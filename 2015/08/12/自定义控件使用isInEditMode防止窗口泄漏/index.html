@@ -3,17 +3,21 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: Android | AFei</title>
+  <title>自定义控件使用isInEditMode防止窗口泄漏 | AFei</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="AFei">
-<meta property="og:url" content="http://yoursite.com/tags/Android/index.html">
+  <meta name="description" content="在开发过程中有时候会遇到Activity has leaked window.，此时便是出现了窗口泄漏问题。
+Android的每一个Activity都有个WindowManager窗体管理器，同样构建在某个Activity之上的对话框、PopupWindow也有相应的WindowManager窗体管理器。因为对话框、PopupWindow不能脱离Activity而单独存在着，所以当某个Dialog">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自定义控件使用isInEditMode防止窗口泄漏">
+<meta property="og:url" content="http://yoursite.com/2015/08/12/自定义控件使用isInEditMode防止窗口泄漏/index.html">
 <meta property="og:site_name" content="AFei">
-<meta property="og:description">
+<meta property="og:description" content="在开发过程中有时候会遇到Activity has leaked window.，此时便是出现了窗口泄漏问题。
+Android的每一个Activity都有个WindowManager窗体管理器，同样构建在某个Activity之上的对话框、PopupWindow也有相应的WindowManager窗体管理器。因为对话框、PopupWindow不能脱离Activity而单独存在着，所以当某个Dialog">
+<meta property="og:updated_time" content="2015-08-12T07:51:21.085Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="AFei">
-<meta name="twitter:description">
+<meta name="twitter:title" content="自定义控件使用isInEditMode防止窗口泄漏">
+<meta name="twitter:description" content="在开发过程中有时候会遇到Activity has leaked window.，此时便是出现了窗口泄漏问题。
+Android的每一个Activity都有个WindowManager窗体管理器，同样构建在某个Activity之上的对话框、PopupWindow也有相应的WindowManager窗体管理器。因为对话框、PopupWindow不能脱离Activity而单独存在着，所以当某个Dialog">
   
     <link rel="alternative" href="/atom.xml" title="AFei" type="application/atom+xml">
   
@@ -190,84 +194,95 @@
 		</header>				
 	</div>
 </nav>
-      <div class="body-wrap">
+      <div class="body-wrap"><article id="post-自定义控件使用isInEditMode防止窗口泄漏" class="article article-type-post" itemscope itemprop="blogPost">
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2015" class="archive-year">2015</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/08/12/自定义控件使用isInEditMode防止窗口泄漏/" class="archive-article-date">
-  	<time datetime="2015-08-12T07:35:14.000Z" itemprop="datePublished">Aug 12</time>
+    <div class="article-meta">
+      <a href="/2015/08/12/自定义控件使用isInEditMode防止窗口泄漏/" class="article-date">
+  	<time datetime="2015-08-12T07:35:14.000Z" itemprop="datePublished">2015-08-12</time>
 </a>
-        </div>
-    	 
+    </div>
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/08/12/自定义控件使用isInEditMode防止窗口泄漏/">自定义控件使用isInEditMode防止窗口泄漏</a>
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      自定义控件使用isInEditMode防止窗口泄漏
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+      </header>
+      
+      <div class="article-info article-info-post">
+        
 	<div class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
 	</div>
 
-          
+        
 
-        </div>
         <div class="clearfix"></div>
-    </header>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在开发过程中有时候会遇到Activity has leaked window.，此时便是出现了窗口泄漏问题。</p>
+<p>Android的每一个Activity都有个WindowManager窗体管理器，同样构建在某个Activity之上的对话框、PopupWindow也有相应的WindowManager窗体管理器。因为对话框、PopupWindow不能脱离Activity而单独存在着，所以当某个Dialog或者某个PopupWindow正在显示的时候我们去finish()了承载该Dialog或PopupWindow的 Activity时，就会抛WindowLeaked异常了，因为这个Dialog或PopupWindow的WindowManager已经没有谁可以附属了，所以它的窗体管理器已经泄漏了。</p>
+<p><strong>使用isInEditMode解决可视化编辑器无法识别自定义控件的问题</strong></p>
+<blockquote>
+<p>isInEditMode:<br>Indicates whether this View is currentlyin edit mode. A View is usually in edit mode when displayed within a developertool. For instance, if this View is being drawn by a visual user interfacebuilder, this method should return true. Subclasses should check the returnvalue of this method to provide different behaviors if their normal behaviormight interfere with the host environment. For instance: the class spawns athread in its constructor, the drawing code relies on device-specific features,etc. This method is usually checked in the drawing code of custom widgets.</p>
+</blockquote>
+<p>所以可以在自定义view的初始化或者需要加载界面的地方设置此方法，避免导致窗体泄漏的问题。</p>
+<pre><code><span class="keyword">private</span> <span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>{
+  <span class="keyword">if</span> (isInEditMode()) {
+    <span class="keyword">return</span>;
+  }
+  <span class="comment">//初始化代码</span>
+}
+</code></pre>
+      
+    </div>
+    
   </div>
-</article>
   
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/08/08/Android自动换行ViewGroup/" class="archive-article-date">
-  	<time datetime="2015-08-08T07:36:13.000Z" itemprop="datePublished">Aug 8</time>
-</a>
-        </div>
-    	 
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/08/08/Android自动换行ViewGroup/">Android自动换行ViewGroup</a>
-    </h1>
   
+    <a href="/2015/08/08/Android自动换行ViewGroup/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Android自动换行ViewGroup</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
 	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
 
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
 
-    
+
 
 </div>
       <footer id="footer">
@@ -293,9 +308,9 @@
 		mathjax: true,
 		animate: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false
 	}
