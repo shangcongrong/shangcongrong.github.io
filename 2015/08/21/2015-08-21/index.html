@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android图片加载框架Fresco分析(二) | AFei</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Fresco的View层设计DraweeView &amp;lt;– GenericDraweeView &amp;lt;– SimpleDraweeView，这便是View层控件的继承关系。
+1.DraweeView
+DraweeView虽然是用来加载图片的，而且也是继承自ImageView，但是Facebook并不支持使用ImageView内部的一些方法。之后的Fresco方法会摒弃ImageView，改继承">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android图片加载框架Fresco分析(二)">
+<meta property="og:url" content="http://yoursite.com/2015/08/21/2015-08-21/index.html">
+<meta property="og:site_name" content="AFei">
+<meta property="og:description" content="Fresco的View层设计DraweeView &amp;lt;– GenericDraweeView &amp;lt;– SimpleDraweeView，这便是View层控件的继承关系。
+1.DraweeView
+DraweeView虽然是用来加载图片的，而且也是继承自ImageView，但是Facebook并不支持使用ImageView内部的一些方法。之后的Fresco方法会摒弃ImageView，改继承">
+<meta property="og:updated_time" content="2015-08-24T09:44:31.466Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android图片加载框架Fresco分析(二)">
+<meta name="twitter:description" content="Fresco的View层设计DraweeView &amp;lt;– GenericDraweeView &amp;lt;– SimpleDraweeView，这便是View层控件的继承关系。
+1.DraweeView
+DraweeView虽然是用来加载图片的，而且也是继承自ImageView，但是Facebook并不支持使用ImageView内部的一些方法。之后的Fresco方法会摒弃ImageView，改继承">
+  
+    <link rel="alternative" href="/atom.xml" title="AFei" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/avatar.jpg">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="https://avatars1.githubusercontent.com/u/2649927?v=3&amp;u=8517cc7bbcbac2fea9b631e386b3dd32755b6eb0&amp;s=140" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Rodriguez-Xin</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/shangcongrong" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/rodriguezxin" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="/yangxin1545@163.com" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">每一首歌都有一个故事～</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Rodriguez-Xin</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="https://avatars1.githubusercontent.com/u/2649927?v=3&amp;u=8517cc7bbcbac2fea9b631e386b3dd32755b6eb0&amp;s=140" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Rodriguez-Xin</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/shangcongrong" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/rodriguezxin" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="/yangxin1545@163.com" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-2015-08-21" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/08/21/2015-08-21/" class="article-date">
+  	<time datetime="2015-08-21T07:19:17.000Z" itemprop="datePublished">2015-08-21</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android图片加载框架Fresco分析(二)
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fresco/">fresco</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Fresco的View层设计">Fresco的View层设计</h1><p><strong>DraweeView</strong> &lt;– <strong>GenericDraweeView</strong> &lt;– <strong>SimpleDraweeView</strong>，这便是View层控件的继承关系。</p>
+<p><strong>1.DraweeView</strong></p>
+<p>DraweeView虽然是用来加载图片的，而且也是继承自ImageView，但是Facebook并不支持使用ImageView内部的一些方法。之后的Fresco方法会摒弃ImageView，改继承自View。</p>
+<p>DraweeView初始化的时候会得到一个DraweeHolder对象，而DraweeHolder在DraweeView便是类似于一个管家，DraweeView将内部需要的大部分事情都交给了Holder来负责管理。比如setHierarchy()和setController()方法，都是将内容交给了holder来管理。这也是一个很好的分层管理方式，值得借鉴。</p>
+<p>这个父类中可以通过自定义Controller设置加载图片，或者通过setImageURI()使用默认的Controller加载图片。如果要使用这个View来加载图片，那么你就需要给他自定义Hierarchy了。</p>
+<p><strong>2.GenericDraweeView</strong></p>
+<p>在DraweeView的子类GenericDraweeView中，作者自定义了attrs属性。意味着，使用者只要在XML文件中针对View使用相应的属性参数便可以达到设置Hierarchy的效果。</p>
+<blockquote>
+<p>DraweeView that creates GenericDraweeHierarchy based on XML attributes.</p>
+</blockquote>
+<p>其中包含了Hierarchy中可以设置的很多属性：</p>
+<pre><code>/* <span class="type">Fading</span> animation parameters:
+ * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_fadeDuration</span>
+ * <span class="type">Images</span> &amp; scale types parameters:
+ * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_viewAspectRatio</span>
+ * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_placeholderImage</span>
+ * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_placeholderImageScaleType</span>
+ * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_retryImage</span>
+ * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_retryImageScaleType</span>
+ * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_failureImage</span>
+ * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_failureImageScaleType</span>
+ * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_progressBarImage</span>
+ * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_progressBarImageScaleType</span>
+ * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_progressBarAutoRotateInterval</span>
+ * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_actualImageScaleType</span>
+ * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_backgroundImage</span>
+ * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_overlayImage</span>
+ * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_pressedStateOverlayImage</span>
+ * <span class="type">Rounding</span> parameters:
+ * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_roundAsCircle</span>
+ * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_roundedCornerRadius</span>
+ * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_roundTopLeft</span>
+ * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_roundTopRight</span>
+ * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_roundBottomRight</span>
+ * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_roundBottomLeft</span>
+ * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_roundWithOverlayColor</span>
+ * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_roundingBorderWidth</span>
+ * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_roundingBorderColor</span>
+ */
+</code></pre><p>GenericDraweeView中属性设置的部分和一般自定义控件类似：</p>
+<pre><code>TypedArray gdhAttrs = context.obtainStyledAttributes(
+      attrs,
+      R.styleable.GenericDraweeView)<span class="comment">;</span>
+fadeDuration = gdhAttrs.getInt(
+        R.styleable.GenericDraweeView_fadeDuration,
+        fadeDuration)<span class="comment">;</span>
+</code></pre><p>在完成这些设置之后，GenericDraweeView需要一个GenericDraweeHierarchyBuilder类的对象来保存所有的属性值，而他的返回值便是一个Hierarchy。也就是说。通过Builder的build()方法，构造了一个View需要的Hierarchy，然后吧XML中设置的属性都保存在Builder中等待使用。</p>
+<pre><code>GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder<span class="params">(resources)</span>;
+builder.setFadeDuration<span class="params">(fadeDuration)</span>;
+...其余属性设置
+setHierarchy<span class="params">(builder.build<span class="params">()</span>)</span>;
+</code></pre><p>Fresco在使用DraweeView的时候虽然宽高不能设置wrap_content，但是它提供了一个可以动态设置宽高比例的方法<strong>setAspectRatio</strong>，因此它需要在GenericDraweeView的OnMeasure方法中重新设置宽高</p>
+<pre><code><span class="keyword">private</span> <span class="keyword">final</span> AspectRatioMeasure.Spec mMeasureSpec = <span class="keyword">new</span> AspectRatioMeasure.Spec();
+@Override
+  <span class="keyword">protected</span> <span class="keyword">void</span> onMeasure(<span class="built_in">int</span> widthMeasureSpec, <span class="built_in">int</span> heightMeasureSpec){
+mMeasureSpec.<span class="variable">width</span> = widthMeasureSpec;
+mMeasureSpec.<span class="variable">height</span> = heightMeasureSpec;
+AspectRatioMeasure.updateMeasureSpec(
+    mMeasureSpec,
+    mAspectRatio,
+    getLayoutParams(),
+    getPaddingLeft() + getPaddingRight(),
+    getPaddingTop() + getPaddingBottom());
+<span class="keyword">super</span>.onMeasure(mMeasureSpec.<span class="variable">width</span>, mMeasureSpec.<span class="variable">height</span>);
+  }
+</code></pre><p>AspectRatioMeasure类中的updateMeasureSpec方法，便是通过比例给View重新设置宽高。</p>
+<p><strong>3.SimpleDraweeView</strong><br>SimpleDraweeView类中有个静态的初始化方法initialize，这个初始化方法会在Fresco的<br>initialize中调用。其实说白了就是Fresco在初始化的时候会new一个controller(PipelineDraweeControllerBuilderSupplier类的对象),而这个controller，每个SimpleDraweeView都可以使用。SimpleDraweeView中其他的方法也都是复写的父类的方法。便不再一一叙述。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/08/22/2015-08-22/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          读书：《程序员的思维修炼》
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/08/19/2015-08-19/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Android图片加载框架Fresco分析(一)</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="2015-08-21" data-title="Android图片加载框架Fresco分析(二)" data-url="http://yoursite.com/2015/08/21/2015-08-21/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"rodriguez-xin"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 Rodriguez-Xin
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+
+<script>
+	var yiliaConfig = {
+		fancybox: false,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
