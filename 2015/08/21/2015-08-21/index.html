@@ -15,7 +15,7 @@ DraweeView虽然是用来加载图片的，而且也是继承自ImageView，但�
 <meta property="og:description" content="Fresco的View层设计DraweeView &amp;lt;– GenericDraweeView &amp;lt;– SimpleDraweeView，这便是View层控件的继承关系。
 1.DraweeView
 DraweeView虽然是用来加载图片的，而且也是继承自ImageView，但是Facebook并不支持使用ImageView内部的一些方法。之后的Fresco方法会摒弃ImageView，改继承">
-<meta property="og:updated_time" content="2015-08-24T09:44:31.466Z">
+<meta property="og:updated_time" content="2015-08-24T12:11:42.182Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android图片加载框架Fresco分析(二)">
 <meta name="twitter:description" content="Fresco的View层设计DraweeView &amp;lt;– GenericDraweeView &amp;lt;– SimpleDraweeView，这便是View层控件的继承关系。
@@ -110,7 +110,7 @@ DraweeView虽然是用来加载图片的，而且也是继承自ImageView，但�
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+						<a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
 					</div>
 				</section>
 				
@@ -269,7 +269,17 @@ AspectRatioMeasure.updateMeasureSpec(
 <span class="keyword">super</span>.onMeasure(mMeasureSpec.<span class="variable">width</span>, mMeasureSpec.<span class="variable">height</span>);
   }
 </code></pre><p>AspectRatioMeasure类中的updateMeasureSpec方法，便是通过比例给View重新设置宽高。</p>
-<p><strong>3.SimpleDraweeView</strong><br>SimpleDraweeView类中有个静态的初始化方法initialize，这个初始化方法会在Fresco的<br>initialize中调用。其实说白了就是Fresco在初始化的时候会new一个controller(PipelineDraweeControllerBuilderSupplier类的对象),而这个controller，每个SimpleDraweeView都可以使用。SimpleDraweeView中其他的方法也都是复写的父类的方法。便不再一一叙述。</p>
+<p><strong>3.SimpleDraweeView</strong><br>SimpleDraweeView类中有个静态的初始化方法initialize，这个初始化方法会在Fresco的<br>initialize中调用。</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">initialize</span><span class="params">(Context context, ImagePipelineConfig imagePipelineConfig)</span> </span>{
+  ImagePipelineFactory.initialize(imagePipelineConfig);
+  initializeDrawee(context);
+}
+
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">initializeDrawee</span><span class="params">(Context context)</span> </span>{
+  sDraweeControllerBuilderSupplier = <span class="keyword">new</span> PipelineDraweeControllerBuilderSupplier(context);
+  SimpleDraweeView.initialize(sDraweeControllerBuilderSupplier);
+}
+</code></pre><p>其实说白了就是Fresco在初始化的时候会new一个controller(PipelineDraweeControllerBuilderSupplier类的对象),而这个controller，每个SimpleDraweeView都可以使用。SimpleDraweeView中其他的方法也都是复写的父类的方法。便不再一一叙述。</p>
 
       
     </div>

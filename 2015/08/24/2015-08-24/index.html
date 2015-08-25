@@ -3,17 +3,25 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives | AFei</title>
+  <title>Android图片加载框架Fresco分析(三) | AFei</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="AFei">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+  <meta name="description" content="Fresco的Controller层设计经过之前的分析，已经知道DraweeView的显示是需要controller层与hierarchy层接洽的。
+每个view都有一个controller来控制。我们还是从源码来分析一下。
+上次说道，SimpleDraweeView需要Fresco类在初始化方法中设置一个controller。其实这个controller便是PipelineDraweeContr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android图片加载框架Fresco分析(三)">
+<meta property="og:url" content="http://yoursite.com/2015/08/24/2015-08-24/index.html">
 <meta property="og:site_name" content="AFei">
-<meta property="og:description">
+<meta property="og:description" content="Fresco的Controller层设计经过之前的分析，已经知道DraweeView的显示是需要controller层与hierarchy层接洽的。
+每个view都有一个controller来控制。我们还是从源码来分析一下。
+上次说道，SimpleDraweeView需要Fresco类在初始化方法中设置一个controller。其实这个controller便是PipelineDraweeContr">
+<meta property="og:image" content="http://7xl9v5.com1.z0.glb.clouddn.com/blogimageimage_20150825202359.png">
+<meta property="og:updated_time" content="2015-08-25T12:24:45.663Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="AFei">
-<meta name="twitter:description">
+<meta name="twitter:title" content="Android图片加载框架Fresco分析(三)">
+<meta name="twitter:description" content="Fresco的Controller层设计经过之前的分析，已经知道DraweeView的显示是需要controller层与hierarchy层接洽的。
+每个view都有一个controller来控制。我们还是从源码来分析一下。
+上次说道，SimpleDraweeView需要Fresco类在初始化方法中设置一个controller。其实这个controller便是PipelineDraweeContr">
   
     <link rel="alternative" href="/atom.xml" title="AFei" type="application/atom+xml">
   
@@ -161,181 +169,108 @@
 		</header>				
 	</div>
 </nav>
-      <div class="body-wrap">
+      <div class="body-wrap"><article id="post-2015-08-24" class="article article-type-post" itemscope itemprop="blogPost">
   
+    <div class="article-meta">
+      <a href="/2015/08/24/2015-08-24/" class="article-date">
+  	<time datetime="2015-08-24T11:31:55.000Z" itemprop="datePublished">2015-08-24</time>
+</a>
+    </div>
   
+  <div class="article-inner">
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android图片加载框架Fresco分析(三)
+    </h1>
+  
+
+      </header>
       
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fresco/">fresco</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2015" class="archive-year">2015</a>
-        </div>
-        <div class="archives">
     
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/08/24/2015-08-24/" class="archive-article-date">
-  	<time datetime="2015-08-24T11:31:55.000Z" itemprop="datePublished">Aug 24</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/08/24/2015-08-24/">Android图片加载框架Fresco分析(三)</a>
-    </h1>
-  
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Fresco的Controller层设计">Fresco的Controller层设计</h1><p>经过之前的分析，已经知道DraweeView的显示是需要controller层与hierarchy层接洽的。</p>
+<p>每个view都有一个controller来控制。我们还是从源码来分析一下。</p>
+<p>上次说道，SimpleDraweeView需要Fresco类在初始化方法中设置一个controller。其实这个controller便是PipelineDraweeControllerBuilderSupplier类的对象。</p>
+<pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">initializeDrawee</span><span class="params">(Context context)</span> </span>{
+  sDraweeControllerBuilderSupplier = <span class="keyword">new</span> PipelineDraweeControllerBuilderSupplier(context);
+  SimpleDraweeView.initialize(sDraweeControllerBuilderSupplier);
+}
+</code></pre><p>以上这些都是针对SimpleDraweeView由Fresco设置默认Controller，并无法自己定义。如果用户非要自己定义该怎么办呢？开发者也给我们提供了一个方法，这个方法也是在Fresco这个类中的<strong>newDraweeControllerBuilder()</strong>方法。我们先说fresco是如何使用自定义controller来协调View和Model层的。而且默认的配置也是facebook所推荐使用的。</p>
+<p><img src="http://7xl9v5.com1.z0.glb.clouddn.com/blogimageimage_20150825202359.png" alt=""></p>
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fresco/">fresco</a></li></ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    
   </div>
-</article>
   
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/08/22/2015-08-22/" class="archive-article-date">
-  	<time datetime="2015-08-22T06:19:02.000Z" itemprop="datePublished">Aug 22</time>
-</a>
-        </div>
-    	 
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/08/22/2015-08-22/">读书：《程序员的思维修炼》</a>
-    </h1>
   
+    <a href="/2015/08/22/2015-08-22/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">读书：《程序员的思维修炼》</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/读书/">读书</a></li></ul>
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
 	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
 
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/08/21/2015-08-21/" class="archive-article-date">
-  	<time datetime="2015-08-21T07:19:17.000Z" itemprop="datePublished">Aug 21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/08/21/2015-08-21/">Android图片加载框架Fresco分析(二)</a>
-    </h1>
-  
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fresco/">fresco</a></li></ul>
-	</div>
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="2015-08-24" data-title="Android图片加载框架Fresco分析(三)" data-url="http://yoursite.com/2015/08/24/2015-08-24/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"rodriguez-xin"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
 
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/08/19/2015-08-19/" class="archive-article-date">
-  	<time datetime="2015-08-19T03:29:29.000Z" itemprop="datePublished">Aug 19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/08/19/2015-08-19/">Android图片加载框架Fresco分析(一)</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fresco/">fresco</a></li></ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/08/12/自定义控件使用isInEditMode防止窗口泄漏/" class="archive-article-date">
-  	<time datetime="2015-08-12T07:35:14.000Z" itemprop="datePublished">Aug 12</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/08/12/自定义控件使用isInEditMode防止窗口泄漏/">自定义控件使用isInEditMode防止窗口泄漏</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/">Next &raquo;</a>
-    </nav>
-  
 
 </div>
       <footer id="footer">
@@ -359,8 +294,8 @@
 		mathjax: true,
 		animate: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false
