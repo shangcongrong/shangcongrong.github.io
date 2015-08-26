@@ -11,7 +11,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/08/19/2015-08-19/index.html">
 <meta property="og:site_name" content="AFei">
 <meta property="og:description" content="作为Android开发者，虽然不是大牛，但也接触了很多图片加载框架，因为手机上最难处理最占内存的往往也就是图片，如果图片处理不好，很容易引起程序崩溃。到目前为止我接触过很多种图片加载框架，其中主要有：UniversalImageLoader，Picasso，Glide，Fresco。Fresco是Facebook最新推出的一款用于Android应用中展示图片的强大图片库，可以从网络、本地存储和本地">
-<meta property="og:updated_time" content="2015-08-21T11:53:31.404Z">
+<meta property="og:updated_time" content="2015-08-26T06:37:07.442Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android图片加载框架Fresco分析(一)">
 <meta name="twitter:description" content="作为Android开发者，虽然不是大牛，但也接触了很多图片加载框架，因为手机上最难处理最占内存的往往也就是图片，如果图片处理不好，很容易引起程序崩溃。到目前为止我接触过很多种图片加载框架，其中主要有：UniversalImageLoader，Picasso，Glide，Fresco。Fresco是Facebook最新推出的一款用于Android应用中展示图片的强大图片库，可以从网络、本地存储和本地">
@@ -205,10 +205,11 @@
 <li>能够通过Drawees模块让不再显示在屏幕上的图片及时地释放内存和空间。</li>
 <li>能够渐进式加载图片。这也是其他图片加载控件所没有的功能。</li>
 <li>支持加载Gif图，支持WebP格式</li>
-<li>缩放或者旋转图片，圆形圆角图片等等</li>
+<li>缩放或者旋转图片，圆形圆角图片等等<a id="more"></a>
+<h3 id="2-总体设计">2.总体设计</h3></li>
 </ol>
 </blockquote>
-<h3 id="2-总体设计">2.总体设计</h3><p>Fresco总体上也是MVC模式，但是其中包含了很多的设计模式，之后会慢慢叙述。在源代码中。</p>
+<p>Fresco总体上也是MVC模式，但是其中包含了很多的设计模式，之后会慢慢叙述。在源代码中。</p>
 <ul>
 <li>DraweeView就相当于View层，负责图片展示以及各种loading，加载效果。</li>
 <li>DraweeController负责接洽View层的展示，每一个view会有一个mDraweeHolder，holder将view中的各种除了展示的操作解耦出来，分而治之。holder中又包含一个controller。controller则负责与下一层hierarchy的连接操作。</li>

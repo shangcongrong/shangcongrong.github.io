@@ -5,19 +5,16 @@
   
   <title>Android自动换行ViewGroup | AFei</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="在Android开发过程中经常会碰到需要让某一些控件，比如：Textview作为标签，而这些标签还要能够自适应屏幕，即要求能够超过一行的宽度时自动换到下一行。Android本身是没有这个控件的。实现起来也不是很难。下面描述一下如何实现这个viewGroup。
-首先，我们需要知道控件内部的子view的三个属性：横向间距、纵向间距、子view方向(orientation)。需要先设置控件属性。代码如下">
+  <meta name="description" content="在Android开发过程中经常会碰到需要让某一些控件，比如：Textview作为标签，而这些标签还要能够自适应屏幕，即要求能够超过一行的宽度时自动换到下一行。Android本身是没有这个控件的。实现起来也不是很难。下面描述一下如何实现这个viewGroup。首先，我们需要知道控件内部的子view的三个属性：横向间距、纵向间距、子view方向(orientation)。需要先设置控件属性。代码如下：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android自动换行ViewGroup">
 <meta property="og:url" content="http://yoursite.com/2015/08/08/Android自动换行ViewGroup/index.html">
 <meta property="og:site_name" content="AFei">
-<meta property="og:description" content="在Android开发过程中经常会碰到需要让某一些控件，比如：Textview作为标签，而这些标签还要能够自适应屏幕，即要求能够超过一行的宽度时自动换到下一行。Android本身是没有这个控件的。实现起来也不是很难。下面描述一下如何实现这个viewGroup。
-首先，我们需要知道控件内部的子view的三个属性：横向间距、纵向间距、子view方向(orientation)。需要先设置控件属性。代码如下">
-<meta property="og:updated_time" content="2015-08-11T07:21:47.395Z">
+<meta property="og:description" content="在Android开发过程中经常会碰到需要让某一些控件，比如：Textview作为标签，而这些标签还要能够自适应屏幕，即要求能够超过一行的宽度时自动换到下一行。Android本身是没有这个控件的。实现起来也不是很难。下面描述一下如何实现这个viewGroup。首先，我们需要知道控件内部的子view的三个属性：横向间距、纵向间距、子view方向(orientation)。需要先设置控件属性。代码如下：">
+<meta property="og:updated_time" content="2015-08-26T06:38:05.040Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android自动换行ViewGroup">
-<meta name="twitter:description" content="在Android开发过程中经常会碰到需要让某一些控件，比如：Textview作为标签，而这些标签还要能够自适应屏幕，即要求能够超过一行的宽度时自动换到下一行。Android本身是没有这个控件的。实现起来也不是很难。下面描述一下如何实现这个viewGroup。
-首先，我们需要知道控件内部的子view的三个属性：横向间距、纵向间距、子view方向(orientation)。需要先设置控件属性。代码如下">
+<meta name="twitter:description" content="在Android开发过程中经常会碰到需要让某一些控件，比如：Textview作为标签，而这些标签还要能够自适应屏幕，即要求能够超过一行的宽度时自动换到下一行。Android本身是没有这个控件的。实现起来也不是很难。下面描述一下如何实现这个viewGroup。首先，我们需要知道控件内部的子view的三个属性：横向间距、纵向间距、子view方向(orientation)。需要先设置控件属性。代码如下：">
   
     <link rel="alternative" href="/atom.xml" title="AFei" type="application/atom+xml">
   
@@ -200,8 +197,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在Android开发过程中经常会碰到需要让某一些控件，比如：Textview作为标签，而这些标签还要能够自适应屏幕，即要求能够超过一行的宽度时自动换到下一行。Android本身是没有这个控件的。实现起来也不是很难。下面描述一下如何实现这个viewGroup。</p>
-<p>首先，我们需要知道控件内部的子view的三个属性：<strong>横向间距</strong>、<strong>纵向间距</strong>、<strong>子view方向(orientation)</strong>。需要先设置控件属性。代码如下：</p>
+        <p>在Android开发过程中经常会碰到需要让某一些控件，比如：Textview作为标签，而这些标签还要能够自适应屏幕，即要求能够超过一行的宽度时自动换到下一行。Android本身是没有这个控件的。实现起来也不是很难。下面描述一下如何实现这个viewGroup。<br>首先，我们需要知道控件内部的子view的三个属性：<strong>横向间距</strong>、<strong>纵向间距</strong>、<strong>子view方向(orientation)</strong>。需要先设置控件属性。代码如下：</p>
 <pre><code><span class="tag">&lt;<span class="title">declare-styleable</span> <span class="attribute">name</span>=<span class="value">"FlowLayout"</span>&gt;</span>
     <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"horizontalSpacing"</span> <span class="attribute">format</span>=<span class="value">"dimension"</span> /&gt;</span>
     <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"verticalSpacing"</span> <span class="attribute">format</span>=<span class="value">"dimension"</span> /&gt;</span>
@@ -210,7 +206,8 @@
         <span class="tag">&lt;<span class="title">enum</span> <span class="attribute">name</span>=<span class="value">"vertical"</span> <span class="attribute">value</span>=<span class="value">"1"</span> /&gt;</span>
     <span class="tag">&lt;/<span class="title">attr</span>&gt;</span>
 <span class="tag">&lt;/<span class="title">declare-styleable</span>&gt;</span>
-</code></pre><p>在构造方法中获取到这些属性，留着之后使用：</p>
+</code></pre><a id="more"></a>
+<p>在构造方法中获取到这些属性，留着之后使用：</p>
 <pre><code>TypedArray <span class="literal">a</span> = context.obtainStyledAttributes(attributeSet, R.styleable.FlowLayout)<span class="comment">;</span>
 horizontalSpacing = <span class="literal">a</span>.getDimensionPixelSize(R.styleable.FlowLayout_horizontalSpacing, <span class="number">0</span>)<span class="comment">;</span>
 verticalSpacing = <span class="literal">a</span>.getDimensionPixelSize(R.styleable.FlowLayout_verticalSpacing, <span class="number">0</span>)<span class="comment">;</span>

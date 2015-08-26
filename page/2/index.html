@@ -187,8 +187,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在Android开发过程中经常会碰到需要让某一些控件，比如：Textview作为标签，而这些标签还要能够自适应屏幕，即要求能够超过一行的宽度时自动换到下一行。Android本身是没有这个控件的。实现起来也不是很难。下面描述一下如何实现这个viewGroup。</p>
-<p>首先，我们需要知道控件内部的子view的三个属性：<strong>横向间距</strong>、<strong>纵向间距</strong>、<strong>子view方向(orientation)</strong>。需要先设置控件属性。代码如下：</p>
+        <p>在Android开发过程中经常会碰到需要让某一些控件，比如：Textview作为标签，而这些标签还要能够自适应屏幕，即要求能够超过一行的宽度时自动换到下一行。Android本身是没有这个控件的。实现起来也不是很难。下面描述一下如何实现这个viewGroup。<br>首先，我们需要知道控件内部的子view的三个属性：<strong>横向间距</strong>、<strong>纵向间距</strong>、<strong>子view方向(orientation)</strong>。需要先设置控件属性。代码如下：</p>
 <pre><code><span class="tag">&lt;<span class="title">declare-styleable</span> <span class="attribute">name</span>=<span class="value">"FlowLayout"</span>&gt;</span>
     <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"horizontalSpacing"</span> <span class="attribute">format</span>=<span class="value">"dimension"</span> /&gt;</span>
     <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"verticalSpacing"</span> <span class="attribute">format</span>=<span class="value">"dimension"</span> /&gt;</span>
@@ -197,130 +196,7 @@
         <span class="tag">&lt;<span class="title">enum</span> <span class="attribute">name</span>=<span class="value">"vertical"</span> <span class="attribute">value</span>=<span class="value">"1"</span> /&gt;</span>
     <span class="tag">&lt;/<span class="title">attr</span>&gt;</span>
 <span class="tag">&lt;/<span class="title">declare-styleable</span>&gt;</span>
-</code></pre><p>在构造方法中获取到这些属性，留着之后使用：</p>
-<pre><code>TypedArray <span class="literal">a</span> = context.obtainStyledAttributes(attributeSet, R.styleable.FlowLayout)<span class="comment">;</span>
-horizontalSpacing = <span class="literal">a</span>.getDimensionPixelSize(R.styleable.FlowLayout_horizontalSpacing, <span class="number">0</span>)<span class="comment">;</span>
-verticalSpacing = <span class="literal">a</span>.getDimensionPixelSize(R.styleable.FlowLayout_verticalSpacing, <span class="number">0</span>)<span class="comment">;</span>
-orientation = <span class="literal">a</span>.getInteger(R.styleable.FlowLayout_orientation, HORIZONTAL)<span class="comment">;</span>
-</code></pre><p>之后要使用到<strong>onMeasure()</strong>方法给控件设置宽高大小。</p>
-<pre><code><span class="keyword">int</span> sizeWidth = MeasureSpec.getSize(widthMeasureSpec) - <span class="keyword">this</span>.getPaddingRight() - <span class="keyword">this</span>.getPaddingLeft();
-<span class="keyword">int</span> sizeHeight = MeasureSpec.getSize(heightMeasureSpec) - <span class="keyword">this</span>.getPaddingTop() - <span class="keyword">this</span>.getPaddingBottom();
-<span class="comment">//分别获取到横向和竖向的specMode</span>
-<span class="keyword">int</span> modeWidth = MeasureSpec.getMode(widthMeasureSpec);
-<span class="keyword">int</span> modeHeight = MeasureSpec.getMode(heightMeasureSpec);
-</code></pre><p>因为控件本身可以横向放置也可以纵向放置，所以需要对横纵方向的mode都做处理。如果是横向放置就要使用横向的mode，反之亦然。</p>
-<pre><code><span class="title">if</span> (orientation == HORIZONTAL) {
-    <span class="title">size</span> = sizeWidth;
-    <span class="title">mode</span> = modeWidth;
-} <span class="title">else</span> {
-    <span class="title">size</span> = sizeHeight;
-    <span class="title">mode</span> = modeHeight;
-}
-</code></pre><p>其中<strong>size</strong>表示整个控件的大小。</p>
-<p>之后便是给子view进行位置的确定。也是需要先获取所有的子view并且调用子view的measure方法设置子view的实际宽高。</p>
-<pre><code>final View child = getChildAt<span class="params">(i)</span>;
-<span class="keyword">if</span> <span class="params">(child.getVisibility<span class="params">()</span> == GONE)</span> {
-    continue;
-}
-LayoutParams lp = <span class="params">(LayoutParams)</span> child.getLayoutParams<span class="params">()</span>;
-child.measure<span class="params">(
-   getChildMeasureSpec<span class="params">(widthMeasureSpec, this.getPaddingLeft<span class="params">()</span> + this.getPaddingRight<span class="params">()</span>, lp.width)</span>,
-   getChildMeasureSpec<span class="params">(heightMeasureSpec, this.getPaddingTop<span class="params">()</span> + this.getPaddingBottom<span class="params">()</span>, lp.height)</span>
-)</span>;
-</code></pre><p>此时就需要使用到之前属性设置的子view横向和纵向的间距以及子view的宽高</p>
-<pre><code><span class="keyword">int</span> hSpacing = <span class="keyword">this</span>.getHorizontalSpacing(lp);
-<span class="keyword">int</span> vSpacing = <span class="keyword">this</span>.getVerticalSpacing(lp);
-<span class="keyword">int</span> childWidth = child.getMeasuredWidth();
-<span class="keyword">int</span> childHeight = child.getMeasuredHeight();
-</code></pre><p>此时在循环中要进行计算，如果当前子view的边界再加上边距和下一个子view的宽或者高超出单行的宽度值时则需要进行换行。</p>
-<pre><code><span class="title">int</span> childLength;
-<span class="title">int</span> childThickness;
-<span class="title">int</span> spacingLength;
-<span class="title">int</span> spacingThickness;
-
-<span class="title">if</span> (orientation == HORIZONTAL) {
-    <span class="title">childLength</span> = childWidth;
-    <span class="title">childThickness</span> = childHeight;
-    <span class="title">spacingLength</span> = hSpacing;
-    <span class="title">spacingThickness</span> = vSpacing;
-} <span class="title">else</span> {
-    <span class="title">childLength</span> = childHeight;
-    <span class="title">childThickness</span> = childWidth;
-    <span class="title">spacingLength</span> = vSpacing;
-    <span class="title">spacingThickness</span> = hSpacing;
-}
-
-<span class="title">lineLength</span> = lineLengthWithSpacing + childLength;
-<span class="title">lineLengthWithSpacing</span> = lineLength + spacingLength;
-
-<span class="title">boolean</span> newLine = lp.newLine || (mode != MeasureSpec.UNSPECIFIED &amp;&amp; lineLength &gt; size);
-<span class="title">if</span> (newLine) {
-    <span class="title">prevLinePosition</span> = prevLinePosition + lineThicknessWithSpacing;
-
-    <span class="title">lineThickness</span> = childThickness;
-    <span class="title">lineLength</span> = childLength;
-    <span class="title">lineThicknessWithSpacing</span> = childThickness + spacingThickness;
-    <span class="title">lineLengthWithSpacing</span> = lineLength + spacingLength;
-}
-
-<span class="title">lineThicknessWithSpacing</span> = Math.max(lineThicknessWithSpacing, childThickness + spacingThickness);
-<span class="title">lineThickness</span> = Math.max(lineThickness, childThickness);
-</code></pre><p>之后便是给自定义view设置起始位置</p>
-<pre><code><span class="built_in">int</span> posX;
-<span class="built_in">int</span> posY;
-<span class="keyword">if</span> (orientation == <span class="type">HORIZONTAL</span>) {
-    posX = getPaddingLeft<span class="literal">()</span> + lineLength - childLength;
-    posY = getPaddingTop<span class="literal">()</span> + prevLinePosition;
-} <span class="keyword">else</span> {
-    posX = getPaddingLeft<span class="literal">()</span> + prevLinePosition;
-    posY = getPaddingTop<span class="literal">()</span> + lineLength - childHeight;
-}
-lp.setPosition(posX, posY);
-</code></pre><p>此时已经可以给控件和子view设置好宽高和所要放置的相应位置。紧接着需要调用<strong>onLayout()</strong>方法，此时如果需要让控件左对齐显示则直接使用之前设置好的位置便可以，代码如下</p>
-<pre><code>final int count = getChildCount<span class="list">()</span><span class="comment">;</span>
-for <span class="list">(<span class="keyword">int</span> i = <span class="number">0</span><span class="comment">; i &lt; count; i++) {</span>
-    View child = getChildAt<span class="list">(<span class="keyword">i</span>)</span><span class="comment">;</span>
-    LayoutParams lp = <span class="list">(<span class="keyword">LayoutParams</span>)</span> child.getLayoutParams<span class="list">()</span><span class="comment">;</span>
-    child.layout<span class="list">(<span class="keyword">lp</span>.x, lp.y, lp.x + child.getMeasuredWidth<span class="list">()</span>, lp.y + child.getMeasuredHeight<span class="list">()</span>)</span><span class="comment">;</span>
-}</span>
-</code></pre><p>而如果当前使用到的标签需要居中显示，则需要对每行的控件获取到并且判断当前行左对齐放置时距右边的边距。此时将右边距除以二，再将当前行第一个子view的左起位置替换则可以达到Group中的子view居中效果。</p>
-<p>此时则需要两次循环，一次获取单行的居中时距左边边距，一次进行控件的摆放，代码如下：</p>
-<pre><code>final int count = getChildCount<span class="list">()</span><span class="comment">;</span>
-int tmpY = <span class="number">0</span><span class="comment">;</span>
-int tmpX = <span class="number">0</span><span class="comment">;</span>
-for <span class="list">(<span class="keyword">int</span> i = <span class="number">0</span><span class="comment">; i &lt; count; i++) {</span>
-    View child = getChildAt<span class="list">(<span class="keyword">i</span>)</span><span class="comment">;</span>
-    LayoutParams lp = <span class="list">(<span class="keyword">LayoutParams</span>)</span> child.getLayoutParams<span class="list">()</span><span class="comment">;</span>
-    if <span class="list">(<span class="keyword">lp</span>.y == tmpY)</span> {
-        tmpX = lp.x + child.getMeasuredWidth<span class="list">()</span><span class="comment">;</span>
-    } else {
-        tmpY = lp.y<span class="comment">;</span>
-        int temp = <span class="list">(<span class="keyword">ScreenUtils</span>.getScreenWidth<span class="list">()</span> - tmpX)</span> / <span class="number">2</span> - <span class="number">5</span><span class="comment">;</span>
-        DebugLog.d<span class="list">(<span class="string">"temp:"</span> + temp)</span><span class="comment">;</span>
-        startX.add<span class="list">(<span class="keyword">temp</span>)</span><span class="comment">;</span>
-    }
-    if <span class="list">(<span class="keyword">i</span> == count - <span class="number">1</span>)</span> {
-        tmpX = lp.x + child.getMeasuredWidth<span class="list">()</span><span class="comment">;</span>
-        int temp = <span class="list">(<span class="keyword">ScreenUtils</span>.getScreenWidth<span class="list">()</span> - tmpX)</span> / <span class="number">2</span><span class="comment">;</span>
-        startX.add<span class="list">(<span class="keyword">temp</span>)</span><span class="comment">;</span>
-    }
-}
-
-int position = <span class="number">0</span><span class="comment">;</span>
-int tmpY2 = <span class="number">0</span><span class="comment">;</span>
-for <span class="list">(<span class="keyword">int</span> i = <span class="number">0</span><span class="comment">; i &lt; count; i++) {</span>
-    View child = getChildAt<span class="list">(<span class="keyword">i</span>)</span><span class="comment">;</span>
-    LayoutParams lp = <span class="list">(<span class="keyword">LayoutParams</span>)</span> child.getLayoutParams<span class="list">()</span><span class="comment">;</span>
-    if <span class="list">(<span class="keyword">lp</span>.y == <span class="number">0</span>)</span> position = <span class="number">0</span><span class="comment">;</span>
-    if <span class="list">(<span class="keyword">tmpY2</span> &lt; lp.y)</span> {
-        position++<span class="comment">;</span>
-        tmpY2 = lp.y<span class="comment">;</span>
-    }
-    child.layout<span class="list">(<span class="keyword">startX</span>.get<span class="list">(<span class="keyword">position</span>)</span> + lp.x, lp.y, startX.get<span class="list">(<span class="keyword">position</span>)</span> + lp.x + child.getMeasuredWidth<span class="list">()</span>,
-            lp.y + child.getMeasuredHeight<span class="list">()</span>)</span><span class="comment">;</span>
-}</span></span>
-</code></pre><p>这样便完成了对自定义换行viewGroup的实现。</p>
-
+</code></pre>
       
     </div>
     
@@ -333,6 +209,10 @@ for <span class="list">(<span class="keyword">int</span> i = <span class="number
 
       
 
+      
+        <p class="article-more-link">
+          <a  href="/2015/08/08/Android自动换行ViewGroup/#more">阅读全文 >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>

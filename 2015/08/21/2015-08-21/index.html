@@ -15,7 +15,7 @@ DraweeView虽然是用来加载图片的，而且也是继承自ImageView，但�
 <meta property="og:description" content="Fresco的View层设计DraweeView &amp;lt;– GenericDraweeView &amp;lt;– SimpleDraweeView，这便是View层控件的继承关系。
 1.DraweeView
 DraweeView虽然是用来加载图片的，而且也是继承自ImageView，但是Facebook并不支持使用ImageView内部的一些方法。之后的Fresco方法会摒弃ImageView，改继承">
-<meta property="og:updated_time" content="2015-08-24T12:11:42.182Z">
+<meta property="og:updated_time" content="2015-08-26T06:36:57.545Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android图片加载框架Fresco分析(二)">
 <meta name="twitter:description" content="Fresco的View层设计DraweeView &amp;lt;– GenericDraweeView &amp;lt;– SimpleDraweeView，这便是View层控件的继承关系。
@@ -207,8 +207,7 @@ DraweeView虽然是用来加载图片的，而且也是继承自ImageView，但�
 <p><strong>1.DraweeView</strong></p>
 <p>DraweeView虽然是用来加载图片的，而且也是继承自ImageView，但是Facebook并不支持使用ImageView内部的一些方法。之后的Fresco方法会摒弃ImageView，改继承自View。</p>
 <p>DraweeView初始化的时候会得到一个DraweeHolder对象，而DraweeHolder在DraweeView便是类似于一个管家，DraweeView将内部需要的大部分事情都交给了Holder来负责管理。比如setHierarchy()和setController()方法，都是将内容交给了holder来管理。这也是一个很好的分层管理方式，值得借鉴。</p>
-<p>这个父类中可以通过自定义Controller设置加载图片，或者通过setImageURI()使用默认的Controller加载图片。如果要使用这个View来加载图片，那么你就需要给他自定义Hierarchy了。</p>
-<p><strong>2.GenericDraweeView</strong></p>
+<p>这个父类中可以通过自定义Controller设置加载图片，或者通过setImageURI()使用默认的Controller加载图片。如果要使用这个View来加载图片，那么你就需要给他自定义Hierarchy了。<br><a id="more"></a><br><strong>2.GenericDraweeView</strong></p>
 <p>在DraweeView的子类GenericDraweeView中，作者自定义了attrs属性。意味着，使用者只要在XML文件中针对View使用相应的属性参数便可以达到设置Hierarchy的效果。</p>
 <blockquote>
 <p>DraweeView that creates GenericDraweeHierarchy based on XML attributes.</p>
