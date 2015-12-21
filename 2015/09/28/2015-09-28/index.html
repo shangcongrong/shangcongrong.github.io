@@ -3,25 +3,21 @@
 <head>
   <meta charset="utf-8">
   
-  <title>读书：《程序员的思维修炼》 | AFei</title>
+  <title>Android图片加载框架Fresco分析(四) | AFei</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近在读这本书，名字叫做《程序员的思维修炼：开发认知潜能的九堂课》。作者以让读者提高开发效率作为开始，分别从九个方面讲解了作为一个程序员（非程序员也一样）该如何锻炼自己的思想。
-书中首先讲述了我们的工作基本上就是要从一个新生慢慢演变成一个专家。新手和专家之间的区别是什么呢，新手主要通过规范来工作，而专家通过感觉和灵感来工作，而这种感觉往往又是很准确的。书中也解释了该如何从一个新手变成一个专家。
-接">
+  <meta name="description" content="Fresco的Model层设计上回讲到fresco的controller层，主要涉及到的是设置请求(ImageRequest)设置动画等等。下面讲述一下fresco的第三层次，Hierarchy层。
+在SimpleDraweeView的最上层DraweeView中，有一个setHierarchy()，即开发者如果需要自己定义hierarchy的话，可以使用这个方法。而如果不用自定义的话。在Draw">
 <meta property="og:type" content="article">
-<meta property="og:title" content="读书：《程序员的思维修炼》">
-<meta property="og:url" content="http://yoursite.com/2015/08/22/2015-08-22/index.html">
+<meta property="og:title" content="Android图片加载框架Fresco分析(四)">
+<meta property="og:url" content="http://yoursite.com/2015/09/28/2015-09-28/index.html">
 <meta property="og:site_name" content="AFei">
-<meta property="og:description" content="最近在读这本书，名字叫做《程序员的思维修炼：开发认知潜能的九堂课》。作者以让读者提高开发效率作为开始，分别从九个方面讲解了作为一个程序员（非程序员也一样）该如何锻炼自己的思想。
-书中首先讲述了我们的工作基本上就是要从一个新生慢慢演变成一个专家。新手和专家之间的区别是什么呢，新手主要通过规范来工作，而专家通过感觉和灵感来工作，而这种感觉往往又是很准确的。书中也解释了该如何从一个新手变成一个专家。
-接">
-<meta property="og:image" content="http://7xl9v5.com1.z0.glb.clouddn.com/blogimages4548399.jpg">
-<meta property="og:updated_time" content="2015-09-22T11:36:05.065Z">
+<meta property="og:description" content="Fresco的Model层设计上回讲到fresco的controller层，主要涉及到的是设置请求(ImageRequest)设置动画等等。下面讲述一下fresco的第三层次，Hierarchy层。
+在SimpleDraweeView的最上层DraweeView中，有一个setHierarchy()，即开发者如果需要自己定义hierarchy的话，可以使用这个方法。而如果不用自定义的话。在Draw">
+<meta property="og:updated_time" content="2015-12-21T09:15:01.662Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="读书：《程序员的思维修炼》">
-<meta name="twitter:description" content="最近在读这本书，名字叫做《程序员的思维修炼：开发认知潜能的九堂课》。作者以让读者提高开发效率作为开始，分别从九个方面讲解了作为一个程序员（非程序员也一样）该如何锻炼自己的思想。
-书中首先讲述了我们的工作基本上就是要从一个新生慢慢演变成一个专家。新手和专家之间的区别是什么呢，新手主要通过规范来工作，而专家通过感觉和灵感来工作，而这种感觉往往又是很准确的。书中也解释了该如何从一个新手变成一个专家。
-接">
+<meta name="twitter:title" content="Android图片加载框架Fresco分析(四)">
+<meta name="twitter:description" content="Fresco的Model层设计上回讲到fresco的controller层，主要涉及到的是设置请求(ImageRequest)设置动画等等。下面讲述一下fresco的第三层次，Hierarchy层。
+在SimpleDraweeView的最上层DraweeView中，有一个setHierarchy()，即开发者如果需要自己定义hierarchy的话，可以使用这个方法。而如果不用自定义的话。在Draw">
   
     <link rel="alternative" href="/atom.xml" title="AFei" type="application/atom+xml">
   
@@ -169,11 +165,11 @@
 		</header>				
 	</div>
 </nav>
-      <div class="body-wrap"><article id="post-2015-08-22" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-2015-09-28" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/08/22/2015-08-22/" class="article-date">
-  	<time datetime="2015-08-22T06:19:02.000Z" itemprop="datePublished">2015-08-22</time>
+      <a href="/2015/09/28/2015-09-28/" class="article-date">
+  	<time datetime="2015-09-28T08:49:42.000Z" itemprop="datePublished">2015-09-28</time>
 </a>
     </div>
   
@@ -184,7 +180,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      读书：《程序员的思维修炼》
+      Android图片加载框架Fresco分析(四)
     </h1>
   
 
@@ -193,7 +189,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/读书/">读书</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fresco/">fresco</a></li></ul>
 	</div>
 
         
@@ -204,11 +200,61 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><img src="http://7xl9v5.com1.z0.glb.clouddn.com/blogimages4548399.jpg" alt=""></p>
-<p>最近在读这本书，名字叫做《程序员的思维修炼：开发认知潜能的九堂课》。作者以让读者提高开发效率作为开始，分别从九个方面讲解了作为一个程序员（非程序员也一样）该如何锻炼自己的思想。</p>
-<p>书中首先讲述了我们的工作基本上就是要从一个新生慢慢演变成一个专家。新手和专家之间的区别是什么呢，新手主要通过规范来工作，而专家通过感觉和灵感来工作，而这种感觉往往又是很准确的。书中也解释了该如何从一个新手变成一个专家。</p>
-<p>接着对大脑进行了分析，得出大脑主要可以分成两种工作方式。R型和L型。R型的人注重整体，情感，灵感等更有艺术性的方面，主要是右脑。而L型则侧重于某个，单独，规律性的方面，主要是左脑。</p>
-<p>了解了L型和R型大脑之后，就要开始训练右脑，主要的方法便是开始感官输入。让L型和R型相互合作，一起促进大脑的运作。</p>
+        <h1 id="Fresco的Model层设计">Fresco的Model层设计</h1><p>上回讲到fresco的controller层，主要涉及到的是设置请求(ImageRequest)设置动画等等。下面讲述一下fresco的第三层次，Hierarchy层。</p>
+<p>在SimpleDraweeView的最上层DraweeView中，有一个<strong>setHierarchy()</strong>，即开发者如果需要自己定义hierarchy的话，可以使用这个方法。而如果不用自定义的话。在DraweeView的子类GenericDraweeView的构造函数中便有已经设置好的hierarchy。同样的，hierarchy也需要一个builder(<strong>GenericDraweeHierarchyBuilder</strong>)才可以创建(fresco中builder模式随处可见)。是否还记得在xml中使用SimpleDraweeView时候设置的xml各种属性？这些属性在这里才真正用到。</p>
+<pre><code>GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder<span class="params">(resources)</span>;
+<span class="comment">// set fade duration</span>
+builder.setFadeDuration<span class="params">(fadeDuration)</span>;
+<span class="comment">// set images &amp; scale types</span>
+<span class="keyword">if</span> <span class="params">(placeholderId &gt; <span class="number">0</span>)</span> {
+  builder.setPlaceholderImage<span class="params">(resources.getDrawable<span class="params">(placeholderId)</span>, placeholderScaleType)</span>;
+}
+<span class="keyword">if</span> <span class="params">(retryImageId &gt; <span class="number">0</span>)</span> {
+  builder.setRetryImage<span class="params">(resources.getDrawable<span class="params">(retryImageId)</span>, retryImageScaleType)</span>;
+}
+<span class="keyword">if</span> <span class="params">(failureImageId &gt; <span class="number">0</span>)</span> {
+  builder.setFailureImage<span class="params">(resources.getDrawable<span class="params">(failureImageId)</span>, failureImageScaleType)</span>;
+}
+<span class="keyword">if</span> <span class="params">(progressBarId &gt; <span class="number">0</span>)</span> {
+  Drawable progressBarDrawable = resources.getDrawable<span class="params">(progressBarId)</span>;
+  <span class="keyword">if</span> <span class="params">(progressBarAutoRotateInterval &gt; <span class="number">0</span>)</span> {
+    progressBarDrawable =
+        new AutoRotateDrawable<span class="params">(progressBarDrawable, progressBarAutoRotateInterval)</span>;
+  }
+  builder.setProgressBarImage<span class="params">(progressBarDrawable, progressBarScaleType)</span>;
+}
+<span class="keyword">if</span> <span class="params">(backgroundId &gt; <span class="number">0</span>)</span> {
+  builder.setBackground<span class="params">(resources.getDrawable<span class="params">(backgroundId)</span>)</span>;
+}
+<span class="keyword">if</span> <span class="params">(overlayId &gt; <span class="number">0</span>)</span> {
+  builder.setOverlay<span class="params">(resources.getDrawable<span class="params">(overlayId)</span>)</span>;
+}
+<span class="keyword">if</span> <span class="params">(pressedStateOverlayId &gt; <span class="number">0</span>)</span> {
+  builder.setPressedStateOverlay<span class="params">(getResources<span class="params">()</span>.getDrawable<span class="params">(pressedStateOverlayId)</span>)</span>;
+}
+
+builder.setActualImageScaleType<span class="params">(actualImageScaleType)</span>;
+<span class="comment">// set rounding parameters</span>
+<span class="keyword">if</span> <span class="params">(roundAsCircle || roundedCornerRadius &gt; <span class="number">0</span>)</span> {
+  RoundingParams roundingParams = new RoundingParams<span class="params">()</span>;
+  roundingParams.setRoundAsCircle<span class="params">(roundAsCircle)</span>;
+  <span class="keyword">if</span> <span class="params">(roundedCornerRadius &gt; <span class="number">0</span>)</span> {
+    roundingParams.setCornersRadii<span class="params">(
+        roundTopLeft ? roundedCornerRadius : <span class="number">0</span>,
+        roundTopRight ? roundedCornerRadius : <span class="number">0</span>,
+        roundBottomRight ? roundedCornerRadius : <span class="number">0</span>,
+        roundBottomLeft ? roundedCornerRadius : <span class="number">0</span>)</span>;
+  }
+  <span class="keyword">if</span> <span class="params">(roundWithOverlayColor != <span class="number">0</span>)</span> {
+    roundingParams.setOverlayColor<span class="params">(roundWithOverlayColor)</span>;
+  }
+  <span class="keyword">if</span> <span class="params">(roundingBorderColor != <span class="number">0</span> &amp;&amp; roundingBorderWidth &gt; <span class="number">0</span>)</span> {
+    roundingParams.setBorder<span class="params">(roundingBorderColor, roundingBorderWidth)</span>;
+  }
+  builder.setRoundingParams<span class="params">(roundingParams)</span>;
+}
+setHierarchy<span class="params">(builder.build<span class="params">()</span>)</span>;
+</code></pre><p>通过GenericDraweeHierarchyBuilder设置好属性之后，调用<strong>build()</strong>方法便会生成一个GenericDraweeHierarchy，</p>
 
       
     </div>
@@ -218,18 +264,18 @@
     
 <nav id="article-nav">
   
-    <a href="/2015/08/24/2015-08-24/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2015/12/21/2015-12-21/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          Android图片加载框架Fresco分析(三)
+          Android图片加载框架Fresco分析(五)
         
       </div>
     </a>
   
   
-    <a href="/2015/08/21/2015-08-21/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Android图片加载框架Fresco分析(二)</div>
+    <a href="/2015/09/23/2015-09-23/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Android快速多渠道打包方法</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -258,7 +304,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="2015-08-22" data-title="读书：《程序员的思维修炼》" data-url="http://yoursite.com/2015/08/22/2015-08-22/"></div>
+	<div class="ds-thread" data-thread-key="2015-09-28" data-title="Android图片加载框架Fresco分析(四)" data-url="http://yoursite.com/2015/09/28/2015-09-28/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

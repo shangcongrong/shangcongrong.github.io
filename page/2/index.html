@@ -103,7 +103,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+						<a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
 					</div>
 				</section>
 				
@@ -162,6 +162,130 @@
 	</div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-2015-08-21" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/08/21/2015-08-21/" class="article-date">
+  	<time datetime="2015-08-21T07:19:17.000Z" itemprop="datePublished">2015-08-21</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/21/2015-08-21/">Android图片加载框架Fresco分析(二)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Fresco的View层设计">Fresco的View层设计</h1><p><strong>DraweeView</strong> &lt;– <strong>GenericDraweeView</strong> &lt;– <strong>SimpleDraweeView</strong>，这便是View层控件的继承关系。</p>
+<p><strong>1.DraweeView</strong></p>
+<p>DraweeView虽然是用来加载图片的，而且也是继承自ImageView，但是Facebook并不支持使用ImageView内部的一些方法。之后的Fresco方法会摒弃ImageView，改继承自View。</p>
+<p>DraweeView初始化的时候会得到一个DraweeHolder对象，而DraweeHolder在DraweeView便是类似于一个管家，DraweeView将内部需要的大部分事情都交给了Holder来负责管理。比如setHierarchy()和setController()方法，都是将内容交给了holder来管理。这也是一个很好的分层管理方式，值得借鉴。</p>
+<p>这个父类中可以通过自定义Controller设置加载图片，或者通过setImageURI()使用默认的Controller加载图片。如果要使用这个View来加载图片，那么你就需要给他自定义Hierarchy了。<br>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fresco/">fresco</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/08/21/2015-08-21/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-2015-08-19" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/08/19/2015-08-19/" class="article-date">
+  	<time datetime="2015-08-19T03:29:29.000Z" itemprop="datePublished">2015-08-19</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/19/2015-08-19/">Android图片加载框架Fresco分析(一)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>作为Android开发者，虽然不是大牛，但也接触了很多图片加载框架，因为手机上最难处理最占内存的往往也就是图片，如果图片处理不好，很容易引起程序崩溃。到目前为止我接触过很多种图片加载框架，其中主要有：UniversalImageLoader，Picasso，Glide，Fresco。<br>Fresco是Facebook最新推出的一款用于Android应用中展示图片的强大图片库，可以从网络、本地存储和本地资源中加载图片。其中的Drawees可以显示占位符，直到图片加载完成。而当图片从屏幕上消失时，会自动释放内存。由于目前项目中使用到了Fresco，所以针对Fresco做一下源码分析。</p>
+<h3 id="1-功能介绍">1.功能介绍</h3><p>Fresco类似ImageLoader和Picasoo一样，操作起来都比较简单，几行代码就可以开始使用了。可以简单的在xml里使用<strong>SimpleDraweeView</strong>配置一些属性。在代码中使用<strong>SimpleDraweeView</strong>的<strong>setImageURI</strong>方法来进行图片的加载。</p>
+<p>Fresco有很大的优点，Fresco的中文文档中说的就很明白，主要优点有：</p>
+<blockquote>
+<ol>
+<li>能够通过Drawees模块让不再显示在屏幕上的图片及时地释放内存和空间。</li>
+<li>能够渐进式加载图片。这也是其他图片加载控件所没有的功能。</li>
+<li>支持加载Gif图，支持WebP格式</li>
+<li>缩放或者旋转图片，圆形圆角图片等等
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fresco/">fresco</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/08/19/2015-08-19/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
   
     <article id="post-自定义控件使用isInEditMode防止窗口泄漏" class="article article-type-post" itemscope itemprop="blogPost">
   
