@@ -5,22 +5,19 @@
   
   <title>Android图片加载框架Fresco分析(五) | AFei</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="#fresco请求部分分析
-SimpleDraweeView在setImageURI的时候，对controller做了默认设置，虽然是DraweeController，但是其实SimpleDraweeView使用到的真正的Controller类是PipeLineDraweeControllerBuilder：
-public void setImageURI(Uri uri, @Nullable O">
+  <meta name="description" content="fresco请求部分分析SimpleDraweeView在setImageURI的时候，对controller做了默认设置，虽然是DraweeController，但是其实SimpleDraweeView使用到的真正的Controller类是PipeLineDraweeControllerBuilder：
+public void setImageURI(Uri uri, @Nullable Obj">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android图片加载框架Fresco分析(五)">
 <meta property="og:url" content="http://yoursite.com/2015/12/21/2015-12-21/index.html">
 <meta property="og:site_name" content="AFei">
-<meta property="og:description" content="#fresco请求部分分析
-SimpleDraweeView在setImageURI的时候，对controller做了默认设置，虽然是DraweeController，但是其实SimpleDraweeView使用到的真正的Controller类是PipeLineDraweeControllerBuilder：
-public void setImageURI(Uri uri, @Nullable O">
-<meta property="og:updated_time" content="2015-12-21T09:17:13.855Z">
+<meta property="og:description" content="fresco请求部分分析SimpleDraweeView在setImageURI的时候，对controller做了默认设置，虽然是DraweeController，但是其实SimpleDraweeView使用到的真正的Controller类是PipeLineDraweeControllerBuilder：
+public void setImageURI(Uri uri, @Nullable Obj">
+<meta property="og:updated_time" content="2015-12-23T02:49:51.706Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android图片加载框架Fresco分析(五)">
-<meta name="twitter:description" content="#fresco请求部分分析
-SimpleDraweeView在setImageURI的时候，对controller做了默认设置，虽然是DraweeController，但是其实SimpleDraweeView使用到的真正的Controller类是PipeLineDraweeControllerBuilder：
-public void setImageURI(Uri uri, @Nullable O">
+<meta name="twitter:description" content="fresco请求部分分析SimpleDraweeView在setImageURI的时候，对controller做了默认设置，虽然是DraweeController，但是其实SimpleDraweeView使用到的真正的Controller类是PipeLineDraweeControllerBuilder：
+public void setImageURI(Uri uri, @Nullable Obj">
   
     <link rel="alternative" href="/atom.xml" title="AFei" type="application/atom+xml">
   
@@ -203,8 +200,7 @@ public void setImageURI(Uri uri, @Nullable O">
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>#fresco请求部分分析</p>
-<p>SimpleDraweeView在setImageURI的时候，对controller做了默认设置，虽然是DraweeController，但是其实SimpleDraweeView使用到的真正的Controller类是PipeLineDraweeControllerBuilder：</p>
+        <h1 id="fresco请求部分分析">fresco请求部分分析</h1><p>SimpleDraweeView在setImageURI的时候，对controller做了默认设置，虽然是DraweeController，但是其实SimpleDraweeView使用到的真正的Controller类是PipeLineDraweeControllerBuilder：</p>
 <pre><code>public void setImageURI<span class="params">(Uri uri, @Nullable Object callerContext)</span> {
   DraweeController controller = mSimpleDraweeControllerBuilder
   .setCallerContext<span class="params">(callerContext)</span>
@@ -502,6 +498,15 @@ notifyConsumer(pooledOutputStream, <span class="literal">true</span>, fetchState
   
     
 <nav id="article-nav">
+  
+    <a href="/2015/12/23/2015-12-23/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          Android图片加载框架Fresco分析(六)
+        
+      </div>
+    </a>
   
   
     <a href="/2015/09/28/2015-09-28/" id="article-nav-older" class="article-nav-link-wrap">
