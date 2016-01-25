@@ -5,19 +5,22 @@
   
   <title>Android图片加载框架Fresco分析(六) | AFei</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="fresco图片显示过程分析SmipleDraweeView中的setImageURI方法中使用到了DraweeController，其实这个controller真正的对象应该是SimpleDraweeView的父类中的GenericDraweeHierarchy，
-public void setImageURI(Uri uri, @Nullable Object callerContext) {">
+  <meta name="description" content="fresco图片显示过程分析SmipleDraweeView中的setImageURI方法中使用到了DraweeController，
+public void setImageURI(Uri uri, @Nullable Object callerContext) {
+DraweeController controller = mSimpleDraweeControllerBuilder">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android图片加载框架Fresco分析(六)">
 <meta property="og:url" content="http://yoursite.com/2015/12/23/2015-12-23/index.html">
 <meta property="og:site_name" content="AFei">
-<meta property="og:description" content="fresco图片显示过程分析SmipleDraweeView中的setImageURI方法中使用到了DraweeController，其实这个controller真正的对象应该是SimpleDraweeView的父类中的GenericDraweeHierarchy，
-public void setImageURI(Uri uri, @Nullable Object callerContext) {">
-<meta property="og:updated_time" content="2015-12-23T02:50:00.755Z">
+<meta property="og:description" content="fresco图片显示过程分析SmipleDraweeView中的setImageURI方法中使用到了DraweeController，
+public void setImageURI(Uri uri, @Nullable Object callerContext) {
+DraweeController controller = mSimpleDraweeControllerBuilder">
+<meta property="og:updated_time" content="2016-01-22T13:33:16.538Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android图片加载框架Fresco分析(六)">
-<meta name="twitter:description" content="fresco图片显示过程分析SmipleDraweeView中的setImageURI方法中使用到了DraweeController，其实这个controller真正的对象应该是SimpleDraweeView的父类中的GenericDraweeHierarchy，
-public void setImageURI(Uri uri, @Nullable Object callerContext) {">
+<meta name="twitter:description" content="fresco图片显示过程分析SmipleDraweeView中的setImageURI方法中使用到了DraweeController，
+public void setImageURI(Uri uri, @Nullable Object callerContext) {
+DraweeController controller = mSimpleDraweeControllerBuilder">
   
     <link rel="alternative" href="/atom.xml" title="AFei" type="application/atom+xml">
   
@@ -200,7 +203,7 @@ public void setImageURI(Uri uri, @Nullable Object callerContext) {">
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="fresco图片显示过程分析">fresco图片显示过程分析</h1><p>SmipleDraweeView中的setImageURI方法中使用到了DraweeController，其实这个controller真正的对象应该是SimpleDraweeView的父类中的GenericDraweeHierarchy，</p>
+        <h1 id="fresco图片显示过程分析">fresco图片显示过程分析</h1><p>SmipleDraweeView中的setImageURI方法中使用到了DraweeController，</p>
 <pre><code>public void setImageURI<span class="params">(Uri uri, @Nullable Object callerContext)</span> {
 DraweeController controller = mSimpleDraweeControllerBuilder
     .setCallerContext<span class="params">(callerContext)</span>
@@ -252,7 +255,7 @@ mFadeDrawable.endBatchMode<span class="params">()</span>;
     
 <nav id="article-nav">
   
-    <a href="/2016/01/06/2016-1-6/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2016/01/06/2016-01-06/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         

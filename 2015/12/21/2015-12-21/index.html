@@ -13,7 +13,7 @@ public void setImageURI(Uri uri, @Nullable Obj">
 <meta property="og:site_name" content="AFei">
 <meta property="og:description" content="fresco请求部分分析SimpleDraweeView在setImageURI的时候，对controller做了默认设置，虽然是DraweeController，但是其实SimpleDraweeView使用到的真正的Controller类是PipeLineDraweeControllerBuilder：
 public void setImageURI(Uri uri, @Nullable Obj">
-<meta property="og:updated_time" content="2015-12-23T02:49:51.706Z">
+<meta property="og:updated_time" content="2016-01-22T06:44:48.949Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android图片加载框架Fresco分析(五)">
 <meta name="twitter:description" content="fresco请求部分分析SimpleDraweeView在setImageURI的时候，对controller做了默认设置，虽然是DraweeController，但是其实SimpleDraweeView使用到的真正的Controller类是PipeLineDraweeControllerBuilder：
@@ -219,7 +219,13 @@ public void setImageURI(Uri uri, @Nullable Obj">
     }
     <span class="function"><span class="keyword">return</span> <span class="title">buildController</span><span class="params">()</span></span>;
 }
-</code></pre><p>该方法中返回的<strong>buildController()</strong>则是SimpleDraweeView本身使用到的PipeLineDraweeControllerBuilder中的buildController()：</p>
+  <span class="keyword">protected</span> <span class="function">AbstractDraweeController <span class="title">buildController</span><span class="params">()</span> </span>{
+    AbstractDraweeController controller = obtainController();
+    maybeBuildAndSetRetryManager(controller);
+    maybeAttachListeners(controller);
+    <span class="keyword">return</span> controller;
+  }
+</code></pre><p>该方法中返回的<strong>buildController()</strong>会执行到SimpleDraweeView本身使用到的PipeLineDraweeControllerBuilder中的obtainController()：</p>
 <pre><code>protected PipelineDraweeController obtainController<span class="params">()</span> {
   DraweeController oldController = getOldController<span class="params">()</span>;
   PipelineDraweeController controller;
@@ -268,7 +274,7 @@ Supplier&lt;DataSource&lt;IMAGE&gt;&gt; supplier = null;
 
 return supplier;
   }
-</code></pre><p>其中的重点为getDataSourceSupplierForRequest()方法和getFirstAvailableDataSourceSupplier()方法，其实getFirstAvailableDataSourceSupplier方法进去看一下就能发现，他将对各请求循环遍历了下，但是最终还是调用到了getDataSourceSupplierForRequest()方法。由此可见，一个是针对单个请求的方法，一个是针对请求list的方法。我们下面看一下getDataSourceSupplierForRequest()的代码：</p>
+</code></pre><p>其中的重点为<strong>getDataSourceSupplierForRequest()</strong>方法和getFirstAvailableDataSourceSupplier()方法，其实getFirstAvailableDataSourceSupplier方法进去看一下就能发现，他将对各请求循环遍历了下，但是最终还是调用到了getDataSourceSupplierForRequest()方法。由此可见，一个是针对单个请求的方法，一个是针对请求list的方法。我们下面看一下getDataSourceSupplierForRequest()的代码：</p>
 <pre><code><span class="keyword">protected</span> Supplier&lt;DataSource&lt;IMAGE&gt;&gt; getDataSourceSupplierForRequest(
   <span class="keyword">final</span> REQUEST imageRequest,
   <span class="keyword">final</span> <span class="keyword">boolean</span> bitmapCacheOnly) {
