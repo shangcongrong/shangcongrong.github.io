@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="AFei">
 <meta property="og:description" content="Fresco的Model层设计上回讲到fresco的controller层，主要涉及到的是设置请求(ImageRequest)设置动画等等。下面讲述一下fresco的第三层次，Hierarchy层。
 在SimpleDraweeView的最上层DraweeView中，有一个setHierarchy()，即开发者如果需要自己定义hierarchy的话，可以使用这个方法。而如果不用自定义的话。在Draw">
-<meta property="og:updated_time" content="2015-12-21T09:15:01.662Z">
+<meta property="og:updated_time" content="2016-02-01T03:03:06.215Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android图片加载框架Fresco分析(四)">
 <meta name="twitter:description" content="Fresco的Model层设计上回讲到fresco的controller层，主要涉及到的是设置请求(ImageRequest)设置动画等等。下面讲述一下fresco的第三层次，Hierarchy层。
@@ -201,39 +201,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="Fresco的Model层设计">Fresco的Model层设计</h1><p>上回讲到fresco的controller层，主要涉及到的是设置请求(ImageRequest)设置动画等等。下面讲述一下fresco的第三层次，Hierarchy层。</p>
-<p>在SimpleDraweeView的最上层DraweeView中，有一个<strong>setHierarchy()</strong>，即开发者如果需要自己定义hierarchy的话，可以使用这个方法。而如果不用自定义的话。在DraweeView的子类GenericDraweeView的构造函数中便有已经设置好的hierarchy。同样的，hierarchy也需要一个builder(<strong>GenericDraweeHierarchyBuilder</strong>)才可以创建(fresco中builder模式随处可见)。是否还记得在xml中使用SimpleDraweeView时候设置的xml各种属性？这些属性在这里才真正用到。</p>
-<pre><code>GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder<span class="params">(resources)</span>;
-<span class="comment">// set fade duration</span>
-builder.setFadeDuration<span class="params">(fadeDuration)</span>;
-<span class="comment">// set images &amp; scale types</span>
-<span class="keyword">if</span> <span class="params">(placeholderId &gt; <span class="number">0</span>)</span> {
-  builder.setPlaceholderImage<span class="params">(resources.getDrawable<span class="params">(placeholderId)</span>, placeholderScaleType)</span>;
-}
-<span class="keyword">if</span> <span class="params">(retryImageId &gt; <span class="number">0</span>)</span> {
-  builder.setRetryImage<span class="params">(resources.getDrawable<span class="params">(retryImageId)</span>, retryImageScaleType)</span>;
-}
-<span class="keyword">if</span> <span class="params">(failureImageId &gt; <span class="number">0</span>)</span> {
-  builder.setFailureImage<span class="params">(resources.getDrawable<span class="params">(failureImageId)</span>, failureImageScaleType)</span>;
-}
-<span class="keyword">if</span> <span class="params">(progressBarId &gt; <span class="number">0</span>)</span> {
-  Drawable progressBarDrawable = resources.getDrawable<span class="params">(progressBarId)</span>;
-  <span class="keyword">if</span> <span class="params">(progressBarAutoRotateInterval &gt; <span class="number">0</span>)</span> {
-    progressBarDrawable =
-        new AutoRotateDrawable<span class="params">(progressBarDrawable, progressBarAutoRotateInterval)</span>;
-  }
-  builder.setProgressBarImage<span class="params">(progressBarDrawable, progressBarScaleType)</span>;
-}
-<span class="keyword">if</span> <span class="params">(backgroundId &gt; <span class="number">0</span>)</span> {
-  builder.setBackground<span class="params">(resources.getDrawable<span class="params">(backgroundId)</span>)</span>;
-}
-<span class="keyword">if</span> <span class="params">(overlayId &gt; <span class="number">0</span>)</span> {
-  builder.setOverlay<span class="params">(resources.getDrawable<span class="params">(overlayId)</span>)</span>;
-}
-<span class="keyword">if</span> <span class="params">(pressedStateOverlayId &gt; <span class="number">0</span>)</span> {
-  builder.setPressedStateOverlay<span class="params">(getResources<span class="params">()</span>.getDrawable<span class="params">(pressedStateOverlayId)</span>)</span>;
-}
-
-builder.setActualImageScaleType<span class="params">(actualImageScaleType)</span>;
+<p>在SimpleDraweeView的最上层DraweeView中，有一个<strong>setHierarchy()</strong>，即开发者如果需要自己定义hierarchy的话，可以使用这个方法。而如果不用自定义的话。在DraweeView的子类GenericDraweeView的构造函数中便有已经设置好的hierarchy。同样的，hierarchy也需要一个builder(<strong>GenericDraweeHierarchyBuilder</strong>)才可以创建(fresco中builder模式随处可见)。是否还记得在xml中使用SimpleDraweeView时候设置的xml各种属性？这些属性在这里才真正用到。<br><a id="more"></a><br>    GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder(resources);<br>    // set fade duration<br>    builder.setFadeDuration(fadeDuration);<br>    // set images &amp; scale types<br>    if (placeholderId &gt; 0) {<br>      builder.setPlaceholderImage(resources.getDrawable(placeholderId), placeholderScaleType);<br>    }<br>    if (retryImageId &gt; 0) {<br>      builder.setRetryImage(resources.getDrawable(retryImageId), retryImageScaleType);<br>    }<br>    if (failureImageId &gt; 0) {<br>      builder.setFailureImage(resources.getDrawable(failureImageId), failureImageScaleType);<br>    }<br>    if (progressBarId &gt; 0) {<br>      Drawable progressBarDrawable = resources.getDrawable(progressBarId);<br>      if (progressBarAutoRotateInterval &gt; 0) {<br>        progressBarDrawable =<br>            new AutoRotateDrawable(progressBarDrawable, progressBarAutoRotateInterval);<br>      }<br>      builder.setProgressBarImage(progressBarDrawable, progressBarScaleType);<br>    }<br>    if (backgroundId &gt; 0) {<br>      builder.setBackground(resources.getDrawable(backgroundId));<br>    }<br>    if (overlayId &gt; 0) {<br>      builder.setOverlay(resources.getDrawable(overlayId));<br>    }<br>    if (pressedStateOverlayId &gt; 0) {<br>      builder.setPressedStateOverlay(getResources().getDrawable(pressedStateOverlayId));<br>    }</p>
+<pre><code>builder.setActualImageScaleType<span class="params">(actualImageScaleType)</span>;
 <span class="comment">// set rounding parameters</span>
 <span class="keyword">if</span> <span class="params">(roundAsCircle || roundedCornerRadius &gt; <span class="number">0</span>)</span> {
   RoundingParams roundingParams = new RoundingParams<span class="params">()</span>;
@@ -254,7 +223,30 @@ builder.setActualImageScaleType<span class="params">(actualImageScaleType)</span
   builder.setRoundingParams<span class="params">(roundingParams)</span>;
 }
 setHierarchy<span class="params">(builder.build<span class="params">()</span>)</span>;
-</code></pre><p>通过GenericDraweeHierarchyBuilder设置好属性之后，调用<strong>build()</strong>方法便会生成一个GenericDraweeHierarchy，</p>
+</code></pre><p>通过GenericDraweeHierarchyBuilder设置好属性之后，调用<strong>build()</strong>方法便会生成一个GenericDraweeHierarchy，那么他的图片是从哪里来的呢，GenericDraweeHierarchy实现了一个接口SettableDraweeHierarchy，这个接口中定义了图片加载过程中包括成功，失败，错误时候的情况。我们看一下成功之后的回调接口：</p>
+<pre><code>@Override
+public void setImage<span class="params">(Drawable drawable, float progress, boolean immediate)</span> {
+  drawable = maybeApplyRoundingBitmapOnly<span class="params">(mRoundingParams, mResources, drawable)</span>;
+  drawable.mutate<span class="params">()</span>;
+  mActualImageSettableDrawable.setDrawable<span class="params">(drawable)</span>;
+  mFadeDrawable.beginBatchMode<span class="params">()</span>;
+  fadeOutBranches<span class="params">()</span>;
+  fadeInLayer<span class="params">(mActualImageIndex)</span>;
+  setProgress<span class="params">(progress)</span>;
+  <span class="keyword">if</span> <span class="params">(immediate)</span> {
+        mFadeDrawable.finishTransitionImmediately<span class="params">()</span>;
+  }
+  mFadeDrawable.endBatchMode<span class="params">()</span>;
+}
+</code></pre><p>上一段代码中就将得到的图片fadeInLayer，而其他站位图则都进行了fadeOut，所以此时getTopDrawable时，便是获取到的最新的图片。那么又是什么时候去获取的图片呢。这时候需要回去看一下在AbstractDraweeController(用来控制图片显示的)中的Hierarchy便是直接使用的SettableDraweeHierarchy，也就是说，Controller中已经持有了SettableDraweeHierarchy的一个实例。</p>
+<pre><code><span class="annotation">@Override</span>
+  <span class="keyword">public</span> <span class="annotation">@Nullable</span>
+  <span class="function">DraweeHierarchy <span class="title">getHierarchy</span><span class="params">()</span> </span>{
+<span class="keyword">return</span> mSettableDraweeHierarchy;
+  }
+</code></pre><p>之后的就是上一篇文章中提到的，在AbstractDraweeController中如果发请求的话，会调用到submitRequest()方法，在此方法中会开线程去下载图片，如果图片下载成功回调至onNewResultImpl()方法中，紧接着又会执行到onNewResultInternal()方法中，这个方法中就会有这样一句：</p>
+<pre><code>mSettableDraweeHierarchy.setImage(drawable, <span class="number">1f</span>, wasImmediate);
+</code></pre><p>此时之前的SimpleDraweeView中的Hierarvhy便有了真正的图片，而之前在显示的时候都是占位图，此时再获取的时候就会发现，topDrawable便开始有了真正的图片可以显示。这样整个图片从请求到请求完成，到如何显示的流程便分析完成了。</p>
 
       
     </div>

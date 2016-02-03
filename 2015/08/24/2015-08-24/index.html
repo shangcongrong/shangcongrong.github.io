@@ -16,7 +16,7 @@
 每个view都有一个controller来控制。我们还是从源码来分析一下。
 上次说道，SimpleDraweeView需要Fresco类在初始化方法中设置一个controller。其实这个controller便是PipelineDraweeContr">
 <meta property="og:image" content="http://7xl9v5.com1.z0.glb.clouddn.com/blogimageimage_20150825202359.png">
-<meta property="og:updated_time" content="2015-08-26T06:36:36.164Z">
+<meta property="og:updated_time" content="2016-02-01T02:54:20.405Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android图片加载框架Fresco分析(三)">
 <meta name="twitter:description" content="Fresco的Controller层设计经过之前的分析，已经知道DraweeView的显示是需要controller层与hierarchy层接洽的。
@@ -206,7 +206,7 @@
       
         <h1 id="Fresco的Controller层设计">Fresco的Controller层设计</h1><p>经过之前的分析，已经知道DraweeView的显示是需要controller层与hierarchy层接洽的。</p>
 <p>每个view都有一个controller来控制。我们还是从源码来分析一下。</p>
-<p>上次说道，SimpleDraweeView需要Fresco类在初始化方法中设置一个controller。其实这个controller便是PipelineDraweeControllerBuilderSupplier类的对象。</p>
+<p>上次说道，SimpleDraweeView需要Fresco类在初始化方法中设置一个controller。其实这个controller便是PipelineDraweeControllerBuilderSupplier类提供的对象。</p>
 <pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">initializeDrawee</span><span class="params">(Context context)</span> </span>{
   sDraweeControllerBuilderSupplier = <span class="keyword">new</span> PipelineDraweeControllerBuilderSupplier(context);
   SimpleDraweeView.initialize(sDraweeControllerBuilderSupplier);

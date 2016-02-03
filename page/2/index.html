@@ -163,6 +163,162 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-2015-12-21" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/12/21/2015-12-21/" class="article-date">
+  	<time datetime="2015-12-21T09:10:30.000Z" itemprop="datePublished">2015-12-21</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/12/21/2015-12-21/">Android图片加载框架Fresco分析(五)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="fresco请求部分分析">fresco请求部分分析</h1><p>SimpleDraweeView在setImageURI的时候，对controller做了默认设置，虽然是DraweeController，但是其实SimpleDraweeView使用到的真正的Controller类是PipeLineDraweeControllerBuilder：</p>
+<pre><code>public void setImageURI<span class="params">(Uri uri, @Nullable Object callerContext)</span> {
+  DraweeController controller = mSimpleDraweeControllerBuilder
+  .setCallerContext<span class="params">(callerContext)</span>
+  .setUri<span class="params">(uri)</span>
+  .setOldController<span class="params">(getController<span class="params">()</span>)</span>
+  .build<span class="params">()</span>;
+  setController<span class="params">(controller)</span>;
+}
+</code></pre><p>其中的build()方法便是调用了controller的抽象建造者AbstrateDraweeControllerBuilder类中的build()方法：</p>
+<pre><code>  <span class="keyword">public</span> <span class="function">AbstractDraweeController <span class="title">build</span><span class="params">()</span> </span>{
+    validate();
+    <span class="comment">// if only a low-res request is specified, treat it as a final request.</span>
+    <span class="keyword">if</span> (mImageRequest == <span class="keyword">null</span> &amp;&amp; mMultiImageRequests == <span class="keyword">null</span> &amp;&amp; mLowResImageRequest != <span class="keyword">null</span>) {
+      mImageRequest = mLowResImageRequest;
+      mLowResImageRequest = <span class="keyword">null</span>;
+    }
+    <span class="function"><span class="keyword">return</span> <span class="title">buildController</span><span class="params">()</span></span>;
+}
+  <span class="keyword">protected</span> <span class="function">AbstractDraweeController <span class="title">buildController</span><span class="params">()</span> </span>{
+    AbstractDraweeController controller = obtainController();
+    maybeBuildAndSetRetryManager(controller);
+    maybeAttachListeners(controller);
+    <span class="keyword">return</span> controller;
+  }
+</code></pre><p>该方法中返回的<strong>buildController()</strong>会执行到SimpleDraweeView本身使用到的PipeLineDraweeControllerBuilder中的obtainController()：</p>
+<pre><code>protected PipelineDraweeController obtainController<span class="params">()</span> {
+  DraweeController oldController = getOldController<span class="params">()</span>;
+  PipelineDraweeController controller;
+  <span class="keyword">if</span> <span class="params">(oldController instanceof PipelineDraweeController)</span> {
+    controller = <span class="params">(PipelineDraweeController)</span> oldController;
+    controller.initialize<span class="params">(
+        obtainDataSourceSupplier<span class="params">()</span>,
+        generateUniqueControllerId<span class="params">()</span>,
+        getCallerContext<span class="params">()</span>)</span>;
+  } <span class="keyword">else</span> {
+    controller = mPipelineDraweeControllerFactory.newController<span class="params">(
+        obtainDataSourceSupplier<span class="params">()</span>,
+        generateUniqueControllerId<span class="params">()</span>,
+        getCallerContext<span class="params">()</span>)</span>;
+  }
+  return controller;
+}
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fresco/">fresco</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/12/21/2015-12-21/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-2015-09-28" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/09/28/2015-09-28/" class="article-date">
+  	<time datetime="2015-09-28T08:49:42.000Z" itemprop="datePublished">2015-09-28</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/09/28/2015-09-28/">Android图片加载框架Fresco分析(四)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Fresco的Model层设计">Fresco的Model层设计</h1><p>上回讲到fresco的controller层，主要涉及到的是设置请求(ImageRequest)设置动画等等。下面讲述一下fresco的第三层次，Hierarchy层。</p>
+<p>在SimpleDraweeView的最上层DraweeView中，有一个<strong>setHierarchy()</strong>，即开发者如果需要自己定义hierarchy的话，可以使用这个方法。而如果不用自定义的话。在DraweeView的子类GenericDraweeView的构造函数中便有已经设置好的hierarchy。同样的，hierarchy也需要一个builder(<strong>GenericDraweeHierarchyBuilder</strong>)才可以创建(fresco中builder模式随处可见)。是否还记得在xml中使用SimpleDraweeView时候设置的xml各种属性？这些属性在这里才真正用到。<br>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fresco/">fresco</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/09/28/2015-09-28/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-2015-09-23" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -248,7 +404,7 @@
       
         <h1 id="Fresco的Controller层设计">Fresco的Controller层设计</h1><p>经过之前的分析，已经知道DraweeView的显示是需要controller层与hierarchy层接洽的。</p>
 <p>每个view都有一个controller来控制。我们还是从源码来分析一下。</p>
-<p>上次说道，SimpleDraweeView需要Fresco类在初始化方法中设置一个controller。其实这个controller便是PipelineDraweeControllerBuilderSupplier类的对象。</p>
+<p>上次说道，SimpleDraweeView需要Fresco类在初始化方法中设置一个controller。其实这个controller便是PipelineDraweeControllerBuilderSupplier类提供的对象。</p>
 <pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">initializeDrawee</span><span class="params">(Context context)</span> </span>{
   sDraweeControllerBuilderSupplier = <span class="keyword">new</span> PipelineDraweeControllerBuilderSupplier(context);
   SimpleDraweeView.initialize(sDraweeControllerBuilderSupplier);
@@ -327,130 +483,6 @@
 
       
 
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-2015-08-21" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/08/21/2015-08-21/" class="article-date">
-  	<time datetime="2015-08-21T07:19:17.000Z" itemprop="datePublished">2015-08-21</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/21/2015-08-21/">Android图片加载框架Fresco分析(二)</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Fresco的View层设计">Fresco的View层设计</h1><p><strong>DraweeView</strong> &lt;– <strong>GenericDraweeView</strong> &lt;– <strong>SimpleDraweeView</strong>，这便是View层控件的继承关系。</p>
-<p><strong>1.DraweeView</strong></p>
-<p>DraweeView虽然是用来加载图片的，而且也是继承自ImageView，但是Facebook并不支持使用ImageView内部的一些方法。之后的Fresco方法会摒弃ImageView，改继承自View。</p>
-<p>DraweeView初始化的时候会得到一个DraweeHolder对象，而DraweeHolder在DraweeView便是类似于一个管家，DraweeView将内部需要的大部分事情都交给了Holder来负责管理。比如setHierarchy()和setController()方法，都是将内容交给了holder来管理。这也是一个很好的分层管理方式，值得借鉴。</p>
-<p>这个父类中可以通过自定义Controller设置加载图片，或者通过setImageURI()使用默认的Controller加载图片。如果要使用这个View来加载图片，那么你就需要给他自定义Hierarchy了。<br>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fresco/">fresco</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/08/21/2015-08-21/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-2015-08-19" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/08/19/2015-08-19/" class="article-date">
-  	<time datetime="2015-08-19T03:29:29.000Z" itemprop="datePublished">2015-08-19</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/19/2015-08-19/">Android图片加载框架Fresco分析(一)</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>作为Android开发者，虽然不是大牛，但也接触了很多图片加载框架，因为手机上最难处理最占内存的往往也就是图片，如果图片处理不好，很容易引起程序崩溃。到目前为止我接触过很多种图片加载框架，其中主要有：UniversalImageLoader，Picasso，Glide，Fresco。<br>Fresco是Facebook最新推出的一款用于Android应用中展示图片的强大图片库，可以从网络、本地存储和本地资源中加载图片。其中的Drawees可以显示占位符，直到图片加载完成。而当图片从屏幕上消失时，会自动释放内存。由于目前项目中使用到了Fresco，所以针对Fresco做一下源码分析。</p>
-<h3 id="1-功能介绍">1.功能介绍</h3><p>Fresco类似ImageLoader和Picasoo一样，操作起来都比较简单，几行代码就可以开始使用了。可以简单的在xml里使用<strong>SimpleDraweeView</strong>配置一些属性。在代码中使用<strong>SimpleDraweeView</strong>的<strong>setImageURI</strong>方法来进行图片的加载。</p>
-<p>Fresco有很大的优点，Fresco的中文文档中说的就很明白，主要优点有：</p>
-<blockquote>
-<ol>
-<li>能够通过Drawees模块让不再显示在屏幕上的图片及时地释放内存和空间。</li>
-<li>能够渐进式加载图片。这也是其他图片加载控件所没有的功能。</li>
-<li>支持加载Gif图，支持WebP格式</li>
-<li>缩放或者旋转图片，圆形圆角图片等等
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fresco/">fresco</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/08/19/2015-08-19/#more">阅读全文 >></a>
-        </p>
       
       <div class="clearfix"></div>
     </div>

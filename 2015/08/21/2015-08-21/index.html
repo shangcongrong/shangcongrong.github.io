@@ -5,22 +5,16 @@
   
   <title>Android图片加载框架Fresco分析(二) | AFei</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Fresco的View层设计DraweeView &amp;lt;– GenericDraweeView &amp;lt;– SimpleDraweeView，这便是View层控件的继承关系。
-1.DraweeView
-DraweeView虽然是用来加载图片的，而且也是继承自ImageView，但是Facebook并不支持使用ImageView内部的一些方法。之后的Fresco方法会摒弃ImageView，改继承">
+  <meta name="description" content="Fresco的View层设计Fresco的view层较为简单，主要有三个view，DraweeView &amp;lt;– GenericDraweeView &amp;lt;– SimpleDraweeView，这便是View层控件的继承关系。在这三个view中，如果需要简单使用的话，可以直接使用SimpleDraweeView，如果要自定义View的话也可以继承上层的两个view。GenericDraweeV">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android图片加载框架Fresco分析(二)">
 <meta property="og:url" content="http://yoursite.com/2015/08/21/2015-08-21/index.html">
 <meta property="og:site_name" content="AFei">
-<meta property="og:description" content="Fresco的View层设计DraweeView &amp;lt;– GenericDraweeView &amp;lt;– SimpleDraweeView，这便是View层控件的继承关系。
-1.DraweeView
-DraweeView虽然是用来加载图片的，而且也是继承自ImageView，但是Facebook并不支持使用ImageView内部的一些方法。之后的Fresco方法会摒弃ImageView，改继承">
-<meta property="og:updated_time" content="2015-08-26T06:36:57.545Z">
+<meta property="og:description" content="Fresco的View层设计Fresco的view层较为简单，主要有三个view，DraweeView &amp;lt;– GenericDraweeView &amp;lt;– SimpleDraweeView，这便是View层控件的继承关系。在这三个view中，如果需要简单使用的话，可以直接使用SimpleDraweeView，如果要自定义View的话也可以继承上层的两个view。GenericDraweeV">
+<meta property="og:updated_time" content="2016-02-01T02:39:18.160Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android图片加载框架Fresco分析(二)">
-<meta name="twitter:description" content="Fresco的View层设计DraweeView &amp;lt;– GenericDraweeView &amp;lt;– SimpleDraweeView，这便是View层控件的继承关系。
-1.DraweeView
-DraweeView虽然是用来加载图片的，而且也是继承自ImageView，但是Facebook并不支持使用ImageView内部的一些方法。之后的Fresco方法会摒弃ImageView，改继承">
+<meta name="twitter:description" content="Fresco的View层设计Fresco的view层较为简单，主要有三个view，DraweeView &amp;lt;– GenericDraweeView &amp;lt;– SimpleDraweeView，这便是View层控件的继承关系。在这三个view中，如果需要简单使用的话，可以直接使用SimpleDraweeView，如果要自定义View的话也可以继承上层的两个view。GenericDraweeV">
   
     <link rel="alternative" href="/atom.xml" title="AFei" type="application/atom+xml">
   
@@ -203,16 +197,17 @@ DraweeView虽然是用来加载图片的，而且也是继承自ImageView，但�
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Fresco的View层设计">Fresco的View层设计</h1><p><strong>DraweeView</strong> &lt;– <strong>GenericDraweeView</strong> &lt;– <strong>SimpleDraweeView</strong>，这便是View层控件的继承关系。</p>
-<p><strong>1.DraweeView</strong></p>
+        <h1 id="Fresco的View层设计">Fresco的View层设计</h1><p>Fresco的view层较为简单，主要有三个view，<strong>DraweeView</strong> &lt;– <strong>GenericDraweeView</strong> &lt;– <strong>SimpleDraweeView</strong>，这便是View层控件的继承关系。在这三个view中，如果需要简单使用的话，可以直接使用SimpleDraweeView，如果要自定义View的话也可以继承上层的两个view。GenericDraweeView中则包含了很重要的用来显示图片的Hierarchy类，而最上层的DraweeView则包含了控制图片展示的Controller。下面将对每个view进行分析。</p>
+<p>###1.DraweeView</p>
 <p>DraweeView虽然是用来加载图片的，而且也是继承自ImageView，但是Facebook并不支持使用ImageView内部的一些方法。之后的Fresco方法会摒弃ImageView，改继承自View。</p>
-<p>DraweeView初始化的时候会得到一个DraweeHolder对象，而DraweeHolder在DraweeView便是类似于一个管家，DraweeView将内部需要的大部分事情都交给了Holder来负责管理。比如setHierarchy()和setController()方法，都是将内容交给了holder来管理。这也是一个很好的分层管理方式，值得借鉴。</p>
-<p>这个父类中可以通过自定义Controller设置加载图片，或者通过setImageURI()使用默认的Controller加载图片。如果要使用这个View来加载图片，那么你就需要给他自定义Hierarchy了。<br><a id="more"></a><br><strong>2.GenericDraweeView</strong></p>
-<p>在DraweeView的子类GenericDraweeView中，作者自定义了attrs属性。意味着，使用者只要在XML文件中针对View使用相应的属性参数便可以达到设置Hierarchy的效果。</p>
+<p>DraweeView初始化的时候会得到一个DraweeHolder对象，而DraweeHolder对于DraweeView便是类似于一个管家，DraweeView将内部需要的大部分事情都交给了Holder来负责管理。比如setHierarchy()和setController()方法，都是将内容交给了holder来管理。这也是一个很好的分层管理方式，值得借鉴。</p>
+<p>在DraweeView类中，Fresco提供了PipelineDraweeController，即pipeline机制来控制整个图片的缓存下载和显示逻辑。也可以通过自定义Controller设置加载图片。</p>
+<p>###2.GenericDraweeView</p>
+<p>在DraweeView的子类<strong>GenericDraweeView</strong>中，作者自定义了attrs属性。意味着，使用者只要在XML文件中针对View使用相应的属性参数便可以达到设置Hierarchy的属性。这样就方便了使用者，只要在XML中就可以得到自己想要的动画以及图片展示效果。</p>
 <blockquote>
 <p>DraweeView that creates GenericDraweeHierarchy based on XML attributes.</p>
 </blockquote>
-<p>其中包含了Hierarchy中可以设置的很多属性：</p>
+<p>下面列出了<strong>GenericDraweeView</strong>其中包含了Hierarchy中可以设置的很多属性：</p>
 <pre><code>/* <span class="type">Fading</span> animation parameters:
  * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_fadeDuration</span>
  * <span class="type">Images</span> &amp; scale types parameters:
@@ -241,34 +236,34 @@ DraweeView虽然是用来加载图片的，而且也是继承自ImageView，但�
  * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_roundingBorderWidth</span>
  * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_roundingBorderColor</span>
  */
-</code></pre><p>GenericDraweeView中属性设置的部分和一般自定义控件类似：</p>
+</code></pre><p><strong>GenericDraweeView</strong>中属性设置的部分和一般自定义控件类似：</p>
 <pre><code>TypedArray gdhAttrs = context.obtainStyledAttributes(
       attrs,
       R.styleable.GenericDraweeView)<span class="comment">;</span>
 fadeDuration = gdhAttrs.getInt(
         R.styleable.GenericDraweeView_fadeDuration,
         fadeDuration)<span class="comment">;</span>
-</code></pre><p>在完成这些设置之后，GenericDraweeView需要一个GenericDraweeHierarchyBuilder类的对象来保存所有的属性值，而他的返回值便是一个Hierarchy。也就是说。通过Builder的build()方法，构造了一个View需要的Hierarchy，然后吧XML中设置的属性都保存在Builder中等待使用。</p>
+</code></pre><p>在完成这些设置之后，<strong>GenericDraweeView</strong> 需要一个<strong>GenericDraweeHierarchyBuilder</strong>类的对象来保存所有的属性值，而他的返回值便是一个Hierarchy。也就是说，通过Builder的build()方法，构造了一个View需要的Hierarchy，然后把XML中设置的属性都保存在Builder中等待使用。</p>
 <pre><code>GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder<span class="params">(resources)</span>;
 builder.setFadeDuration<span class="params">(fadeDuration)</span>;
 ...其余属性设置
 setHierarchy<span class="params">(builder.build<span class="params">()</span>)</span>;
 </code></pre><p>Fresco在使用DraweeView的时候虽然宽高不能设置wrap_content，但是它提供了一个可以动态设置宽高比例的方法<strong>setAspectRatio</strong>，因此它需要在GenericDraweeView的OnMeasure方法中重新设置宽高</p>
 <pre><code><span class="keyword">private</span> <span class="keyword">final</span> AspectRatioMeasure.Spec mMeasureSpec = <span class="keyword">new</span> AspectRatioMeasure.Spec();
-@Override
-  <span class="keyword">protected</span> <span class="keyword">void</span> onMeasure(<span class="built_in">int</span> widthMeasureSpec, <span class="built_in">int</span> heightMeasureSpec){
-mMeasureSpec.<span class="variable">width</span> = widthMeasureSpec;
-mMeasureSpec.<span class="variable">height</span> = heightMeasureSpec;
-AspectRatioMeasure.updateMeasureSpec(
-    mMeasureSpec,
-    mAspectRatio,
-    getLayoutParams(),
-    getPaddingLeft() + getPaddingRight(),
-    getPaddingTop() + getPaddingBottom());
-<span class="keyword">super</span>.onMeasure(mMeasureSpec.<span class="variable">width</span>, mMeasureSpec.<span class="variable">height</span>);
+    @Override
+      <span class="keyword">protected</span> <span class="keyword">void</span> onMeasure(<span class="built_in">int</span> widthMeasureSpec, <span class="built_in">int</span> heightMeasureSpec){
+    mMeasureSpec.<span class="variable">width</span> = widthMeasureSpec;
+    mMeasureSpec.<span class="variable">height</span> = heightMeasureSpec;
+    AspectRatioMeasure.updateMeasureSpec(
+        mMeasureSpec,
+        mAspectRatio,
+        getLayoutParams(),
+        getPaddingLeft() + getPaddingRight(),
+        getPaddingTop() + getPaddingBottom());
+    <span class="keyword">super</span>.onMeasure(mMeasureSpec.<span class="variable">width</span>, mMeasureSpec.<span class="variable">height</span>);
   }
 </code></pre><p>AspectRatioMeasure类中的updateMeasureSpec方法，便是通过比例给View重新设置宽高。</p>
-<p><strong>3.SimpleDraweeView</strong><br>SimpleDraweeView类中有个静态的初始化方法initialize，这个初始化方法会在Fresco的<br>initialize中调用。</p>
+<p>###3.SimpleDraweeView<br>SimpleDraweeView类中有个静态的初始化方法initialize，这个初始化方法会在Fresco的<br>initialize中调用。</p>
 <pre><code><span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">initialize</span><span class="params">(Context context, ImagePipelineConfig imagePipelineConfig)</span> </span>{
   ImagePipelineFactory.initialize(imagePipelineConfig);
   initializeDrawee(context);
