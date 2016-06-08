@@ -163,6 +163,84 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-2016-01-21" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/01/21/2016-01-21/" class="article-date">
+  	<time datetime="2016-01-21T09:06:03.000Z" itemprop="datePublished">2016-01-21</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/01/21/2016-01-21/">Android图片加载框架Fresco分析(七)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>ImagePipeline类中的</p>
+<pre><code><span class="comment">/**
+ * Submits a request for bitmap cache lookup.
+ *
+ * <span class="doctag">@param</span> imageRequest the request to submit
+ * <span class="doctag">@return</span> a DataSource representing the image
+ */</span>
+<span class="keyword">public</span> DataSource&lt;CloseableReference&lt;CloseableImage&gt;&gt; fetchImageFromBitmapCache(
+    ImageRequest imageRequest,
+    Object callerContext) {
+  <span class="keyword">try</span> {
+    Producer&lt;CloseableReference&lt;CloseableImage&gt;&gt; producerSequence =
+        mProducerSequenceFactory.getDecodedImageProducerSequence(imageRequest);
+    <span class="keyword">return</span> submitFetchRequest(
+        producerSequence,
+        imageRequest,
+        ImageRequest.RequestLevel.BITMAP_MEMORY_CACHE,
+        callerContext);
+  } <span class="keyword">catch</span> (<span class="keyword">Exception</span> <span class="keyword">exception</span>) {
+    <span class="keyword">return</span> DataSources.immediateFailedDataSource(<span class="keyword">exception</span>);
+  }
+}
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fresco/">fresco</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/01/21/2016-01-21/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-2016-01-06" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -433,65 +511,6 @@ setController<span class="params">(controller)</span>;
       
         <p class="article-more-link">
           <a  href="/2015/09/28/2015-09-28/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-2015-09-23" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/09/23/2015-09-23/" class="article-date">
-  	<time datetime="2015-09-23T05:36:32.000Z" itemprop="datePublished">2015-09-23</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/23/2015-09-23/">Android快速多渠道打包方法</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="1-首先需要的是Python开发环境">1.首先需要的是Python开发环境</h1><p>去python官网<a href="https://www.python.org/downloads/下载最新版python3">https://www.python.org/downloads/下载最新版python3</a> 双击安装，配置path环境变量，把python安装的目录添加进去。</p>
-<h1 id="2-需要使用的文件">2.需要使用的文件</h1><p><strong>必备文件：</strong>info文件夹\channel.txt和MultiChannelBuildTool.py</p>
-<p><strong>其余文件：</strong>其余文件有些是在打包的过程中会自动生成，如info文件夹/ temp.txt和包含有多渠道的app集合文件夹MutilChannel_<em>*</em>，这些文件在打包之前都要删除，附赠一个还有MD5校验工具。</p>
-<p><strong>注意：</strong>info文件夹和channel.txt如果没有可以自己新建起来，全部都是小写。<br>打包之前需要把MutilChannel_<em>*</em>文件夹和temp.txt都删除。<br>MultiChannelBuildTool.py的MD5为7A07C15C9B26881276CEC99C7D19DB34<br>每次打包之前都应该用MD5校验工具查看下，防止被人修改。</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/09/23/2015-09-23/#more">阅读全文 >></a>
         </p>
       
       <div class="clearfix"></div>
