@@ -163,6 +163,108 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-2016-06-08" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/06/08/2016-06-08/" class="article-date">
+  	<time datetime="2016-06-08T07:12:21.000Z" itemprop="datePublished">2016-06-08</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/06/08/2016-06-08/">Android图片转换字体</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>需求实现过程中遇到了一个问题，模块需要同时显示文字，一个图标和带有html标签的有颜色文字，我们试用了几个方法。基本上可以作为同一类型的TextView富文本等方式设置的总结。</p>
+<h4 id="1-_Spannable">1. Spannable</h4><p>首先使用了Spannable，看下代码：</p>
+<pre><code>SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder<span class="params">(mWarehouse + <span class="string">" 至  "</span>)</span>;
+ImageSpan imageSpan = new ImageSpan<span class="params">(getContext<span class="params">()</span>, R.drawable.address_icon)</span>;
+spannableStringBuilder.setSpan<span class="params">(imageSpan, spannableStringBuilder.length<span class="params">()</span> - <span class="number">1</span>, spannableStringBuilder.length<span class="params">()</span>, Spannable
+        .SPAN_INCLUSIVE_EXCLUSIVE)</span>;
+<span class="keyword">if</span> <span class="params">(StringUtils.isNotNull<span class="params">(goodsDelivery.getPostage<span class="params">()</span>)</span>)</span> {
+    spannableStringBuilder.append<span class="params">(<span class="string">" "</span> + goodsDelivery.getAddress<span class="params">()</span> + <span class="string">" "</span> + Html.fromHtml<span class="params">(goodsDelivery.getPostage<span class="params">()</span>)</span>)</span>;
+}
+mPostageRulesContainer.setText<span class="params">(spannableStringBuilder)</span>;
+</code></pre><p>这个应该网上有很多，使用的过程中发现后台传的字符串中间是有html标签的，spannable不能识别标签中的属性因此这种方法不能适用。</p>
+<h4 id="2-_Html-ImageGetter">2. Html.ImageGetter</h4><p>接着使用了Html.ImageGetter方法，先看一下代码：</p>
+<pre><code>Html.ImageGetter imageGetter = new Html.ImageGetter<span class="params">()</span> {
+
+    public Drawable getDrawable<span class="params">(String source)</span> {
+        int rId = Integer.parseInt<span class="params">(source)</span>;
+        Drawable drawable = getResources<span class="params">()</span>.getDrawable<span class="params">(rId)</span>;
+        <span class="keyword">if</span> <span class="params">(drawable != null)</span> {
+            drawable.setBounds<span class="params">(<span class="number">0</span>, <span class="number">0</span>, drawable.getIntrinsicWidth<span class="params">()</span>, drawable.getIntrinsicHeight<span class="params">()</span>)</span>;
+        }
+        return drawable;
+    }
+};
+String test = mWarehouse + <span class="string">" 至  &lt;img src=\""</span> + R.drawable.address_icon_a + <span class="string">"\" /&gt; "</span> + goodsDelivery.getAddress<span class="params">()</span> + goodsDelivery.getPostage<span class="params">()</span>;
+mPostageRulesContainer.setText<span class="params">(Html.fromHtml<span class="params">(text, imageGetter, null)</span>)</span>;
+</code></pre><p>这个方法可以支持将图标通过<img>标签加入到string中，再通过Html.fromHtml()方法是用。此时显示就没有问题了，但是这个方法还有个问题就是在TextView中设置了行间距之后，会导致图标无法识别行间距，而出现视觉上看起来和文字不在同一行的问题。</p>
+<p>之后我们想到用监听TextView的行数来解决问题，先看代码：</p>
+<pre><code>mPostageRulesContainer.post(<span class="keyword">new</span> Runnable() {
+        @<span class="function">Override
+        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{
+            <span class="keyword">if</span> (mPostageRulesContainer.getLineCount() &gt; <span class="number">1</span>) {
+                mPostageRulesContainer.setText(Html.fromHtml(mWarehouse + <span class="string">" 至  &lt;img src=\""</span> + R.drawable.address_icon + <span class="string">"\" /&gt; "</span> +
+                        goodsDelivery.getAddress() +
+                        goodsDelivery.getPostage(), imageGetter, null));
+                mTitle.setPadding(<span class="number">0</span>,<span class="number">23</span>,<span class="number">0</span>,<span class="number">0</span>);
+            }<span class="keyword">else</span> <span class="keyword">if</span> (mPostageRulesContainer.getLineCount()==<span class="number">1</span>){
+                mTitle.setPadding(<span class="number">0</span>,<span class="number">2</span>,<span class="number">0</span>,<span class="number">0</span>);
+            }
+        }
+    });
+</code></pre><p>这样会有两个弊端，一是TextView要在setText之后再进行监听才管用。二是，需要区分行数使用不同的图片，这样就会存在两张图片。</p>
+<h4 id="3-_图片转换字体">3. 图片转换字体</h4><p>最后选择的方法是，将图片转换成字体，通过一个特殊的字符串来代表这个图片，相当于把这个图片变成了一个字，下面详细说一下这个方法。</p>
+<p>首先要把这个图标转换成ttf文件，可以自己生成。我是通过<a href="http://fontello.com/" target="_blank" rel="external">http://fontello.com/</a>，在这个网站上下载到了一个一样的图标，把这个图标生成一个ttf文件，将ttf字体文件放在assets/fonts目录下。然后在demo.html中得到了这个图标的文字编码，设置在string中就可以直接使用了。</p>
+<p>用法比较简单，看一下代码:</p>
+<pre><code>Typeface iconfont = Typeface.createFromAsset<span class="params">(getContext<span class="params">()</span>.getAssets<span class="params">()</span>, <span class="string">"fonts/fontello.ttf"</span>)</span>;
+String <span class="built_in">text</span> = mWarehouse + <span class="string">" 至  "</span> + getContext<span class="params">()</span>.getString<span class="params">(R.string.ic_postage)</span> + goodsDelivery.getAddress<span class="params">()</span> + <span class="string">" "</span> +
+        goodsDelivery.getPostage<span class="params">()</span>;
+mPostageRulesContainer.setTypeface<span class="params">(iconfont)</span>;
+mPostageRulesContainer.setText<span class="params">(Html.fromHtml<span class="params">(test)</span>)</span>;
+</code></pre><p>这样就解决了目前遇到的所有问题，而且发现这样设置图标还有一个好处，就是可以通过颜色值和字体大小来控制图标的大小，可以完全把图标当成一个文字来处理。非常方便。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-2016-04-16" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -407,84 +509,6 @@ public void onAttach<span class="params">()</span> {
 
       
 
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-2016-01-21" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/21/2016-01-21/" class="article-date">
-  	<time datetime="2016-01-21T09:06:03.000Z" itemprop="datePublished">2016-01-21</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/21/2016-01-21/">Android图片加载框架Fresco分析(七)</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>ImagePipeline类中的</p>
-<pre><code><span class="comment">/**
- * Submits a request for bitmap cache lookup.
- *
- * <span class="doctag">@param</span> imageRequest the request to submit
- * <span class="doctag">@return</span> a DataSource representing the image
- */</span>
-<span class="keyword">public</span> DataSource&lt;CloseableReference&lt;CloseableImage&gt;&gt; fetchImageFromBitmapCache(
-    ImageRequest imageRequest,
-    Object callerContext) {
-  <span class="keyword">try</span> {
-    Producer&lt;CloseableReference&lt;CloseableImage&gt;&gt; producerSequence =
-        mProducerSequenceFactory.getDecodedImageProducerSequence(imageRequest);
-    <span class="keyword">return</span> submitFetchRequest(
-        producerSequence,
-        imageRequest,
-        ImageRequest.RequestLevel.BITMAP_MEMORY_CACHE,
-        callerContext);
-  } <span class="keyword">catch</span> (<span class="keyword">Exception</span> <span class="keyword">exception</span>) {
-    <span class="keyword">return</span> DataSources.immediateFailedDataSource(<span class="keyword">exception</span>);
-  }
-}
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fresco/">fresco</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/01/21/2016-01-21/#more">阅读全文 >></a>
-        </p>
       
       <div class="clearfix"></div>
     </div>
