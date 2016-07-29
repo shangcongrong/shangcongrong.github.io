@@ -15,7 +15,7 @@ SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(mWa">
 <meta property="og:description" content="需求实现过程中遇到了一个问题，模块需要同时显示文字，一个图标和带有html标签的有颜色文字，我们试用了几个方法。基本上可以作为同一类型的TextView富文本等方式设置的总结。
 1. Spannable首先使用了Spannable，看下代码：
 SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(mWa">
-<meta property="og:updated_time" content="2016-06-08T07:21:50.803Z">
+<meta property="og:updated_time" content="2016-07-29T12:47:05.434Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android图片转换字体">
 <meta name="twitter:description" content="需求实现过程中遇到了一个问题，模块需要同时显示文字，一个图标和带有html标签的有颜色文字，我们试用了几个方法。基本上可以作为同一类型的TextView富文本等方式设置的总结。
@@ -252,7 +252,8 @@ String <span class="built_in">text</span> = mWarehouse + <span class="string">" 
         goodsDelivery.getPostage<span class="params">()</span>;
 mPostageRulesContainer.setTypeface<span class="params">(iconfont)</span>;
 mPostageRulesContainer.setText<span class="params">(Html.fromHtml<span class="params">(test)</span>)</span>;
-</code></pre><p>这样就解决了目前遇到的所有问题，而且发现这样设置图标还有一个好处，就是可以通过颜色值和字体大小来控制图标的大小，可以完全把图标当成一个文字来处理。非常方便。</p>
+</code></pre><p>如果一定要是用自己的图片生成字体的话，可以到这个网站<a href="http://image.online-convert.com/convert-to-svg" target="_blank" rel="external">http://image.online-convert.com/convert-to-svg</a>去生成SVG图片，再到<a href="https://icomoon.io/app/#/select" target="_blank" rel="external">https://icomoon.io/app/#/select</a>这个网站将SVG图片转换成字体即可。具体可参考这篇文章：<a href="http://www.w3cplus.com/css3/how-to-turn-your-icons-into-a-web-font.html" title="如何把你的图标转换成web字体" target="_blank" rel="external">如何把你的图标转换成web字体</a>。</p>
+<p>这样就解决了目前遇到的所有问题，而且发现这样设置图标还有一个好处，就是可以通过颜色值和字体大小来控制图标的大小，可以完全把图标当成一个文字来处理。非常方便。</p>
 
       
     </div>
