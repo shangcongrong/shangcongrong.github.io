@@ -163,6 +163,68 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-2016-08-01" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/08/01/2016-08-01/" class="article-date">
+  	<time datetime="2016-08-01T07:12:21.000Z" itemprop="datePublished">2016-08-01</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/01/2016-08-01/">Android制作卡片类长图踩坑记</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在实现需求过程中，最近产品喜欢上了分享大图卡片。但是发现每个地方分享的卡片大图还不一样。。。经过分析发现还是能够找到一点共性。先上图看看最基础的卡片样子。由于分享的卡片在四张图片上下都需要自定义一些其他控件，主要有文字商品信息等等。为了整理一个通用的管理方法来进行分享大图操作，我在其中使用到了策略模式。</p>
+<p>在实现之前先思考了一下，大概需要解决的问题有以下几个：</p>
+<ol>
+<li>在卡片中的几张图片还没下载完就吊起分享肯定是不行的。这就需要监听图片下载了；</li>
+<li>分享到的App对大图都是有大小限制的，其中微博限制最大2M，这样就需要进行图片压缩；</li>
+</ol>
+<h3 id="公共部分">公共部分</h3><p>在实现的过程中，需要一个layout文件，先将公共部分设置好，像上半部分和下半部分都是共有的，所以直接放在布局中。在布局的最外层需要使用到ScrollView，因为卡片可能会很长，只有ScrollView能够达到这种长图效果。此时在布局中需要预留出一个位置来放置下载好的图片，预留的包裹图片的控件叫做mShareImgContainer，在mShareImgContainer的上下也需要各预留一个ViewGroup，放置会变化的东西。公共的部分都很好做，下面仔细说一下下载图和放置图的处理部分。</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/08/01/2016-08-01/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-2016-06-08" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -198,47 +260,6 @@ spannableStringBuilder.setSpan<span class="params">(imageSpan, spannableStringBu
 }
 mPostageRulesContainer.setText<span class="params">(spannableStringBuilder)</span>;
 </code></pre><p>这个应该网上有很多，使用的过程中发现后台传的字符串中间是有html标签的，spannable不能识别标签中的属性因此这种方法不能适用。</p>
-<h4 id="2-_Html-ImageGetter">2. Html.ImageGetter</h4><p>接着使用了Html.ImageGetter方法，先看一下代码：</p>
-<pre><code>Html.ImageGetter imageGetter = new Html.ImageGetter<span class="params">()</span> {
-
-    public Drawable getDrawable<span class="params">(String source)</span> {
-        int rId = Integer.parseInt<span class="params">(source)</span>;
-        Drawable drawable = getResources<span class="params">()</span>.getDrawable<span class="params">(rId)</span>;
-        <span class="keyword">if</span> <span class="params">(drawable != null)</span> {
-            drawable.setBounds<span class="params">(<span class="number">0</span>, <span class="number">0</span>, drawable.getIntrinsicWidth<span class="params">()</span>, drawable.getIntrinsicHeight<span class="params">()</span>)</span>;
-        }
-        return drawable;
-    }
-};
-String test = mWarehouse + <span class="string">" 至  &lt;img src=\""</span> + R.drawable.address_icon_a + <span class="string">"\" /&gt; "</span> + goodsDelivery.getAddress<span class="params">()</span> + goodsDelivery.getPostage<span class="params">()</span>;
-mPostageRulesContainer.setText<span class="params">(Html.fromHtml<span class="params">(text, imageGetter, null)</span>)</span>;
-</code></pre><p>这个方法可以支持将图标通过<img>标签加入到string中，再通过Html.fromHtml()方法是用。此时显示就没有问题了，但是这个方法还有个问题就是在TextView中设置了行间距之后，会导致图标无法识别行间距，而出现视觉上看起来和文字不在同一行的问题。</p>
-<p>之后我们想到用监听TextView的行数来解决问题，先看代码：</p>
-<pre><code>mPostageRulesContainer.post(<span class="keyword">new</span> Runnable() {
-        @<span class="function">Override
-        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{
-            <span class="keyword">if</span> (mPostageRulesContainer.getLineCount() &gt; <span class="number">1</span>) {
-                mPostageRulesContainer.setText(Html.fromHtml(mWarehouse + <span class="string">" 至  &lt;img src=\""</span> + R.drawable.address_icon + <span class="string">"\" /&gt; "</span> +
-                        goodsDelivery.getAddress() +
-                        goodsDelivery.getPostage(), imageGetter, null));
-                mTitle.setPadding(<span class="number">0</span>,<span class="number">23</span>,<span class="number">0</span>,<span class="number">0</span>);
-            }<span class="keyword">else</span> <span class="keyword">if</span> (mPostageRulesContainer.getLineCount()==<span class="number">1</span>){
-                mTitle.setPadding(<span class="number">0</span>,<span class="number">2</span>,<span class="number">0</span>,<span class="number">0</span>);
-            }
-        }
-    });
-</code></pre><p>这样会有两个弊端，一是TextView要在setText之后再进行监听才管用。二是，需要区分行数使用不同的图片，这样就会存在两张图片。</p>
-<h4 id="3-_图片转换字体">3. 图片转换字体</h4><p>最后选择的方法是，将图片转换成字体，通过一个特殊的字符串来代表这个图片，相当于把这个图片变成了一个字，下面详细说一下这个方法。</p>
-<p>首先要把这个图标转换成ttf文件，可以自己生成。我是通过<a href="http://fontello.com/" target="_blank" rel="external">http://fontello.com/</a>，在这个网站上下载到了一个一样的图标，把这个图标生成一个ttf文件，将ttf字体文件放在assets/fonts目录下。然后在demo.html中得到了这个图标的文字编码，设置在string中就可以直接使用了。</p>
-<p>用法比较简单，看一下代码:</p>
-<pre><code>Typeface iconfont = Typeface.createFromAsset<span class="params">(getContext<span class="params">()</span>.getAssets<span class="params">()</span>, <span class="string">"fonts/fontello.ttf"</span>)</span>;
-String <span class="built_in">text</span> = mWarehouse + <span class="string">" 至  "</span> + getContext<span class="params">()</span>.getString<span class="params">(R.string.ic_postage)</span> + goodsDelivery.getAddress<span class="params">()</span> + <span class="string">" "</span> +
-        goodsDelivery.getPostage<span class="params">()</span>;
-mPostageRulesContainer.setTypeface<span class="params">(iconfont)</span>;
-mPostageRulesContainer.setText<span class="params">(Html.fromHtml<span class="params">(test)</span>)</span>;
-</code></pre><p>如果一定要是用自己的图片生成字体的话，可以到这个网站<a href="http://image.online-convert.com/convert-to-svg" target="_blank" rel="external">http://image.online-convert.com/convert-to-svg</a>去生成SVG图片，再到<a href="https://icomoon.io/app/#/select" target="_blank" rel="external">https://icomoon.io/app/#/select</a>这个网站将SVG图片转换成字体即可。具体可参考这篇文章：<a href="http://www.w3cplus.com/css3/how-to-turn-your-icons-into-a-web-font.html" title="如何把你的图标转换成web字体" target="_blank" rel="external">如何把你的图标转换成web字体</a>。</p>
-<p>这样就解决了目前遇到的所有问题，而且发现这样设置图标还有一个好处，就是可以通过颜色值和字体大小来控制图标的大小，可以完全把图标当成一个文字来处理。非常方便。</p>
-
       
     </div>
     
@@ -251,6 +272,10 @@ mPostageRulesContainer.setText<span class="params">(Html.fromHtml<span class="pa
 
       
 
+      
+        <p class="article-more-link">
+          <a  href="/2016/06/08/2016-06-08/#more">阅读全文 >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -434,82 +459,6 @@ mPostageRulesContainer.setText<span class="params">(Html.fromHtml<span class="pa
         <p class="article-more-link">
           <a  href="/2016/01/27/2016-01-27/#more">阅读全文 >></a>
         </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-2016-01-25" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/25/2016-01-25/" class="article-date">
-  	<time datetime="2016-01-25T07:43:38.000Z" itemprop="datePublished">2016-01-25</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/25/2016-01-25/">Android图片加载框架Fresco分析(八)</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Fresco的图片显示流程：</p>
-<p>DraweeView中的OnAttachedToWindow()方法中，会调用到DraweeHolder的onAttach()方法。DraweeHolder相当于View的管家。通过这个方法看出来，View在attached的时候就已经调用了holder的onAttach，而在这个onAttach中又会调用到attachController方法，进而调用controller的onAttach的方法。再进去看一下controller的attach方法里做了什么</p>
-<pre><code>@Override
-public void onAttach<span class="params">()</span> {
-  <span class="keyword">if</span> <span class="params">(FLog.isLoggable<span class="params">(FLog.VERBOSE)</span>)</span> {
-    FLog.v<span class="params">(
-        TAG,
-        <span class="string">"controller %x %s: onAttach: %s"</span>,
-        System.identityHashCode<span class="params">(this)</span>,
-        mId,
-        mIsRequestSubmitted ? <span class="string">"request already submitted"</span> : <span class="string">"request needs submit"</span>)</span>;
-  }
-  mEventTracker.recordEvent<span class="params">(Event.ON_ATTACH_CONTROLLER)</span>;
-  Preconditions.checkNotNull<span class="params">(mSettableDraweeHierarchy)</span>;
-  mDeferredReleaser.cancelDeferredRelease<span class="params">(this)</span>;
-  mIsAttached = <span class="literal">true</span>;
-  <span class="keyword">if</span> <span class="params">(!mIsRequestSubmitted)</span> {
-    submitRequest<span class="params">()</span>;
-  }
-}
-</code></pre><p>controller的onAttach方法出现在抽象类(AbstractDraweeController)中，在这里明显能够看出来<strong>submitRequest()</strong>调用了请求去下载图片。</p>
-<p>进到submitRequest方法中的代码可以看到一个mSettableDraweeHierarchy，这个Hierarchy是从SimpleDraweeView的父类GenericDraweeView里之前设置好的。同时，controller也会持有这个Hierarchy（之前说明过hierarchy就是用来显示图片和加载进度等）。再往下可以看到</p>
-<pre><code>mDataSource = getDataSource()<span class="comment">;</span>
-</code></pre><p>getDataSource便是将之前解析五中的流程都走了一遍。相当于得到了DataSource。其实最开始是很多的Producer，之后通过ProducerToDataSourceAdapter类将Producer转换成了DataSource。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fresco/">fresco</a></li></ul>
-	</div>
-
-      
-
       
       <div class="clearfix"></div>
     </div>

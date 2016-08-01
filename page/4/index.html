@@ -163,6 +163,70 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-2015-08-19" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/08/19/2015-08-19/" class="article-date">
+  	<time datetime="2015-08-19T03:29:29.000Z" itemprop="datePublished">2015-08-19</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/19/2015-08-19/">Android图片加载框架Fresco分析(一)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>作为Android开发者，虽然不是大牛，但也接触了很多图片加载框架，因为手机上最难处理最占内存的往往也就是图片，如果图片处理不好，很容易引起程序崩溃。到目前为止我接触过很多种图片加载框架，其中主要有：UniversalImageLoader，Picasso，Glide，Fresco。<br>Fresco是Facebook最新推出的一款用于Android应用中展示图片的强大图片库，可以从网络、本地存储和本地资源中加载图片。其中的Drawees可以显示占位符，直到图片加载完成。而当图片从屏幕上消失时，会自动释放内存。由于目前项目中使用到了Fresco，所以针对Fresco做一下源码分析。</p>
+<h3 id="1-功能介绍">1.功能介绍</h3><p>Fresco类似ImageLoader和Picasoo一样，操作起来都比较简单，几行代码就可以开始使用了。可以简单的在xml里使用<strong>SimpleDraweeView</strong>配置一些属性。在代码中使用<strong>SimpleDraweeView</strong>的<strong>setImageURI</strong>方法来进行图片的加载。</p>
+<p>Fresco有很大的优点，Fresco的中文文档中说的就很明白，主要优点有：</p>
+<blockquote>
+<ol>
+<li>能够通过Drawees模块让不再显示在屏幕上的图片及时地释放内存和空间。</li>
+<li>能够渐进式加载图片。这也是其他图片加载控件所没有的功能。</li>
+<li>支持加载Gif图，支持WebP格式</li>
+<li>缩放或者旋转图片，圆形圆角图片等等
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fresco/">fresco</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/08/19/2015-08-19/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-自定义控件使用isInEditMode防止窗口泄漏" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">

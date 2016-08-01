@@ -15,7 +15,7 @@ SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(mWa">
 <meta property="og:description" content="需求实现过程中遇到了一个问题，模块需要同时显示文字，一个图标和带有html标签的有颜色文字，我们试用了几个方法。基本上可以作为同一类型的TextView富文本等方式设置的总结。
 1. Spannable首先使用了Spannable，看下代码：
 SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(mWa">
-<meta property="og:updated_time" content="2016-07-29T12:47:05.434Z">
+<meta property="og:updated_time" content="2016-08-01T10:57:01.113Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android图片转换字体">
 <meta name="twitter:description" content="需求实现过程中遇到了一个问题，模块需要同时显示文字，一个图标和带有html标签的有颜色文字，我们试用了几个方法。基本上可以作为同一类型的TextView富文本等方式设置的总结。
@@ -214,6 +214,7 @@ spannableStringBuilder.setSpan<span class="params">(imageSpan, spannableStringBu
 }
 mPostageRulesContainer.setText<span class="params">(spannableStringBuilder)</span>;
 </code></pre><p>这个应该网上有很多，使用的过程中发现后台传的字符串中间是有html标签的，spannable不能识别标签中的属性因此这种方法不能适用。</p>
+<a id="more"></a>
 <h4 id="2-_Html-ImageGetter">2. Html.ImageGetter</h4><p>接着使用了Html.ImageGetter方法，先看一下代码：</p>
 <pre><code>Html.ImageGetter imageGetter = new Html.ImageGetter<span class="params">()</span> {
 
@@ -262,6 +263,15 @@ mPostageRulesContainer.setText<span class="params">(Html.fromHtml<span class="pa
   
     
 <nav id="article-nav">
+  
+    <a href="/2016/08/01/2016-08-01/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          Android制作卡片类长图踩坑记
+        
+      </div>
+    </a>
   
   
     <a href="/2016/04/16/2016-04-16/" id="article-nav-older" class="article-nav-link-wrap">

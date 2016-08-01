@@ -163,6 +163,82 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-2016-01-25" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/01/25/2016-01-25/" class="article-date">
+  	<time datetime="2016-01-25T07:43:38.000Z" itemprop="datePublished">2016-01-25</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/01/25/2016-01-25/">Android图片加载框架Fresco分析(八)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Fresco的图片显示流程：</p>
+<p>DraweeView中的OnAttachedToWindow()方法中，会调用到DraweeHolder的onAttach()方法。DraweeHolder相当于View的管家。通过这个方法看出来，View在attached的时候就已经调用了holder的onAttach，而在这个onAttach中又会调用到attachController方法，进而调用controller的onAttach的方法。再进去看一下controller的attach方法里做了什么</p>
+<pre><code>@Override
+public void onAttach<span class="params">()</span> {
+  <span class="keyword">if</span> <span class="params">(FLog.isLoggable<span class="params">(FLog.VERBOSE)</span>)</span> {
+    FLog.v<span class="params">(
+        TAG,
+        <span class="string">"controller %x %s: onAttach: %s"</span>,
+        System.identityHashCode<span class="params">(this)</span>,
+        mId,
+        mIsRequestSubmitted ? <span class="string">"request already submitted"</span> : <span class="string">"request needs submit"</span>)</span>;
+  }
+  mEventTracker.recordEvent<span class="params">(Event.ON_ATTACH_CONTROLLER)</span>;
+  Preconditions.checkNotNull<span class="params">(mSettableDraweeHierarchy)</span>;
+  mDeferredReleaser.cancelDeferredRelease<span class="params">(this)</span>;
+  mIsAttached = <span class="literal">true</span>;
+  <span class="keyword">if</span> <span class="params">(!mIsRequestSubmitted)</span> {
+    submitRequest<span class="params">()</span>;
+  }
+}
+</code></pre><p>controller的onAttach方法出现在抽象类(AbstractDraweeController)中，在这里明显能够看出来<strong>submitRequest()</strong>调用了请求去下载图片。</p>
+<p>进到submitRequest方法中的代码可以看到一个mSettableDraweeHierarchy，这个Hierarchy是从SimpleDraweeView的父类GenericDraweeView里之前设置好的。同时，controller也会持有这个Hierarchy（之前说明过hierarchy就是用来显示图片和加载进度等）。再往下可以看到</p>
+<pre><code>mDataSource = getDataSource()<span class="comment">;</span>
+</code></pre><p>getDataSource便是将之前解析五中的流程都走了一遍。相当于得到了DataSource。其实最开始是很多的Producer，之后通过ProducerToDataSourceAdapter类将Producer转换成了DataSource。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fresco/">fresco</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-2016-01-21" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -454,63 +530,6 @@ setController<span class="params">(controller)</span>;
       
         <p class="article-more-link">
           <a  href="/2015/12/21/2015-12-21/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-2015-09-28" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/09/28/2015-09-28/" class="article-date">
-  	<time datetime="2015-09-28T08:49:42.000Z" itemprop="datePublished">2015-09-28</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/28/2015-09-28/">Android图片加载框架Fresco分析(四)</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Fresco的Model层设计">Fresco的Model层设计</h1><p>上回讲到fresco的controller层，主要涉及到的是设置请求(ImageRequest)设置动画等等。下面讲述一下fresco的第三层次，Hierarchy层。</p>
-<p>在SimpleDraweeView的最上层DraweeView中，有一个<strong>setHierarchy()</strong>，即开发者如果需要自己定义hierarchy的话，可以使用这个方法。而如果不用自定义的话。在DraweeView的子类GenericDraweeView的构造函数中便有已经设置好的hierarchy。同样的，hierarchy也需要一个builder(<strong>GenericDraweeHierarchyBuilder</strong>)才可以创建(fresco中builder模式随处可见)。是否还记得在xml中使用SimpleDraweeView时候设置的xml各种属性？这些属性在这里才真正用到。<br>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fresco/">fresco</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/09/28/2015-09-28/#more">阅读全文 >></a>
         </p>
       
       <div class="clearfix"></div>
