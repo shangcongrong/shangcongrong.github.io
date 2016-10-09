@@ -103,7 +103,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+						<a href="/tags/Android/" style="font-size: 16.67px;">Android</a> <a href="/tags/React-Native/" style="font-size: 10px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/读书/" style="font-size: 13.33px;">读书</a>
 					</div>
 				</section>
 				
@@ -162,6 +162,64 @@
 	</div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-2016-01-27" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/01/27/2016-01-27/" class="article-date">
+  	<time datetime="2016-01-27T11:57:30.000Z" itemprop="datePublished">2016-01-27</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/01/27/2016-01-27/">《谷歌-重新定义公司》读后感</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="http://7xl9v5.com1.z0.glb.clouddn.com/2016-01-27.jpg" alt=""></p>
+<p>最近读了<strong>《谷歌-重新定义公司》</strong>这本书，总体上来讲，让读者都看到了新世纪高科技企业的文化。里面也讲到了很多关于创业公司该如何发展壮大的东西。都说谷歌是一家让人有归属感的公司，通过这本书确实让每个人都有一种向往。这本书的组织结构也是相当于一个专题一个专题的。而由于我读的过程中是在班车上，所以每天看一小段，刚好很合适。</p>
+<p>书中首先先从一个谷歌和微软竞争的小故事引出谷歌在面对困难时候所采取的各种措施。同时，以时代为大背景，讲述了谷歌是如何管理整个公司以及员工和公司之前微妙的关系变化。公司希望员工创造价值，而员工又希望通过公司实现自己的价值。等着两者达到统一并且平衡的时候，就是双赢的态势。<br>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/读书/">读书</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/01/27/2016-01-27/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
   
     <article id="post-2016-01-25" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -431,105 +489,6 @@ setController<span class="params">(controller)</span>;
       
         <p class="article-more-link">
           <a  href="/2015/12/23/2015-12-23/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-2015-12-21" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/12/21/2015-12-21/" class="article-date">
-  	<time datetime="2015-12-21T09:10:30.000Z" itemprop="datePublished">2015-12-21</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/12/21/2015-12-21/">Android图片加载框架Fresco分析(五)</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="fresco请求部分分析">fresco请求部分分析</h1><p>SimpleDraweeView在setImageURI的时候，对controller做了默认设置，虽然是DraweeController，但是其实SimpleDraweeView使用到的真正的Controller类是PipeLineDraweeControllerBuilder：</p>
-<pre><code>public void setImageURI<span class="params">(Uri uri, @Nullable Object callerContext)</span> {
-  DraweeController controller = mSimpleDraweeControllerBuilder
-  .setCallerContext<span class="params">(callerContext)</span>
-  .setUri<span class="params">(uri)</span>
-  .setOldController<span class="params">(getController<span class="params">()</span>)</span>
-  .build<span class="params">()</span>;
-  setController<span class="params">(controller)</span>;
-}
-</code></pre><p>其中的build()方法便是调用了controller的抽象建造者AbstrateDraweeControllerBuilder类中的build()方法：</p>
-<pre><code>  <span class="keyword">public</span> <span class="function">AbstractDraweeController <span class="title">build</span><span class="params">()</span> </span>{
-    validate();
-    <span class="comment">// if only a low-res request is specified, treat it as a final request.</span>
-    <span class="keyword">if</span> (mImageRequest == <span class="keyword">null</span> &amp;&amp; mMultiImageRequests == <span class="keyword">null</span> &amp;&amp; mLowResImageRequest != <span class="keyword">null</span>) {
-      mImageRequest = mLowResImageRequest;
-      mLowResImageRequest = <span class="keyword">null</span>;
-    }
-    <span class="function"><span class="keyword">return</span> <span class="title">buildController</span><span class="params">()</span></span>;
-}
-  <span class="keyword">protected</span> <span class="function">AbstractDraweeController <span class="title">buildController</span><span class="params">()</span> </span>{
-    AbstractDraweeController controller = obtainController();
-    maybeBuildAndSetRetryManager(controller);
-    maybeAttachListeners(controller);
-    <span class="keyword">return</span> controller;
-  }
-</code></pre><p>该方法中返回的<strong>buildController()</strong>会执行到SimpleDraweeView本身使用到的PipeLineDraweeControllerBuilder中的obtainController()：</p>
-<pre><code>protected PipelineDraweeController obtainController<span class="params">()</span> {
-  DraweeController oldController = getOldController<span class="params">()</span>;
-  PipelineDraweeController controller;
-  <span class="keyword">if</span> <span class="params">(oldController instanceof PipelineDraweeController)</span> {
-    controller = <span class="params">(PipelineDraweeController)</span> oldController;
-    controller.initialize<span class="params">(
-        obtainDataSourceSupplier<span class="params">()</span>,
-        generateUniqueControllerId<span class="params">()</span>,
-        getCallerContext<span class="params">()</span>)</span>;
-  } <span class="keyword">else</span> {
-    controller = mPipelineDraweeControllerFactory.newController<span class="params">(
-        obtainDataSourceSupplier<span class="params">()</span>,
-        generateUniqueControllerId<span class="params">()</span>,
-        getCallerContext<span class="params">()</span>)</span>;
-  }
-  return controller;
-}
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fresco/">fresco</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/12/21/2015-12-21/#more">阅读全文 >></a>
         </p>
       
       <div class="clearfix"></div>

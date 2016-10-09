@@ -103,7 +103,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+						<a href="/tags/Android/" style="font-size: 16.67px;">Android</a> <a href="/tags/React-Native/" style="font-size: 10px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/读书/" style="font-size: 13.33px;">读书</a>
 					</div>
 				</section>
 				
@@ -162,6 +162,76 @@
 	</div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-2016-10-09" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/10/09/2016-10-09/" class="article-date">
+  	<time datetime="2016-10-09T07:12:21.000Z" itemprop="datePublished">2016-10-09</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/10/09/2016-10-09/">React Native初探</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>大部分简单的功能实现官方文档的说明都很清楚，我这里主要说一下我在开发过程中遇到的一些棘手的问题和解决办法</p>
+<h3 id="1-布局和视觉样式部分">1.布局和视觉样式部分</h3><h4 id="a-RN中如何实现FrameLayout效果">a.RN中如何实现FrameLayout效果</h4><p>如果要在RN中实现类似Android中的FrameLayout效果，需要对view的style设置 <strong>positon: ‘absolute’</strong> ,以及一些方向属性</p>
+<pre><code><span class="tag">goods_left_label_style</span>: {
+    <span class="attribute">position</span>: <span class="string">'absolute'</span>,<span class="comment">//相对父元素进行绝对定位</span>
+    <span class="attribute">left</span>: <span class="number">0</span>,
+    <span class="attribute">top</span>: <span class="number">0</span>，
+    right：<span class="number">0</span>，
+    bottom：<span class="number">0</span> <span class="comment">//后面四个根据需要设置</span>
+},
+</code></pre><h4 id="b-等比例权重布局">b.等比例权重布局</h4><p>要进行等比例权重布局需要使用一个重要的属性，<strong>flexDirection</strong>，该属性用于指定主轴的方向。即指定子view的布局方向。可以设置两个值分别是：row和column。感觉上类似于<strong>orientation</strong>。接着在子布局中设置<strong>flex</strong>属性就是view的权重了，类似于android中的weight。</p>
+<p>除了flexDirection之外还有几个很重要的属性，下面说明一下他们的使用方法：</p>
+<p><strong>justifyContent</strong>和<strong>alignItems</strong>,这两个属性是相对的，第一个是设置子View的水平方向布局，第二个是设置VIew的竖直方向布局，他们的取值有相同也有不同。这两个属性都可以取三个值，分别是flex-start,flex-end,center,意思分别是顶部对齐，底部对齐，居中对齐。</p>
+<p>接着说他们不同的部分，justifyContent还有一个stretch属性，意思是在竖直方向上填充整个父布局；alignItems有两个分别是space-between和spage-around属性，这两个很特别在android上是没有的，<strong>space-between</strong>意思是第一个子组件位于父容器左端，最后一个子组件位于父容器最右端。然后平均分配在父容器水平方向上。<strong>space-around</strong>指所有子组件平均分配在父容器的水平方向上，左右都有留空隙。 </p>
+<p>以上的两个属性都是父布局管理子布局的属性，还有一个属性是<strong>alignSelf</strong>，他是用来单独设置组件竖直方向的样式，与alignItem类似，只是一个设置父一个设置子。</p>
+<p><strong>flexWrap</strong>用于设置子view是否可以换行，有两个属性可设置nowrap和wrap。nowrap:即使空间不够也不换行。wrap:空间不够的话自动换行。</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React-Native/">React Native</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/10/09/2016-10-09/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
   
     <article id="post-2016-08-01" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -402,64 +472,6 @@ mPostageRulesContainer.setText<span class="params">(spannableStringBuilder)</spa
 
       
 
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-2016-01-27" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/27/2016-01-27/" class="article-date">
-  	<time datetime="2016-01-27T11:57:30.000Z" itemprop="datePublished">2016-01-27</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/27/2016-01-27/">《谷歌-重新定义公司》读后感</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="http://7xl9v5.com1.z0.glb.clouddn.com/2016-01-27.jpg" alt=""></p>
-<p>最近读了<strong>《谷歌-重新定义公司》</strong>这本书，总体上来讲，让读者都看到了新世纪高科技企业的文化。里面也讲到了很多关于创业公司该如何发展壮大的东西。都说谷歌是一家让人有归属感的公司，通过这本书确实让每个人都有一种向往。这本书的组织结构也是相当于一个专题一个专题的。而由于我读的过程中是在班车上，所以每天看一小段，刚好很合适。</p>
-<p>书中首先先从一个谷歌和微软竞争的小故事引出谷歌在面对困难时候所采取的各种措施。同时，以时代为大背景，讲述了谷歌是如何管理整个公司以及员工和公司之前微妙的关系变化。公司希望员工创造价值，而员工又希望通过公司实现自己的价值。等着两者达到统一并且平衡的时候，就是双赢的态势。<br>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/读书/">读书</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/01/27/2016-01-27/#more">阅读全文 >></a>
-        </p>
       
       <div class="clearfix"></div>
     </div>
