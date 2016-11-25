@@ -103,7 +103,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Android/" style="font-size: 16.67px;">Android</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/读书/" style="font-size: 13.33px;">读书</a> <a href="/tags/随笔/" style="font-size: 10px;">随笔</a>
+						<a href="/tags/Android/" style="font-size: 16.67px;">Android</a> <a href="/tags/React-Native/" style="font-size: 10px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/读书/" style="font-size: 13.33px;">读书</a>
 					</div>
 				</section>
 				
@@ -162,6 +162,61 @@
 	</div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-2016-03-04" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/03/04/2016-03-04/" class="article-date">
+  	<time datetime="2016-03-04T01:55:58.000Z" itemprop="datePublished">2016-03-04</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/04/2016-03-04/">人生的意义是什么---《哲学家们都干了些什么？》读后感</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>由于之前和妹子定下了，每年至少看12本书的目标，而二月选择的就是这本书。整个二月，从春节前开始断断续续的到二月底才看完这本书。看完之后当我关上kindle，仔细回想书中的内容时。突然生发出一中想要静静地思考一下人生的冲动。就像书中末尾的疑问一样，我们为什么要活着？作者针对这句话给了一个很好的回答，如果回答不了为什么活着的问题，就问问自己“为什么不去自杀？”。是啊，为什么不去自杀呢？面对这个问题，我闭上眼睛认真想了一下，有很多个答案在我心里徘徊。如果自杀了父母会很伤心，我身边的人也会很伤心，而且感觉自己也真的还没有活够，这个世界上还有很多事情没有经历过，为什么要去自杀呢？那么父母亲人的爱，希望更多的经历世界上的新鲜事便是我的人生意义咯？不管怎样这本书开启了我对生活哲学的思考。</p>
+<p>作者的行文思路很明确，在开始提出问题，结束的时候以一中让读者思考的方式回答了自己的问题。中间部分讲述了整个哲学的发展史，读来也很轻松有趣。书中从皇权和宗教的斗争，讲到宗教和哲学的斗争，都是一个打压另外一个，出奇的相似。但是有一句话说的好：“需要用到暴力来解决的问题，都是已经解决不了的问题了。”在西方历史早期，由于人们不断的开始有了宗教信仰，所以皇权慢慢地沦为宗教势力的手下败将。而随着科学的进步，人们也会逐渐意识到宗教的部分问题无法说服大众。人们慢慢就会越来越倾向于相信科学。而通过观察每个科学观点的提出，以及互相之间的争论，又不难发现，有些争论完全是由于科学家之前哲学思想的碰撞。读来真是很畅快，能够引发人的思考。有时候觉得如果高中政治课也能像这样讲故事，真的能让学生明白很多哲学知识啊。</p>
+<p>书中也有几个很有名的哲学家给我留下了深刻的印象。休谟就是其中之一，休谟提出的怀疑论一直是我的想法，因为我对这个世界一直也是存在着怀疑的态度。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/读书/">读书</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
   
     <article id="post-2016-01-27" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -431,83 +486,9 @@ public void onAttach<span class="params">()</span> {
 
 
   
-    <article id="post-2015-12-23" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/12/23/2015-12-23/" class="article-date">
-  	<time datetime="2015-12-23T02:35:12.000Z" itemprop="datePublished">2015-12-23</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/12/23/2015-12-23/">Android图片加载框架Fresco分析(六)</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="fresco图片显示过程分析">fresco图片显示过程分析</h1><p>SmipleDraweeView中的setImageURI方法中使用到了DraweeController，</p>
-<pre><code>public void setImageURI<span class="params">(Uri uri, @Nullable Object callerContext)</span> {
-DraweeController controller = mSimpleDraweeControllerBuilder
-    .setCallerContext<span class="params">(callerContext)</span>
-    .setUri<span class="params">(uri)</span>
-    .setOldController<span class="params">(getController<span class="params">()</span>)</span>
-    .build<span class="params">()</span>;
-setController<span class="params">(controller)</span>;
-  }
-</code></pre><p>代码中有个setController，该方法属于父类DraweeView,我们进去该方法看一下：</p>
-<pre><code><span class="tag">public</span> <span class="tag">void</span> <span class="tag">setController</span>(<span class="at_rule">@<span class="keyword">Nullable</span> DraweeController draweeController) </span>{
-<span class="tag">mDraweeHolder</span><span class="class">.setController</span>(<span class="tag">draweeController</span>);
-<span class="tag">super</span><span class="class">.setImageDrawable</span>(<span class="tag">mDraweeHolder</span><span class="class">.getTopLevelDrawable</span>());
-  }
-</code></pre><p>其中可以看出来，最终显示的图片就是mDraweeHolder.getTopLevelDrawable()得到的。在进去DraweeHolder中看一下：</p>
-<pre><code><span class="keyword">public</span> <span class="function">Drawable <span class="title">getTopLevelDrawable</span><span class="params">()</span> </span>{
-<span class="keyword">return</span> mHierarchy == <span class="keyword">null</span> ? <span class="keyword">null</span> : mHierarchy.getTopLevelDrawable();
-  }
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fresco/">fresco</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/12/23/2015-12-23/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
     </nav>
   
 </div>
