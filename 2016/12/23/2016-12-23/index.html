@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Weex调研总结 | AFei</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1.更新方式更新方式主要有两种，
+第一种，将准备和项目一起打包的js文件放置在assets文件夹下，同时增加更新js文件的逻辑和读取更新文件的逻辑，当在apk发布之后想要更新js文件时，只要走下载逻辑，将js文件下载到自定义目录下，在加载的时候读取新的js文件即可。
+这种方式的缺点在于，js文件普遍都比较大，我目前做的两个demo一个展示的功能页面是40kb，红包雨动画是16kb，如果有数十个文件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Weex调研总结">
+<meta property="og:url" content="http://yoursite.com/2016/12/23/2016-12-23/index.html">
+<meta property="og:site_name" content="AFei">
+<meta property="og:description" content="1.更新方式更新方式主要有两种，
+第一种，将准备和项目一起打包的js文件放置在assets文件夹下，同时增加更新js文件的逻辑和读取更新文件的逻辑，当在apk发布之后想要更新js文件时，只要走下载逻辑，将js文件下载到自定义目录下，在加载的时候读取新的js文件即可。
+这种方式的缺点在于，js文件普遍都比较大，我目前做的两个demo一个展示的功能页面是40kb，红包雨动画是16kb，如果有数十个文件">
+<meta property="og:updated_time" content="2016-12-23T08:50:32.883Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Weex调研总结">
+<meta name="twitter:description" content="1.更新方式更新方式主要有两种，
+第一种，将准备和项目一起打包的js文件放置在assets文件夹下，同时增加更新js文件的逻辑和读取更新文件的逻辑，当在apk发布之后想要更新js文件时，只要走下载逻辑，将js文件下载到自定义目录下，在加载的时候读取新的js文件即可。
+这种方式的缺点在于，js文件普遍都比较大，我目前做的两个demo一个展示的功能页面是40kb，红包雨动画是16kb，如果有数十个文件">
+  
+    <link rel="alternative" href="/atom.xml" title="AFei" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/avatar.jpg">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="https://avatars1.githubusercontent.com/u/2649927?v=3&amp;u=8517cc7bbcbac2fea9b631e386b3dd32755b6eb0&amp;s=140" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Rodriguez-Xin</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/shangcongrong" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/rodriguezxin" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="/yangxin1545@163.com" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Android/" style="font-size: 17.5px;">Android</a> <a href="/tags/React-Native/" style="font-size: 12.5px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/weex/" style="font-size: 10px;">weex</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">每一首歌都有一个故事～</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Rodriguez-Xin</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="https://avatars1.githubusercontent.com/u/2649927?v=3&amp;u=8517cc7bbcbac2fea9b631e386b3dd32755b6eb0&amp;s=140" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Rodriguez-Xin</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/shangcongrong" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/rodriguezxin" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="/yangxin1545@163.com" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-2016-12-23" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/12/23/2016-12-23/" class="article-date">
+  	<time datetime="2016-12-23T08:47:01.000Z" itemprop="datePublished">2016-12-23</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Weex调研总结
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/weex/">weex</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="1-更新方式">1.更新方式</h4><p>更新方式主要有两种，</p>
+<p>第一种，将准备和项目一起打包的js文件放置在assets文件夹下，同时增加更新js文件的逻辑和读取更新文件的逻辑，当在apk发布之后想要更新js文件时，只要走下载逻辑，将js文件下载到自定义目录下，在加载的时候读取新的js文件即可。</p>
+<p>这种方式的缺点在于，js文件普遍都比较大，我目前做的两个demo一个展示的功能页面是40kb，红包雨动画是16kb，如果有数十个文件，那么apk的大小也是无法保证的。</p>
+<p>第二种，直接访问后台提供的js文件，即通过网络方式加载，类似于webview加载h5页面，此种方式可以搭配缓存策略来做。</p>
+<p>两种方式可以配合使用，对于比较重要的页面可以放在assets下面，其他的页面可以通过初始化时进行下载，之后如果有更新可以通过和本地的文件进行版本比对，如果需要更新再下载，不需要更新就是用本地文件。变动较大的可以直接使用网络文件。</p>
+<a id="more"></a>
+<h4 id="2-自定义组件">2.自定义组件</h4><h5 id="自定义Native_View">自定义Native View</h5><pre><code>public <span class="class"><span class="keyword">class</span> <span class="title">WeexImageView</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">WXComponent</span> {</span>
+
+public <span class="type">WeexImageView</span>(<span class="type">WXSDKInstance</span> instance, <span class="type">WXDomObject</span> dom, <span class="type">WXVContainer</span> parent, boolean isLazy) {
+    <span class="keyword">super</span>(instance, dom, parent, isLazy);
+}
+
+<span class="annotation">@Override</span>
+<span class="keyword">protected</span> <span class="type">View</span> initComponentHostView(<span class="annotation">@NonNull</span> <span class="type">Context</span> context) {
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="type">KaolaImageView</span>(context);
+}
+
+<span class="annotation">@Override</span>
+public <span class="type">View</span> getHostView() {
+    <span class="keyword">return</span> <span class="keyword">super</span>.getHostView();
+}
+
+<span class="annotation">@WXComponentProp</span>(name = <span class="string">"url"</span>)
+public void setUrlStr(<span class="type">String</span> url) {
+    <span class="type">ImageLoaderManager</span>.startLoad(<span class="keyword">new</span> <span class="type">ImageLoaderBuilder</span>(((<span class="type">KaolaImageView</span>) mHost), url));
+}
+}
+<span class="comment">//注册之后weex才能使用当前view</span>
+<span class="type">WXSDKEngine</span>.registerComponent(<span class="string">"kaolaimage"</span>, <span class="type">WeexImageView</span>.<span class="keyword">class</span>);
+</code></pre><h5 id="自定义Module">自定义Module</h5><pre><code>public <span class="class"><span class="keyword">class</span> <span class="title">DeviceModule</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">WXModule</span> {</span>
+  <span class="annotation">@WXModuleAnno</span>
+  public void getOSVersion(<span class="annotation">@Nullable</span> <span class="type">JSCallback</span> callback) {
+    <span class="type">String</span> osversion = android.os.<span class="type">Build</span>.<span class="type">VERSION</span>.<span class="type">RELEASE</span>;
+    <span class="keyword">if</span>(callback != <span class="literal">null</span>) {
+      callback.invoke(osversion);
+    }
+  }
+
+  <span class="annotation">@WXModuleAnno</span>
+  public void getSDKVersion(<span class="annotation">@Nullable</span> <span class="type">JSCallback</span> callback) {
+    <span class="annotation">@SuppressWarnings</span>(<span class="string">"deprecation"</span>)
+    <span class="type">String</span> sdkversion = android.os.<span class="type">Build</span>.<span class="type">VERSION</span>.<span class="type">SDK</span>;
+    <span class="keyword">if</span>(callback != <span class="literal">null</span>) {
+      callback.invoke(sdkversion);
+    }
+  }
+}
+
+<span class="type">WXSDKEngine</span>.registerModule(<span class="string">"deviceApi"</span>, <span class="type">DeviceModule</span>.<span class="keyword">class</span>);
+</code></pre><h5 id="自定义weex_View">自定义weex View</h5><p>官方文档中提到了自定义weex view的方法，其中在一个新的we文件中定义view是可以达到效果的，如果新view与使用者不在同一个目录下，需要使用 <strong>require(‘path-a/new.we’)</strong> 引用进来才可以。官网孩提供的另外一种，文件内部的引用view的方法是不行的，在中英文的文档中分别有两种方式一种是通过 <strong><element></element></strong> 一种是通过 <strong><we-element></we-element></strong> ,两种我都试过了没有效果。</p>
+<p>通过$vm(id)找到自定义组件的上下文，通过this.$el(id)找到组件。</p>
+<h4 id="3-调试方式">3.调试方式</h4><p>调试方式我开发的时候主要采用了三层方式。第一层在浏览器中调试，第二层通过weex-pack在官方提供的demo项目中调试，第三步再放在我们项目中进行调试。</p>
+<p>1.<strong>在浏览器中进行调试</strong>，官方提供了单独的we页面可以直接通过weex filename.we命令热更新到浏览器中查看。通过这种方式可以很方便的在浏览器中查看log信息。</p>
+<p>这个命令有个缺点，多个文件就无法通过此命令动态更新，必须一个一个执行。</p>
+<p>2.<strong>通过weex-pack命令</strong>，能够生成一个官方提供的demo项目，其中提供了android，ios和web三种方式的打包，通过这种方式可以直接打包成apk在手机上调试。</p>
+<p>在demo中调试时，可以使用weex debug命令，打开浏览器的窗口，扫描二维码即可在浏览器中调试，方便查看log信息。</p>
+<p>这个步骤需要针对手机进行布局上的一些微调，因为我在实现过程中发现在浏览器中运行正常的demo，放在手机上就显示不正确了。主要是表现在布局上，目前还不太清楚原理，估计可能底weex使用的布局有关系。</p>
+<p>但是这种方式也有缺点，初始化项目完成之后，需要手动更改一次playground项目中的assets/disc目录下的文件(可以全部删除)，因为每次打包不会删掉已经无用的文件。感觉这里是个bug。</p>
+<p>3.<strong>在项目中打包查看</strong>，通过以上两步基本上放在我们项目中就不会有什么问题了。在weex_gala分支下，我也在调试面板里增加了更新和demo显示页面，不过服务器我搭在了我的电脑上，之后会迁移到外网上。</p>
+<h4 id="一些目前遇到的问题">一些目前遇到的问题</h4><p>1.打包工具很多但是有一些不是很完善，还需要等待他们的版本更新，比如weexpack工具可以直接打包成apk，但是无用的文件却不会删掉，需要手动删除。weex loader工具需要自己设置很多东西来管理项目。期待之后weexpack的完善。</p>
+<p>2.目前还不支持停止和还原动画，他们之后的任务已经罗列在这里了<a href="https://github.com/alibaba/weex/issues/1494" target="_blank" rel="external">https://github.com/alibaba/weex/issues/1494</a>。</p>
+<p>3.分页加载的流畅性比RN好了很多，但是官方提供的下拉刷新和上拉加载效果都不是很好，会有卡顿的情况。</p>
+<p>4.对Native的依赖比RN多，本身并没有加载图片的方法，需要依赖native的加载图片逻辑。当然也可以使用native的网络加载模式。</p>
+<p>5.因为参考了vue，所以主要的view更新都是响应式的，即数据更新之后，view中即可实时显示出来，但是这种data设置需要在<strong><template\></template\></strong>标签内，如果想在<strong><style\></style\></strong>中更新就不行了。</p>
+<p>6.单个的we文件的大小在10k以内，但是生成的js文件就很大了，我做的两个功能分别是16kb(动画)和43kb(列表)。网上的Demo中有的有上百kb，所以是否要把js文件放在本地的assets文件夹下还是需要考虑的。</p>
+<h4 id="目前的成果">目前的成果</h4><p>完成了之前列表页的分页加载逻辑实现；</p>
+<p>完成了首页富运营红包雨动画的实现；</p>
+<p>跑通更新流程；</p>
+<p>we文件的管理和demo项目可以在这里下载：<a href="https://g.hz.netease.com/klandroid/gala" target="_blank" rel="external">https://g.hz.netease.com/klandroid/gala</a></p>
+<h4 id="之后要做的事">之后要做的事</h4><p>扩展kaola项目下的公共apiModule给js文件使用；</p>
+<p>在项目中统一weex总线逻辑；</p>
+<p>红包雨动画的暂停和点击效果；</p>
+<p>使用项目中成熟的模块，例如请求模块和一些基本信息获取的方法；</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/11/25/2016-11-25/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">React Native loading旋转动画的实现</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="2016-12-23" data-title="Weex调研总结" data-url="http://yoursite.com/2016/12/23/2016-12-23/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"rodriguez-xin"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 Rodriguez-Xin
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+
+<script>
+	var yiliaConfig = {
+		fancybox: false,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

@@ -103,7 +103,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Android/" style="font-size: 16.67px;">Android</a> <a href="/tags/React-Native/" style="font-size: 10px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/读书/" style="font-size: 13.33px;">读书</a>
+						<a href="/tags/Android/" style="font-size: 17.5px;">Android</a> <a href="/tags/React-Native/" style="font-size: 12.5px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/weex/" style="font-size: 10px;">weex</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a>
 					</div>
 				</section>
 				
@@ -162,6 +162,76 @@
 	</div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-2016-04-16" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/04/16/2016-04-16/" class="article-date">
+  	<time datetime="2016-04-16T01:35:19.000Z" itemprop="datePublished">2016-04-16</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/04/16/2016-04-16/">购物类App商品Sku级联逻辑</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>对于一个购物类的App，可以说sku量是很重要的一环，那么什么是sku呢，SKU=Stock Keeping Unit（库存量单位）。它的基本解释即库存进出计量的基本单元。什么意思呢？比如，我们去买一条裤子，裤子有红色和蓝色，每种颜色都有L，XL两种号码，那么，我们一定要买一条的话则必然颜色选择一种，型号选择一个。就会出现，红色L号，红色XL号，蓝色L号，蓝色XL号四种情况。而这四种商品便是库存量的最小单位，就是真正的SKU。</p>
+<p>在考拉商品详情页SKU的设计过程中，我用到了一个activity，一个view，一个manager。</p>
+<p>###一、数据组织方式</p>
+<p>我将每一个属性的的每一个属性值定义为一个model(SkuBtnEntity)，其中name为当前属性的名字，value为当前属性值。例如：name=颜色，value=红。同时每个按钮有四种状态，普通未选中状态，普通选中状态，缺货置灰未选中状态，缺货置灰选中状态。类中全部成员变量如下：</p>
+<pre><code><span class="keyword">private</span> TextView mSkuBtn;   <span class="comment">//属性按钮</span>
+<span class="keyword">private</span> <span class="built_in">int</span> mIsColor;       <span class="comment">//1为颜色属性，0为其他属性</span>
+<span class="keyword">private</span> <span class="keyword">String</span> mImageUrl;   <span class="comment">//图片url</span>
+<span class="keyword">private</span> <span class="keyword">String</span> mNameId;
+<span class="keyword">private</span> <span class="keyword">String</span> mName;
+<span class="keyword">private</span> <span class="keyword">String</span> mValueId;
+<span class="keyword">private</span> <span class="keyword">String</span> mValue;
+<span class="keyword">private</span> <span class="built_in">boolean</span> isAsh;      <span class="comment">//缺货置灰未选中状态</span>
+<span class="keyword">private</span> <span class="built_in">boolean</span> isPressed;  <span class="comment">//普通选中状态</span>
+<span class="keyword">private</span> <span class="built_in">boolean</span> isForcedAsh;<span class="comment">//缺货置灰选中状态</span>
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/04/16/2016-04-16/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
   
     <article id="post-2016-03-04" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -415,62 +485,6 @@ public void onAttach<span class="params">()</span> {
         <p class="article-more-link">
           <a  href="/2016/01/21/2016-01-21/#more">阅读全文 >></a>
         </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-2016-01-06" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/06/2016-01-06/" class="article-date">
-  	<time datetime="2016-01-06T06:08:55.000Z" itemprop="datePublished">2016-01-06</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/06/2016-01-06/">Android Studio peer not authenticated 问题解决</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>导入项目的时候发现了一个问题，项目导入完成了，但是一直在刷新，刷新完成后，一直提示</p>
-<pre><code>refresh failed xxx project
-<span class="constant">Error</span><span class="symbol">:Couse</span><span class="symbol">:peer</span> <span class="keyword">not</span> authenticated
-</code></pre><p>经过查询Studi的log文件(D:\Users\Administrator.AndroidStudioPreview1.4\system\log)发现，是缺少javassist-3.16.1-GA.jar文件，从正常的gradle文件夹中将这个jar包搞过来就正常了。可能是在下载gradle过程中缺少了文件。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
-	</div>
-
-      
-
       
       <div class="clearfix"></div>
     </div>
