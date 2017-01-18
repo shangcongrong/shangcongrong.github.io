@@ -5,22 +5,19 @@
   
   <title>AFei</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
+  <meta property="og:type" content="website">
 <meta property="og:title" content="AFei">
 <meta property="og:url" content="http://yoursite.com/page/4/index.html">
 <meta property="og:site_name" content="AFei">
-<meta property="og:description">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AFei">
-<meta name="twitter:description">
   
     <link rel="alternative" href="/atom.xml" title="AFei" type="application/atom+xml">
   
   
     <link rel="icon" href="/avatar.jpg">
   
-  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div id="container">
@@ -103,7 +100,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Android/" style="font-size: 17.5px;">Android</a> <a href="/tags/React-Native/" style="font-size: 12.5px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/weex/" style="font-size: 10px;">weex</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a>
+						<a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/React-Native/" style="font-size: 13.33px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/weex/" style="font-size: 10px;">weex</a> <a href="/tags/读书/" style="font-size: 16.67px;">读书</a>
 					</div>
 				</section>
 				
@@ -163,6 +160,122 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-2015-09-28" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/09/28/2015-09-28/" class="article-date">
+  	<time datetime="2015-09-28T08:49:42.000Z" itemprop="datePublished">2015-09-28</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/09/28/2015-09-28/">Android图片加载框架Fresco分析(四)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Fresco的Model层设计"><a href="#Fresco的Model层设计" class="headerlink" title="Fresco的Model层设计"></a>Fresco的Model层设计</h1><p>上回讲到fresco的controller层，主要涉及到的是设置请求(ImageRequest)设置动画等等。下面讲述一下fresco的第三层次，Hierarchy层。</p>
+<p>在SimpleDraweeView的最上层DraweeView中，有一个<strong>setHierarchy()</strong>，即开发者如果需要自己定义hierarchy的话，可以使用这个方法。而如果不用自定义的话。在DraweeView的子类GenericDraweeView的构造函数中便有已经设置好的hierarchy。同样的，hierarchy也需要一个builder(<strong>GenericDraweeHierarchyBuilder</strong>)才可以创建(fresco中builder模式随处可见)。是否还记得在xml中使用SimpleDraweeView时候设置的xml各种属性？这些属性在这里才真正用到。<br>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fresco/">fresco</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/09/28/2015-09-28/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-2015-09-23" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/09/23/2015-09-23/" class="article-date">
+  	<time datetime="2015-09-23T05:36:32.000Z" itemprop="datePublished">2015-09-23</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/09/23/2015-09-23/">Android快速多渠道打包方法</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-首先需要的是Python开发环境"><a href="#1-首先需要的是Python开发环境" class="headerlink" title="1.首先需要的是Python开发环境"></a>1.首先需要的是Python开发环境</h1><p>去python官网<a href="https://www.python.org/downloads/下载最新版python3">https://www.python.org/downloads/下载最新版python3</a> 双击安装，配置path环境变量，把python安装的目录添加进去。</p>
+<h1 id="2-需要使用的文件"><a href="#2-需要使用的文件" class="headerlink" title="2.需要使用的文件"></a>2.需要使用的文件</h1><p><strong>必备文件：</strong>info文件夹\channel.txt和MultiChannelBuildTool.py</p>
+<p><strong>其余文件：</strong>其余文件有些是在打包的过程中会自动生成，如info文件夹/ temp.txt和包含有多渠道的app集合文件夹MutilChannel_<em>*</em>，这些文件在打包之前都要删除，附赠一个还有MD5校验工具。</p>
+<p><strong>注意：</strong>info文件夹和channel.txt如果没有可以自己新建起来，全部都是小写。<br>打包之前需要把MutilChannel_<em>*</em>文件夹和temp.txt都删除。<br>MultiChannelBuildTool.py的MD5为7A07C15C9B26881276CEC99C7D19DB34<br>每次打包之前都应该用MD5校验工具查看下，防止被人修改。</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/09/23/2015-09-23/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-2015-08-24" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -187,11 +300,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Fresco的Controller层设计">Fresco的Controller层设计</h1><p>经过之前的分析，已经知道DraweeView的显示是需要controller层与hierarchy层接洽的。</p>
+        <h1 id="Fresco的Controller层设计"><a href="#Fresco的Controller层设计" class="headerlink" title="Fresco的Controller层设计"></a>Fresco的Controller层设计</h1><p>经过之前的分析，已经知道DraweeView的显示是需要controller层与hierarchy层接洽的。</p>
 <p>每个view都有一个controller来控制。我们还是从源码来分析一下。</p>
 <p>上次说道，SimpleDraweeView需要Fresco类在初始化方法中设置一个controller。其实这个controller便是PipelineDraweeControllerBuilderSupplier类提供的对象。</p>
-<pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">initializeDrawee</span><span class="params">(Context context)</span> </span>{
-  sDraweeControllerBuilderSupplier = <span class="keyword">new</span> PipelineDraweeControllerBuilderSupplier(context);
+<pre><code>private static void initializeDrawee(Context context) {
+  sDraweeControllerBuilderSupplier = new PipelineDraweeControllerBuilderSupplier(context);
   SimpleDraweeView.initialize(sDraweeControllerBuilderSupplier);
 }
 </code></pre><p>以上这些都是针对SimpleDraweeView由Fresco设置默认Controller，并无法自己定义。如果用户非要自己定义该怎么办呢？开发者也给我们提供了一个方法，这个方法也是在Fresco这个类中的<strong>newDraweeControllerBuilder()</strong>方法。我们先说fresco是如何使用自定义controller来协调View和Model层的。而且默认的配置也是facebook所推荐使用的。</p>
@@ -307,7 +420,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Fresco的View层设计">Fresco的View层设计</h1><p>Fresco的view层较为简单，主要有三个view，<strong>DraweeView</strong> &lt;– <strong>GenericDraweeView</strong> &lt;– <strong>SimpleDraweeView</strong>，这便是View层控件的继承关系。在这三个view中，如果需要简单使用的话，可以直接使用SimpleDraweeView，如果要自定义View的话也可以继承上层的两个view。GenericDraweeView中则包含了很重要的用来显示图片的Hierarchy类，而最上层的DraweeView则包含了控制图片展示的Controller。下面将对每个view进行分析。</p>
+        <h1 id="Fresco的View层设计"><a href="#Fresco的View层设计" class="headerlink" title="Fresco的View层设计"></a>Fresco的View层设计</h1><p>Fresco的view层较为简单，主要有三个view，<strong>DraweeView</strong> &lt;– <strong>GenericDraweeView</strong> &lt;– <strong>SimpleDraweeView</strong>，这便是View层控件的继承关系。在这三个view中，如果需要简单使用的话，可以直接使用SimpleDraweeView，如果要自定义View的话也可以继承上层的两个view。GenericDraweeView中则包含了很重要的用来显示图片的Hierarchy类，而最上层的DraweeView则包含了控制图片展示的Controller。下面将对每个view进行分析。</p>
 <p>###1.DraweeView</p>
 <p>DraweeView虽然是用来加载图片的，而且也是继承自ImageView，但是Facebook并不支持使用ImageView内部的一些方法。之后的Fresco方法会摒弃ImageView，改继承自View。</p>
 <p>DraweeView初始化的时候会得到一个DraweeHolder对象，而DraweeHolder对于DraweeView便是类似于一个管家，DraweeView将内部需要的大部分事情都交给了Holder来负责管理。比如setHierarchy()和setController()方法，都是将内容交给了holder来管理。这也是一个很好的分层管理方式，值得借鉴。</p>
@@ -318,69 +431,69 @@
 <p>DraweeView that creates GenericDraweeHierarchy based on XML attributes.</p>
 </blockquote>
 <p>下面列出了<strong>GenericDraweeView</strong>其中包含了Hierarchy中可以设置的很多属性：</p>
-<pre><code>/* <span class="type">Fading</span> animation parameters:
- * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_fadeDuration</span>
- * <span class="type">Images</span> &amp; scale types parameters:
- * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_viewAspectRatio</span>
- * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_placeholderImage</span>
- * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_placeholderImageScaleType</span>
- * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_retryImage</span>
- * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_retryImageScaleType</span>
- * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_failureImage</span>
- * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_failureImageScaleType</span>
- * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_progressBarImage</span>
- * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_progressBarImageScaleType</span>
- * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_progressBarAutoRotateInterval</span>
- * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_actualImageScaleType</span>
- * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_backgroundImage</span>
- * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_overlayImage</span>
- * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_pressedStateOverlayImage</span>
- * <span class="type">Rounding</span> parameters:
- * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_roundAsCircle</span>
- * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_roundedCornerRadius</span>
- * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_roundTopLeft</span>
- * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_roundTopRight</span>
- * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_roundBottomRight</span>
- * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_roundBottomLeft</span>
- * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_roundWithOverlayColor</span>
- * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_roundingBorderWidth</span>
- * @attr <span class="keyword">ref</span> com.facebook.R.styleable<span class="comment">#GenericDraweeView_roundingBorderColor</span>
+<pre><code>/* Fading animation parameters:
+ * @attr ref com.facebook.R.styleable#GenericDraweeView_fadeDuration
+ * Images &amp; scale types parameters:
+ * @attr ref com.facebook.R.styleable#GenericDraweeView_viewAspectRatio
+ * @attr ref com.facebook.R.styleable#GenericDraweeView_placeholderImage
+ * @attr ref com.facebook.R.styleable#GenericDraweeView_placeholderImageScaleType
+ * @attr ref com.facebook.R.styleable#GenericDraweeView_retryImage
+ * @attr ref com.facebook.R.styleable#GenericDraweeView_retryImageScaleType
+ * @attr ref com.facebook.R.styleable#GenericDraweeView_failureImage
+ * @attr ref com.facebook.R.styleable#GenericDraweeView_failureImageScaleType
+ * @attr ref com.facebook.R.styleable#GenericDraweeView_progressBarImage
+ * @attr ref com.facebook.R.styleable#GenericDraweeView_progressBarImageScaleType
+ * @attr ref com.facebook.R.styleable#GenericDraweeView_progressBarAutoRotateInterval
+ * @attr ref com.facebook.R.styleable#GenericDraweeView_actualImageScaleType
+ * @attr ref com.facebook.R.styleable#GenericDraweeView_backgroundImage
+ * @attr ref com.facebook.R.styleable#GenericDraweeView_overlayImage
+ * @attr ref com.facebook.R.styleable#GenericDraweeView_pressedStateOverlayImage
+ * Rounding parameters:
+ * @attr ref com.facebook.R.styleable#GenericDraweeView_roundAsCircle
+ * @attr ref com.facebook.R.styleable#GenericDraweeView_roundedCornerRadius
+ * @attr ref com.facebook.R.styleable#GenericDraweeView_roundTopLeft
+ * @attr ref com.facebook.R.styleable#GenericDraweeView_roundTopRight
+ * @attr ref com.facebook.R.styleable#GenericDraweeView_roundBottomRight
+ * @attr ref com.facebook.R.styleable#GenericDraweeView_roundBottomLeft
+ * @attr ref com.facebook.R.styleable#GenericDraweeView_roundWithOverlayColor
+ * @attr ref com.facebook.R.styleable#GenericDraweeView_roundingBorderWidth
+ * @attr ref com.facebook.R.styleable#GenericDraweeView_roundingBorderColor
  */
 </code></pre><p><strong>GenericDraweeView</strong>中属性设置的部分和一般自定义控件类似：</p>
 <pre><code>TypedArray gdhAttrs = context.obtainStyledAttributes(
       attrs,
-      R.styleable.GenericDraweeView)<span class="comment">;</span>
+      R.styleable.GenericDraweeView);
 fadeDuration = gdhAttrs.getInt(
         R.styleable.GenericDraweeView_fadeDuration,
-        fadeDuration)<span class="comment">;</span>
+        fadeDuration);
 </code></pre><p>在完成这些设置之后，<strong>GenericDraweeView</strong> 需要一个<strong>GenericDraweeHierarchyBuilder</strong>类的对象来保存所有的属性值，而他的返回值便是一个Hierarchy。也就是说，通过Builder的build()方法，构造了一个View需要的Hierarchy，然后把XML中设置的属性都保存在Builder中等待使用。</p>
-<pre><code>GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder<span class="params">(resources)</span>;
-builder.setFadeDuration<span class="params">(fadeDuration)</span>;
+<pre><code>GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder(resources);
+builder.setFadeDuration(fadeDuration);
 ...其余属性设置
-setHierarchy<span class="params">(builder.build<span class="params">()</span>)</span>;
+setHierarchy(builder.build());
 </code></pre><p>Fresco在使用DraweeView的时候虽然宽高不能设置wrap_content，但是它提供了一个可以动态设置宽高比例的方法<strong>setAspectRatio</strong>，因此它需要在GenericDraweeView的OnMeasure方法中重新设置宽高</p>
-<pre><code><span class="keyword">private</span> <span class="keyword">final</span> AspectRatioMeasure.Spec mMeasureSpec = <span class="keyword">new</span> AspectRatioMeasure.Spec();
+<pre><code>private final AspectRatioMeasure.Spec mMeasureSpec = new AspectRatioMeasure.Spec();
     @Override
-      <span class="keyword">protected</span> <span class="keyword">void</span> onMeasure(<span class="built_in">int</span> widthMeasureSpec, <span class="built_in">int</span> heightMeasureSpec){
-    mMeasureSpec.<span class="variable">width</span> = widthMeasureSpec;
-    mMeasureSpec.<span class="variable">height</span> = heightMeasureSpec;
+      protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
+    mMeasureSpec.width = widthMeasureSpec;
+    mMeasureSpec.height = heightMeasureSpec;
     AspectRatioMeasure.updateMeasureSpec(
         mMeasureSpec,
         mAspectRatio,
         getLayoutParams(),
         getPaddingLeft() + getPaddingRight(),
         getPaddingTop() + getPaddingBottom());
-    <span class="keyword">super</span>.onMeasure(mMeasureSpec.<span class="variable">width</span>, mMeasureSpec.<span class="variable">height</span>);
+    super.onMeasure(mMeasureSpec.width, mMeasureSpec.height);
   }
 </code></pre><p>AspectRatioMeasure类中的updateMeasureSpec方法，便是通过比例给View重新设置宽高。</p>
 <p>###3.SimpleDraweeView<br>SimpleDraweeView类中有个静态的初始化方法initialize，这个初始化方法会在Fresco的<br>initialize中调用。</p>
-<pre><code><span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">initialize</span><span class="params">(Context context, ImagePipelineConfig imagePipelineConfig)</span> </span>{
+<pre><code>public static void initialize(Context context, ImagePipelineConfig imagePipelineConfig) {
   ImagePipelineFactory.initialize(imagePipelineConfig);
   initializeDrawee(context);
 }
 
-<span class="keyword">private</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">initializeDrawee</span><span class="params">(Context context)</span> </span>{
-  sDraweeControllerBuilderSupplier = <span class="keyword">new</span> PipelineDraweeControllerBuilderSupplier(context);
+private static void initializeDrawee(Context context) {
+  sDraweeControllerBuilderSupplier = new PipelineDraweeControllerBuilderSupplier(context);
   SimpleDraweeView.initialize(sDraweeControllerBuilderSupplier);
 }
 </code></pre><p>其实说白了就是Fresco在初始化的时候会new一个controller(PipelineDraweeControllerBuilderSupplier类的对象),而这个controller，每个SimpleDraweeView都可以使用。SimpleDraweeView中其他的方法也都是复写的父类的方法。便不再一一叙述。</p>
@@ -412,135 +525,6 @@ setHierarchy<span class="params">(builder.build<span class="params">()</span>)</
 
 
   
-    <article id="post-2015-08-19" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/08/19/2015-08-19/" class="article-date">
-  	<time datetime="2015-08-19T03:29:29.000Z" itemprop="datePublished">2015-08-19</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/19/2015-08-19/">Android图片加载框架Fresco分析(一)</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>作为Android开发者，虽然不是大牛，但也接触了很多图片加载框架，因为手机上最难处理最占内存的往往也就是图片，如果图片处理不好，很容易引起程序崩溃。到目前为止我接触过很多种图片加载框架，其中主要有：UniversalImageLoader，Picasso，Glide，Fresco。<br>Fresco是Facebook最新推出的一款用于Android应用中展示图片的强大图片库，可以从网络、本地存储和本地资源中加载图片。其中的Drawees可以显示占位符，直到图片加载完成。而当图片从屏幕上消失时，会自动释放内存。由于目前项目中使用到了Fresco，所以针对Fresco做一下源码分析。</p>
-<h3 id="1-功能介绍">1.功能介绍</h3><p>Fresco类似ImageLoader和Picasoo一样，操作起来都比较简单，几行代码就可以开始使用了。可以简单的在xml里使用<strong>SimpleDraweeView</strong>配置一些属性。在代码中使用<strong>SimpleDraweeView</strong>的<strong>setImageURI</strong>方法来进行图片的加载。</p>
-<p>Fresco有很大的优点，Fresco的中文文档中说的就很明白，主要优点有：</p>
-<blockquote>
-<ol>
-<li>能够通过Drawees模块让不再显示在屏幕上的图片及时地释放内存和空间。</li>
-<li>能够渐进式加载图片。这也是其他图片加载控件所没有的功能。</li>
-<li>支持加载Gif图，支持WebP格式</li>
-<li>缩放或者旋转图片，圆形圆角图片等等
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fresco/">fresco</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/08/19/2015-08-19/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-自定义控件使用isInEditMode防止窗口泄漏" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/08/12/自定义控件使用isInEditMode防止窗口泄漏/" class="article-date">
-  	<time datetime="2015-08-12T07:35:14.000Z" itemprop="datePublished">2015-08-12</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/12/自定义控件使用isInEditMode防止窗口泄漏/">自定义控件使用isInEditMode防止窗口泄漏</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在开发过程中有时候会遇到Activity has leaked window.，此时便是出现了窗口泄漏问题。</p>
-<p>Android的每一个Activity都有个WindowManager窗体管理器，同样构建在某个Activity之上的对话框、PopupWindow也有相应的WindowManager窗体管理器。因为对话框、PopupWindow不能脱离Activity而单独存在着，所以当某个Dialog或者某个PopupWindow正在显示的时候我们去finish()了承载该Dialog或PopupWindow的 Activity时，就会抛WindowLeaked异常了，因为这个Dialog或PopupWindow的WindowManager已经没有谁可以附属了，所以它的窗体管理器已经泄漏了。</p>
-<p><strong>使用isInEditMode解决可视化编辑器无法识别自定义控件的问题</strong></p>
-<blockquote>
-<p>isInEditMode:<br>Indicates whether this View is currentlyin edit mode. A View is usually in edit mode when displayed within a developertool. For instance, if this View is being drawn by a visual user interfacebuilder, this method should return true. Subclasses should check the returnvalue of this method to provide different behaviors if their normal behaviormight interfere with the host environment. For instance: the class spawns athread in its constructor, the drawing code relies on device-specific features,etc. This method is usually checked in the drawing code of custom widgets.</p>
-</blockquote>
-<p>所以可以在自定义view的初始化或者需要加载界面的地方设置此方法，避免导致窗体泄漏的问题。</p>
-<pre><code><span class="keyword">private</span> <span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>{
-  <span class="keyword">if</span> (isInEditMode()) {
-    <span class="keyword">return</span>;
-  }
-  <span class="comment">//初始化代码</span>
-}
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
@@ -551,7 +535,7 @@ setHierarchy<span class="params">(builder.build<span class="params">()</span>)</
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2016 Rodriguez-Xin
+    		&copy; 2017 Rodriguez-Xin
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -575,8 +559,8 @@ setHierarchy<span class="params">(builder.build<span class="params">()</span>)</
 		open_in_new: false
 	}
 </script>
-<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
-<script src="/js/main.js" type="text/javascript"></script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
 
 
 

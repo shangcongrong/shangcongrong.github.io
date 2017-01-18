@@ -27,7 +27,7 @@ constructor(pro">
   
     <link rel="icon" href="/avatar.jpg">
   
-  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div id="container">
@@ -110,7 +110,7 @@ constructor(pro">
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Android/" style="font-size: 17.5px;">Android</a> <a href="/tags/React-Native/" style="font-size: 12.5px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/weex/" style="font-size: 10px;">weex</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a>
+						<a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/React-Native/" style="font-size: 13.33px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/weex/" style="font-size: 10px;">weex</a> <a href="/tags/读书/" style="font-size: 16.67px;">读书</a>
 					</div>
 				</section>
 				
@@ -205,18 +205,18 @@ constructor(pro">
       
         <p>在决定做一次loading动画的时候，我首先看了一下官方文档：<a href="https://facebook.github.io/react-native/docs/animations.html" target="_blank" rel="external">React Native Animated的使用</a>。不过官方文档看得云里雾里，必须通过自己动手才能真正了解怎么做。</p>
 <p>首先需要在自定义view(当然也可以不自定义，不过建议最好这种view可以自己定义防止state与其他view冲突）。在自定义view的constructor方法中，需要对动画初始值进行设置：</p>
-<pre><code><span class="constructor"><span class="keyword">constructor</span>(props) </span>{
-    <span class="keyword">super</span>(props);
-    <span class="keyword">this</span>.state = {
-        rotateValue: <span class="keyword">new</span> Animated.Value(<span class="number">0</span>),
+<pre><code>constructor(props) {
+    super(props);
+    this.state = {
+        rotateValue: new Animated.Value(0),
     };
 }
 </code></pre><p>接着需要实现动画的逻辑rotateValue其实是作为一个会变动的值，通过值的变动来更新view的显示效果的。第二步在componentDidMount方法中执行动画：</p>
 <pre><code>componentDidMount() {
-    this.<span class="keyword">state</span>.rotateValue.<span class="built_in">set</span>Value(<span class="number">0</span>);
-    Animated.timing(this.<span class="keyword">state</span>.rotateValue,{
-        <span class="keyword">to</span>Value: <span class="number">360</span>*TIMES,
-        duration: <span class="number">800</span>*TIMES,
+    this.state.rotateValue.setValue(0);
+    Animated.timing(this.state.rotateValue,{
+        toValue: 360*TIMES,
+        duration: 800*TIMES,
         easing: Easing.linear
         }).start();// 开始spring动画
 }
@@ -229,13 +229,13 @@ constructor(pro">
              &lt;Animated.Image
              style = {[styles.bottom_loading_style,
                     {transform:[{rotate: this.state.rotateValue
-                      .interpolate({inputRange: [<span class="number">0</span>, <span class="number">360</span>],outputRange: [<span class="string">'0deg'</span>, <span class="string">'360deg'</span>]})
+                      .interpolate({inputRange: [0, 360],outputRange: [&apos;0deg&apos;, &apos;360deg&apos;]})
                       }]
                     }]}
-             source = {THUMB_URLS[<span class="number">0</span>]}
-             resizeMode = <span class="string">"contain"</span>/&gt;
+             source = {THUMB_URLS[0]}
+             resizeMode = &quot;contain&quot;/&gt;
              &lt;Image style = {styles.title_btn_style} 
-                source = {THUMB_URLS[<span class="number">1</span>]}  resizeMode = <span class="string">"contain"</span>/&gt;
+                source = {THUMB_URLS[1]}  resizeMode = &quot;contain&quot;/&gt;
         &lt;/View&gt;
     );
 }
@@ -318,7 +318,7 @@ constructor(pro">
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2016 Rodriguez-Xin
+    		&copy; 2017 Rodriguez-Xin
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -342,8 +342,8 @@ constructor(pro">
 		open_in_new: false
 	}
 </script>
-<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
-<script src="/js/main.js" type="text/javascript"></script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
 
 
 

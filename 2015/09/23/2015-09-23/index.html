@@ -27,7 +27,7 @@
   
     <link rel="icon" href="/avatar.jpg">
   
-  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div id="container">
@@ -110,7 +110,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Android/" style="font-size: 17.5px;">Android</a> <a href="/tags/React-Native/" style="font-size: 12.5px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/weex/" style="font-size: 10px;">weex</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a>
+						<a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/React-Native/" style="font-size: 13.33px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/weex/" style="font-size: 10px;">weex</a> <a href="/tags/读书/" style="font-size: 16.67px;">读书</a>
 					</div>
 				</section>
 				
@@ -203,86 +203,86 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="1-首先需要的是Python开发环境">1.首先需要的是Python开发环境</h1><p>去python官网<a href="https://www.python.org/downloads/下载最新版python3" target="_blank" rel="external">https://www.python.org/downloads/下载最新版python3</a> 双击安装，配置path环境变量，把python安装的目录添加进去。</p>
-<h1 id="2-需要使用的文件">2.需要使用的文件</h1><p><strong>必备文件：</strong>info文件夹\channel.txt和MultiChannelBuildTool.py</p>
+        <h1 id="1-首先需要的是Python开发环境"><a href="#1-首先需要的是Python开发环境" class="headerlink" title="1.首先需要的是Python开发环境"></a>1.首先需要的是Python开发环境</h1><p>去python官网<a href="https://www.python.org/downloads/下载最新版python3" target="_blank" rel="external">https://www.python.org/downloads/下载最新版python3</a> 双击安装，配置path环境变量，把python安装的目录添加进去。</p>
+<h1 id="2-需要使用的文件"><a href="#2-需要使用的文件" class="headerlink" title="2.需要使用的文件"></a>2.需要使用的文件</h1><p><strong>必备文件：</strong>info文件夹\channel.txt和MultiChannelBuildTool.py</p>
 <p><strong>其余文件：</strong>其余文件有些是在打包的过程中会自动生成，如info文件夹/ temp.txt和包含有多渠道的app集合文件夹MutilChannel_<em>*</em>，这些文件在打包之前都要删除，附赠一个还有MD5校验工具。</p>
 <p><strong>注意：</strong>info文件夹和channel.txt如果没有可以自己新建起来，全部都是小写。<br>打包之前需要把MutilChannel_<em>*</em>文件夹和temp.txt都删除。<br>MultiChannelBuildTool.py的MD5为7A07C15C9B26881276CEC99C7D19DB34<br>每次打包之前都应该用MD5校验工具查看下，防止被人修改。</p>
 <a id="more"></a>
-<h1 id="3-使用方法">3.使用方法</h1><p><strong>编写渠道文件：</strong>打开info文件夹下的channel.txt文件，输入格式如下：<br><em>渠道ID–渠道名字–渠道描述</em>，例如：</p>
-<pre><code><span class="literal">-</span><span class="comment">1</span><span class="literal">-</span><span class="literal">-</span><span class="comment">Default</span><span class="literal">-</span><span class="literal">-</span><span class="comment">默认测试渠道</span>
-<span class="comment">0</span><span class="literal">-</span><span class="literal">-</span><span class="comment">Official_Channel</span><span class="literal">-</span><span class="literal">-</span><span class="comment">官网</span>
-<span class="comment">1</span><span class="literal">-</span><span class="literal">-</span><span class="comment">AppStore_Channel</span><span class="literal">-</span><span class="literal">-</span><span class="comment">App</span> <span class="comment">Store</span>
-<span class="comment">2</span><span class="literal">-</span><span class="literal">-</span><span class="comment">_360_Channel</span><span class="literal">-</span><span class="literal">-</span><span class="comment">360</span>
-<span class="comment">3</span><span class="literal">-</span><span class="literal">-</span><span class="comment">WanDouJia_Channel</span><span class="literal">-</span><span class="literal">-</span><span class="comment">豌豆荚</span>
-<span class="comment">4</span><span class="literal">-</span><span class="literal">-</span><span class="comment">Tencent_Channel</span><span class="literal">-</span><span class="literal">-</span><span class="comment">腾讯应用宝</span>
-<span class="comment">5</span><span class="literal">-</span><span class="literal">-</span><span class="comment">Baidu_Channel</span><span class="literal">-</span><span class="literal">-</span><span class="comment">百度应用市场</span>
-<span class="comment">6</span><span class="literal">-</span><span class="literal">-</span><span class="comment">_91_Channel</span><span class="literal">-</span><span class="literal">-</span><span class="comment">91</span>
-<span class="comment">7</span><span class="literal">-</span><span class="literal">-</span><span class="comment">Xiaomi_Channel</span><span class="literal">-</span><span class="literal">-</span><span class="comment">小米</span>
+<h1 id="3-使用方法"><a href="#3-使用方法" class="headerlink" title="3.使用方法"></a>3.使用方法</h1><p><strong>编写渠道文件：</strong>打开info文件夹下的channel.txt文件，输入格式如下：<br><em>渠道ID–渠道名字–渠道描述</em>，例如：</p>
+<pre><code>-1--Default--默认测试渠道
+0--Official_Channel--官网
+1--AppStore_Channel--App Store
+2--_360_Channel--360
+3--WanDouJia_Channel--豌豆荚
+4--Tencent_Channel--腾讯应用宝
+5--Baidu_Channel--百度应用市场
+6--_91_Channel--91
+7--Xiaomi_Channel--小米
 </code></pre><p>第一个是渠道ID，第二个是渠道名，第三个是渠道描述，中间用两个减号隔开<br>格式要求严格，不要写多余的东西；不管是渠道ID、渠道名或者渠道描述，都绝不能包含两个相连的减号（可以有下划线和一个减号），渠道ID和渠道名字必须要写，渠道描述还没实际用到，预留，可以不写。</p>
 <p>开始打包：将需要打包的app放入MultiChannelBuild文件夹中，<br>(和MultiChannelBuildTool.py同级)，在Python环境配置成功的前提下，点击经过校验的MultiChannelBuildTool.py，过2秒后既可以生成所需要的不同渠道app。</p>
 <p>其中的Python文件<strong>MultiChannelBuildTool.py</strong>代码为：</p>
-<pre><code><span class="comment">#!/usr/bin/python</span>
-<span class="comment"># coding=utf-8</span>
+<pre><code>#!/usr/bin/python
+# coding=utf-8
 import zipfile
 import shutil
 import os
 
-<span class="comment"># 空文件 便于写入此空文件到apk包中作为channel文件</span>
-src_empty_file = <span class="string">'info/temp.txt'</span>
-<span class="comment"># 创建一个空文件（不存在则创建）</span>
-f = <span class="built_in">open</span>(src_empty_file, <span class="string">'w'</span>) 
-f.<span class="built_in">close</span>()
+# 空文件 便于写入此空文件到apk包中作为channel文件
+src_empty_file = &apos;info/temp.txt&apos;
+# 创建一个空文件（不存在则创建）
+f = open(src_empty_file, &apos;w&apos;) 
+f.close()
 
-<span class="comment"># 获取当前目录中所有的apk源包</span>
+# 获取当前目录中所有的apk源包
 src_apks = []
-<span class="comment"># python3 : os.listdir()即可，这里使用兼容Python2的os.listdir('.')</span>
-<span class="keyword">for</span> <span class="built_in">file</span> <span class="operator">in</span> os.listdir(<span class="string">'.'</span>):
-    <span class="keyword">if</span> os.path.isfile(<span class="built_in">file</span>):
-        extension = os.path.splitext(<span class="built_in">file</span>)[<span class="number">1</span>][<span class="number">1</span>:]
-        <span class="keyword">if</span> extension <span class="operator">in</span> <span class="string">'apk'</span>:
-            src_apks.append(<span class="built_in">file</span>)
+# python3 : os.listdir()即可，这里使用兼容Python2的os.listdir(&apos;.&apos;)
+for file in os.listdir(&apos;.&apos;):
+    if os.path.isfile(file):
+        extension = os.path.splitext(file)[1][1:]
+        if extension in &apos;apk&apos;:
+            src_apks.append(file)
 
-<span class="comment"># 获取渠道列表</span>
-channel_file = <span class="string">'info/channel.txt'</span>
-f = <span class="built_in">open</span>(channel_file)
-<span class="keyword">lines</span> = f.readlines()
-f.<span class="built_in">close</span>()
+# 获取渠道列表
+channel_file = &apos;info/channel.txt&apos;
+f = open(channel_file)
+lines = f.readlines()
+f.close()
 
-<span class="keyword">for</span> src_apk <span class="operator">in</span> src_apks:
-    <span class="comment"># file name (with extension)</span>
+for src_apk in src_apks:
+    # file name (with extension)
     src_apk_file_name = os.path.basename(src_apk)
-    <span class="comment"># 分割文件名与后缀</span>
+    # 分割文件名与后缀
     temp_list = os.path.splitext(src_apk_file_name)
-    <span class="comment"># name without extension</span>
-    src_apk_name = temp_list[<span class="number">0</span>]
-    <span class="comment"># 后缀名，包含.   例如: ".apk "</span>
-    src_apk_extension = temp_list[<span class="number">1</span>]
+    # name without extension
+    src_apk_name = temp_list[0]
+    # 后缀名，包含.   例如: &quot;.apk &quot;
+    src_apk_extension = temp_list[1]
 
-    <span class="comment"># 创建生成目录,与文件名相关</span>
-    output_dir = <span class="string">'MutilChannel_'</span> + src_apk_name + <span class="string">'/'</span>
-    <span class="comment"># 目录不存在则创建</span>
-    <span class="keyword">if</span> <span class="operator">not</span> os.path.exists(output_dir):
+    # 创建生成目录,与文件名相关
+    output_dir = &apos;MutilChannel_&apos; + src_apk_name + &apos;/&apos;
+    # 目录不存在则创建
+    if not os.path.exists(output_dir):
         os.mkdir(output_dir)
 
-    <span class="comment"># 遍历渠道号并创建对应渠道号的apk文件</span>
-    <span class="keyword">for</span> <span class="built_in">line</span> <span class="operator">in</span> <span class="keyword">lines</span>:
-        <span class="comment"># 获取当前渠道号，因为从渠道文件中获得带有\n,所有strip一下</span>
-        target_channel = <span class="built_in">line</span>.strip()
-        <span class="keyword">if</span> target_channel == <span class="string">''</span>:
+    # 遍历渠道号并创建对应渠道号的apk文件
+    for line in lines:
+        # 获取当前渠道号，因为从渠道文件中获得带有\n,所有strip一下
+        target_channel = line.strip()
+        if target_channel == &apos;&apos;:
             continue
-        channel_parts=target_channel.<span class="built_in">split</span>(<span class="string">'--'</span>)
-        <span class="comment"># 拼接对应渠道号的apk</span>
-        target_apk = output_dir + src_apk_name + <span class="string">"-"</span> + channel_parts[<span class="number">1</span>] + src_apk_extension
-        <span class="comment"># 拷贝建立新apk</span>
+        channel_parts=target_channel.split(&apos;--&apos;)
+        # 拼接对应渠道号的apk
+        target_apk = output_dir + src_apk_name + &quot;-&quot; + channel_parts[1] + src_apk_extension
+        # 拷贝建立新apk
         shutil.copy(src_apk,  target_apk)
-        <span class="comment"># zip获取新建立的apk文件</span>
-        zipped = zipfile.ZipFile(target_apk, <span class="string">'a'</span>, zipfile.ZIP_DEFLATED)
-        <span class="comment"># 初始化渠道信息</span>
-        empty_channel_file = <span class="string">"META-INF/--{channel}"</span>.<span class="built_in">format</span>(channel = target_channel)
-        <span class="comment"># 写入渠道信息</span>
-        zipped.<span class="built_in">write</span>(src_empty_file, empty_channel_file)
-        <span class="comment"># 关闭zip流</span>
-        zipped.<span class="built_in">close</span>()
+        # zip获取新建立的apk文件
+        zipped = zipfile.ZipFile(target_apk, &apos;a&apos;, zipfile.ZIP_DEFLATED)
+        # 初始化渠道信息
+        empty_channel_file = &quot;META-INF/--{channel}&quot;.format(channel = target_channel)
+        # 写入渠道信息
+        zipped.write(src_empty_file, empty_channel_file)
+        # 关闭zip流
+        zipped.close()
 </code></pre>
       
     </div>
@@ -356,7 +356,7 @@ f.<span class="built_in">close</span>()
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2016 Rodriguez-Xin
+    		&copy; 2017 Rodriguez-Xin
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -380,8 +380,8 @@ f.<span class="built_in">close</span>()
 		open_in_new: false
 	}
 </script>
-<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
-<script src="/js/main.js" type="text/javascript"></script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
 
 
 

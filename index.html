@@ -5,22 +5,19 @@
   
   <title>AFei</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
+  <meta property="og:type" content="website">
 <meta property="og:title" content="AFei">
 <meta property="og:url" content="http://yoursite.com/index.html">
 <meta property="og:site_name" content="AFei">
-<meta property="og:description">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AFei">
-<meta name="twitter:description">
   
     <link rel="alternative" href="/atom.xml" title="AFei" type="application/atom+xml">
   
   
     <link rel="icon" href="/avatar.jpg">
   
-  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div id="container">
@@ -103,7 +100,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Android/" style="font-size: 17.5px;">Android</a> <a href="/tags/React-Native/" style="font-size: 12.5px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/weex/" style="font-size: 10px;">weex</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a>
+						<a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/React-Native/" style="font-size: 13.33px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/weex/" style="font-size: 10px;">weex</a> <a href="/tags/读书/" style="font-size: 16.67px;">读书</a>
 					</div>
 				</section>
 				
@@ -163,6 +160,114 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-page" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/01/18/page/" class="article-date">
+  	<time datetime="2017-01-18T03:30:51.000Z" itemprop="datePublished">2017-01-18</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/18/page/">page</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-2017-01-17" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/01/17/2017-01-17/" class="article-date">
+  	<time datetime="2017-01-17T08:30:34.000Z" itemprop="datePublished">2017-01-17</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/17/2017-01-17/">购物车吸顶7.0无法点击问题排查</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>问题表现：</p>
+<p>购物车吸顶效果在7.0的手机上无法点击选中仓库；</p>
+<p>问题排查过程：</p>
+<p>首先因为点击效果不能展示，根据效果猜测，可能是事件没有传递到对应的子view，经过断点调试和打log发现。DOWN，MOVE和UP事件都传递给了子view。</p>
+<p>此时我把click和checkchanged事件都换成了setOnToucnListener，此时就可以相应到事件的效果了。根据源码分析知道，onclick事件是在onTouchEvent的内部执行的。也就是说事件其实是分发给了对应的子view，并且他能够通过dispatchTouchEvent来分发事件，但是当传递到自己的onTouchEvent里面的时候出现了问题。</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2017/01/17/2017-01-17/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-2016-12-23" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -187,7 +292,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h4 id="1-更新方式">1.更新方式</h4><p>更新方式主要有两种，</p>
+        <h4 id="1-更新方式"><a href="#1-更新方式" class="headerlink" title="1.更新方式"></a>1.更新方式</h4><p>更新方式主要有两种，</p>
 <p>第一种，将准备和项目一起打包的js文件放置在assets文件夹下，同时增加更新js文件的逻辑和读取更新文件的逻辑，当在apk发布之后想要更新js文件时，只要走下载逻辑，将js文件下载到自定义目录下，在加载的时候读取新的js文件即可。</p>
 <p>这种方式的缺点在于，js文件普遍都比较大，我目前做的两个demo一个展示的功能页面是40kb，红包雨动画是16kb，如果有数十个文件，那么apk的大小也是无法保证的。</p>
 <p>第二种，直接访问后台提供的js文件，即通过网络方式加载，类似于webview加载h5页面，此种方式可以搭配缓存策略来做。</p>
@@ -249,18 +354,18 @@
       
         <p>在决定做一次loading动画的时候，我首先看了一下官方文档：<a href="https://facebook.github.io/react-native/docs/animations.html">React Native Animated的使用</a>。不过官方文档看得云里雾里，必须通过自己动手才能真正了解怎么做。</p>
 <p>首先需要在自定义view(当然也可以不自定义，不过建议最好这种view可以自己定义防止state与其他view冲突）。在自定义view的constructor方法中，需要对动画初始值进行设置：</p>
-<pre><code><span class="constructor"><span class="keyword">constructor</span>(props) </span>{
-    <span class="keyword">super</span>(props);
-    <span class="keyword">this</span>.state = {
-        rotateValue: <span class="keyword">new</span> Animated.Value(<span class="number">0</span>),
+<pre><code>constructor(props) {
+    super(props);
+    this.state = {
+        rotateValue: new Animated.Value(0),
     };
 }
 </code></pre><p>接着需要实现动画的逻辑rotateValue其实是作为一个会变动的值，通过值的变动来更新view的显示效果的。第二步在componentDidMount方法中执行动画：</p>
 <pre><code>componentDidMount() {
-    this.<span class="keyword">state</span>.rotateValue.<span class="built_in">set</span>Value(<span class="number">0</span>);
-    Animated.timing(this.<span class="keyword">state</span>.rotateValue,{
-        <span class="keyword">to</span>Value: <span class="number">360</span>*TIMES,
-        duration: <span class="number">800</span>*TIMES,
+    this.state.rotateValue.setValue(0);
+    Animated.timing(this.state.rotateValue,{
+        toValue: 360*TIMES,
+        duration: 800*TIMES,
         easing: Easing.linear
         }).start();// 开始spring动画
 }
@@ -321,15 +426,15 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>大部分简单的功能实现官方文档的说明都很清楚，我这里主要说一下我在开发过程中遇到的一些棘手的问题和解决办法</p>
-<h3 id="1-布局和视觉样式部分">1.布局和视觉样式部分</h3><h4 id="a-RN中如何实现FrameLayout效果">a.RN中如何实现FrameLayout效果</h4><p>如果要在RN中实现类似Android中的FrameLayout效果，需要对view的style设置 <strong>positon: ‘absolute’</strong> ,以及一些方向属性</p>
-<pre><code><span class="tag">goods_left_label_style</span>: {
-    <span class="attribute">position</span>: <span class="string">'absolute'</span>,<span class="comment">//相对父元素进行绝对定位</span>
-    <span class="attribute">left</span>: <span class="number">0</span>,
-    <span class="attribute">top</span>: <span class="number">0</span>，
-    right：<span class="number">0</span>，
-    bottom：<span class="number">0</span> <span class="comment">//后面四个根据需要设置</span>
+<h3 id="1-布局和视觉样式部分"><a href="#1-布局和视觉样式部分" class="headerlink" title="1.布局和视觉样式部分"></a>1.布局和视觉样式部分</h3><h4 id="a-RN中如何实现FrameLayout效果"><a href="#a-RN中如何实现FrameLayout效果" class="headerlink" title="a.RN中如何实现FrameLayout效果"></a>a.RN中如何实现FrameLayout效果</h4><p>如果要在RN中实现类似Android中的FrameLayout效果，需要对view的style设置 <strong>positon: ‘absolute’</strong> ,以及一些方向属性</p>
+<pre><code>goods_left_label_style: {
+    position: &apos;absolute&apos;,//相对父元素进行绝对定位
+    left: 0,
+    top: 0，
+    right：0，
+    bottom：0 //后面四个根据需要设置
 },
-</code></pre><h4 id="b-等比例权重布局">b.等比例权重布局</h4><p>要进行等比例权重布局需要使用一个重要的属性，<strong>flexDirection</strong>，该属性用于指定主轴的方向。即指定子view的布局方向。可以设置两个值分别是：row和column。感觉上类似于<strong>orientation</strong>。接着在子布局中设置<strong>flex</strong>属性就是view的权重了，类似于android中的weight。</p>
+</code></pre><h4 id="b-等比例权重布局"><a href="#b-等比例权重布局" class="headerlink" title="b.等比例权重布局"></a>b.等比例权重布局</h4><p>要进行等比例权重布局需要使用一个重要的属性，<strong>flexDirection</strong>，该属性用于指定主轴的方向。即指定子view的布局方向。可以设置两个值分别是：row和column。感觉上类似于<strong>orientation</strong>。接着在子布局中设置<strong>flex</strong>属性就是view的权重了，类似于android中的weight。</p>
 <p>除了flexDirection之外还有几个很重要的属性，下面说明一下他们的使用方法：</p>
 <p><strong>justifyContent</strong>和<strong>alignItems</strong>,这两个属性是相对的，第一个是设置子View的水平方向布局，第二个是设置VIew的竖直方向布局，他们的取值有相同也有不同。这两个属性都可以取三个值，分别是flex-start,flex-end,center,意思分别是顶部对齐，底部对齐，居中对齐。</p>
 <p>接着说他们不同的部分，justifyContent还有一个stretch属性，意思是在竖直方向上填充整个父布局；alignItems有两个分别是space-between和spage-around属性，这两个很特别在android上是没有的，<strong>space-between</strong>意思是第一个子组件位于父容器左端，最后一个子组件位于父容器最右端。然后平均分配在父容器水平方向上。<strong>space-around</strong>指所有子组件平均分配在父容器的水平方向上，左右都有留空隙。 </p>
@@ -366,135 +471,6 @@
 
 
   
-    <article id="post-2016-08-01" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/08/01/2016-08-01/" class="article-date">
-  	<time datetime="2016-08-01T07:12:21.000Z" itemprop="datePublished">2016-08-01</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/01/2016-08-01/">Android制作卡片类长图踩坑记</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在实现需求过程中，产品喜欢上了分享大图卡片。但是发现每个地方分享的卡片大图还不一样。经过分析发现还是能够找到一点共性。先上图看看最基础的卡片样子。由于分享的卡片在四张图片上下都需要自定义一些其他控件，主要有文字商品信息等等。</p>
-<p><img src="http://7xl9v5.com1.z0.glb.clouddn.com/2016-08-15" alt="图1"></p>
-<p>在实现之前先思考了一下，需要解决的问题有以下几个：</p>
-<ol>
-<li>因为每个地方的分享大图是不一样的，需要找出共性部分，并将不同之处方便替换；</li>
-<li>在卡片中的几张图片还没下载完就吊起分享肯定是不行的。这就需要监听图片下载了；</li>
-<li>分享到的App对大图都是有大小限制的，其中微博限制最大2M，这样就需要进行图片压缩。</li>
-</ol>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/08/01/2016-08-01/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-2016-06-08" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/06/08/2016-06-08/" class="article-date">
-  	<time datetime="2016-06-08T07:12:21.000Z" itemprop="datePublished">2016-06-08</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/08/2016-06-08/">Android图片转换字体</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>需求实现过程中遇到了一个问题，模块需要同时显示文字，一个图标和带有html标签的有颜色文字，我们试用了几个方法。基本上可以作为同一类型的TextView富文本等方式设置的总结。</p>
-<h4 id="1-_Spannable">1. Spannable</h4><p>首先使用了Spannable，看下代码：</p>
-<pre><code>SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder<span class="params">(mWarehouse + <span class="string">" 至  "</span>)</span>;
-ImageSpan imageSpan = new ImageSpan<span class="params">(getContext<span class="params">()</span>, R.drawable.address_icon)</span>;
-spannableStringBuilder.setSpan<span class="params">(imageSpan, spannableStringBuilder.length<span class="params">()</span> - <span class="number">1</span>, spannableStringBuilder.length<span class="params">()</span>, Spannable
-        .SPAN_INCLUSIVE_EXCLUSIVE)</span>;
-<span class="keyword">if</span> <span class="params">(StringUtils.isNotNull<span class="params">(goodsDelivery.getPostage<span class="params">()</span>)</span>)</span> {
-    spannableStringBuilder.append<span class="params">(<span class="string">" "</span> + goodsDelivery.getAddress<span class="params">()</span> + <span class="string">" "</span> + Html.fromHtml<span class="params">(goodsDelivery.getPostage<span class="params">()</span>)</span>)</span>;
-}
-mPostageRulesContainer.setText<span class="params">(spannableStringBuilder)</span>;
-</code></pre><p>这个应该网上有很多，使用的过程中发现后台传的字符串中间是有html标签的，spannable不能识别标签中的属性因此这种方法不能适用。</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/06/08/2016-06-08/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -505,7 +481,7 @@ mPostageRulesContainer.setText<span class="params">(spannableStringBuilder)</spa
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2016 Rodriguez-Xin
+    		&copy; 2017 Rodriguez-Xin
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -529,8 +505,8 @@ mPostageRulesContainer.setText<span class="params">(spannableStringBuilder)</spa
 		open_in_new: false
 	}
 </script>
-<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
-<script src="/js/main.js" type="text/javascript"></script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
 
 
 

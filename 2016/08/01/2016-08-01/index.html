@@ -32,13 +32,14 @@
 
 因为每个地方的分享大图是不一样的，需要找出共性部分，并将不同之处方便替换；
 在卡片中的几张图片还没下载完就吊起分享肯定">
+<meta name="twitter:image" content="http://7xl9v5.com1.z0.glb.clouddn.com/2016-08-15">
   
     <link rel="alternative" href="/atom.xml" title="AFei" type="application/atom+xml">
   
   
     <link rel="icon" href="/avatar.jpg">
   
-  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div id="container">
@@ -121,7 +122,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Android/" style="font-size: 17.5px;">Android</a> <a href="/tags/React-Native/" style="font-size: 12.5px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/weex/" style="font-size: 10px;">weex</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a>
+						<a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/React-Native/" style="font-size: 13.33px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/weex/" style="font-size: 10px;">weex</a> <a href="/tags/读书/" style="font-size: 16.67px;">读书</a>
 					</div>
 				</section>
 				
@@ -228,58 +229,58 @@
 <p>###非公共部分</p>
 <p><img src="http://7xl9v5.com1.z0.glb.clouddn.com/image_20160815141037.png" alt="图2"></p>
 <p>如果没有非公共部分，可以不使用此方法。非公共部分由于分享的内容不同会经常变动ui效果，因此这里采用了策略模式，将分享图片占位的顶部和底部留出，作为自定义部分，要使用此方法的需要自定义上下两部分的可以自制一个策略类，并将此方法设置到ShareImgManager中。具体代码如下：</p>
-<pre><code>ShareImgManager shareImgManager = new ShareImgManager<span class="params">(getContext<span class="params">()</span>)</span>;
-shareImgManager.setShareImgStrategy<span class="params">(new ShareUserCommentImg<span class="params">(getContext<span class="params">()</span>, goodsComment, mShowGoodsComment.getGoods<span class="params">()</span>)</span>)</span>;<span class="comment">//自定义ui部分</span>
-shareImgManager.addImgBottomPart<span class="params">()</span>;
+<pre><code>ShareImgManager shareImgManager = new ShareImgManager(getContext());
+shareImgManager.setShareImgStrategy(new ShareUserCommentImg(getContext(), goodsComment, mShowGoodsComment.getGoods()));//自定义ui部分
+shareImgManager.addImgBottomPart();
 </code></pre><p>其中的ShareUserCommentImg类实现了ShareImgManager.ShareImgStrategy接口，接口包含了两个方法，分别是分享大图的上下两个部分，可以将相应的view指定进去。只要返回相应的view，在ShareImgManager里面会将这两部分加入进去，看下这个类的具体代码：</p>
 <pre><code>public class ShareUserCommentImg implements ShareImgManager.ShareImgStrategy {
 private Context mContext;
 private GoodsComment mGoodsComment;
 private CommentGoods mCommentGoods;
-public ShareUserCommentImg<span class="params">(Context context, GoodsComment goodsComment, CommentGoods commentGoods)</span> {
+public ShareUserCommentImg(Context context, GoodsComment goodsComment, CommentGoods commentGoods) {
     this.mContext = context;
     mGoodsComment = goodsComment;
     mCommentGoods = commentGoods;
 }
 
 @Override
-public View imgTopPart<span class="params">()</span> {
+public View imgTopPart() {
     return null;
 }
 
 @Override
-public View imgBottomPart<span class="params">()</span> {
-    <span class="keyword">if</span> <span class="params">(mCommentGoods == null)</span> return null;
-    View mShareView = LayoutInflater.from<span class="params">(mContext)</span>.inflate<span class="params">(R.layout.share_user_comment_img_bottom_part, null)</span>;
-    TextView commentGoodsTitle = <span class="params">(TextView)</span> mShareView.findViewById<span class="params">(R.id.comment_goods_title)</span>;
-    KaolaImageView belongGoodsIv = <span class="params">(KaolaImageView)</span> mShareView.findViewById<span class="params">(R.id.belong_goods_iv)</span>;
-    TextView commentGoodsPrice = <span class="params">(TextView)</span> mShareView.findViewById<span class="params">(R.id.comment_goods_price)</span>;
-    TextView shareCommentContent = <span class="params">(TextView)</span> mShareView.findViewById<span class="params">(R.id.share_comment_content)</span>;
-    ImageLoaderManager.startLoad<span class="params">(new ImageLoaderBuilder<span class="params">()</span>.setKaolaImageView<span class="params">(belongGoodsIv)</span>
-            .setImgUrl<span class="params">(mCommentGoods.getImageUrl<span class="params">()</span>)</span>.setWidthHeight<span class="params">(<span class="number">35</span>, <span class="number">35</span>)</span>)</span>;
-    commentGoodsPrice.setText<span class="params">(<span class="string">"￥"</span> + StringUtils.formatFloat<span class="params">(mCommentGoods.getActualCurrentPriceForApp<span class="params">()</span>)</span>)</span>;
-    commentGoodsTitle.setText<span class="params">(mCommentGoods.getTitle<span class="params">()</span>)</span>;
-    shareCommentContent.setText<span class="params">(Html.fromHtml<span class="params">(<span class="string">"&lt;font color=\"#D22147\"&gt;@"</span> + mGoodsComment.getNicknameKaola<span class="params">()</span> + <span class="string">": &lt;/font&gt;"</span> +
-            mGoodsComment.getCommentContent<span class="params">()</span>)</span>)</span>;
+public View imgBottomPart() {
+    if (mCommentGoods == null) return null;
+    View mShareView = LayoutInflater.from(mContext).inflate(R.layout.share_user_comment_img_bottom_part, null);
+    TextView commentGoodsTitle = (TextView) mShareView.findViewById(R.id.comment_goods_title);
+    KaolaImageView belongGoodsIv = (KaolaImageView) mShareView.findViewById(R.id.belong_goods_iv);
+    TextView commentGoodsPrice = (TextView) mShareView.findViewById(R.id.comment_goods_price);
+    TextView shareCommentContent = (TextView) mShareView.findViewById(R.id.share_comment_content);
+    ImageLoaderManager.startLoad(new ImageLoaderBuilder().setKaolaImageView(belongGoodsIv)
+            .setImgUrl(mCommentGoods.getImageUrl()).setWidthHeight(35, 35));
+    commentGoodsPrice.setText(&quot;￥&quot; + StringUtils.formatFloat(mCommentGoods.getActualCurrentPriceForApp()));
+    commentGoodsTitle.setText(mCommentGoods.getTitle());
+    shareCommentContent.setText(Html.fromHtml(&quot;&lt;font color=\&quot;#D22147\&quot;&gt;@&quot; + mGoodsComment.getNicknameKaola() + &quot;: &lt;/font&gt;&quot; +
+            mGoodsComment.getCommentContent()));
     return mShareView;
 }
 </code></pre><p>}</p>
 <p>###显示图片的部分</p>
 <p>创建好加载图片的ImageView控件之后，要add进去。此时我在做的时候发现了一个问题就是控件虽然add进去了，也看到占了很大的位置，但是只能显示一片空白，并没有图片显示。后来发现，是因为我们使用的是Facebook的Fresco下载图片框架问题，fresco在控件未attach到当前视图的时候是不会去下载图片的，要在ondraw之后才会去下载图片，因此在塞完控件之后只要draw一下，fresco就会异步去下载图片。看一下这个方法的代码：</p>
-<pre><code>public static Bitmap getBitmap<span class="params">(ScrollView scrollView)</span> {
-    int width = scrollView.getWidth<span class="params">()</span>;
-    int height = scrollView.getHeight<span class="params">()</span>;
-    scrollView.setBackgroundColor<span class="params">(Color.WHITE)</span>;
-    <span class="keyword">if</span> <span class="params">(<span class="number">0</span> == width || <span class="number">0</span> == height)</span> {
-        scrollView.measure<span class="params">(View.MeasureSpec.makeMeasureSpec<span class="params">(<span class="number">750</span>, View.MeasureSpec.EXACTLY)</span>,
-                View.MeasureSpec.makeMeasureSpec<span class="params">(<span class="number">0</span>, View.MeasureSpec.UNSPECIFIED)</span>)</span>;
-        scrollView.layout<span class="params">(<span class="number">0</span>, <span class="number">0</span>, scrollView.getMeasuredWidth<span class="params">()</span>, scrollView.getMeasuredHeight<span class="params">()</span>)</span>;
-        width = scrollView.getWidth<span class="params">()</span>;
-        height = scrollView.getHeight<span class="params">()</span>;
+<pre><code>public static Bitmap getBitmap(ScrollView scrollView) {
+    int width = scrollView.getWidth();
+    int height = scrollView.getHeight();
+    scrollView.setBackgroundColor(Color.WHITE);
+    if (0 == width || 0 == height) {
+        scrollView.measure(View.MeasureSpec.makeMeasureSpec(750, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        scrollView.layout(0, 0, scrollView.getMeasuredWidth(), scrollView.getMeasuredHeight());
+        width = scrollView.getWidth();
+        height = scrollView.getHeight();
     }
-    Bitmap bitmap = Bitmap.createBitmap<span class="params">(width, height, Bitmap.Config.RGB_565)</span>;
-    final Canvas canvas = new Canvas<span class="params">(bitmap)</span>;
-    scrollView.draw<span class="params">(canvas)</span>;
+    Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+    final Canvas canvas = new Canvas(bitmap);
+    scrollView.draw(canvas);
     return bitmap;
 }
 </code></pre><p>此时虽然进行了measure等一系列操作，但是只是占了位置，图片还没显示上去，所以要等图片下载完成之后再执行一遍才可以看到图片。</p>
@@ -289,7 +290,7 @@ public View imgBottomPart<span class="params">()</span> {
 <p>图片压缩方法主要有两种：</p>
 <p>#####1.质量压缩</p>
 <p>质量压缩，方法如下：</p>
-<pre><code><span class="tag">image</span><span class="class">.compress</span>(<span class="tag">Bitmap</span><span class="class">.CompressFormat</span><span class="class">.JPEG</span>, 50, <span class="tag">baos</span>);
+<pre><code>image.compress(Bitmap.CompressFormat.JPEG, 50, baos);
 </code></pre><p>其中第一个参数为所需要压缩的图片格式，可选三个格式JPEG，PNG和WEBP，试过这三个格式，发现JPEG的压缩方式是最好的。PNG是无损压缩，WEBP如果需要压缩的话，耗时是JPEG的好几倍，而且压缩效果也不好。所以不是推荐的压缩格式。第二个参数是需要压缩到的图片质量，第三个参数是图片输入流。</p>
 <p>关于压缩的原理，看了一下源码，发现谷歌使用的也是libjpeg这个被广泛使用的开源JPEG图像处理库，android并没有直接使用libjpeg，而是使用了一个封装库Skia，通过Skia来使用libjpeg的。Skia对libjpeg进行了良好的封装，基于这个引擎可以很方便为操作系统、浏览器等开发图像处理功能。libjpeg在压缩图像的时候，有一个参数叫optimize_coding，官方文档中是这样写的：</p>
 <blockquote>
@@ -300,16 +301,16 @@ public View imgBottomPart<span class="params">()</span> {
 <p>采用这种方法进行压缩，并不会减少图片的像素，官方文档也解释说, 它会让图片重新构造, 但是有可能图像的位深(即色深)和每个像素的透明度会变化,也就是说以jpeg格式压缩后, 原来图片中透明的元素将消失.所以这种格式很可能造成失真。</p>
 <p>#####2.尺寸压缩</p>
 <p>尺寸压缩主要使用到的是BitmapFactory.Options这个参数，BitmapFactory.Options的成员变量主要有：</p>
-<pre><code><span class="keyword">public</span> Bitmap inBitmap;<span class="comment">//重用Bitmap</span>
-<span class="keyword">public</span> <span class="built_in">boolean</span> inJustDecodeBounds;<span class="comment">//设置只去读图片的附加信息(宽高),不去解析真实的Bitmap</span>
-<span class="keyword">public</span> <span class="built_in">int</span> inSampleSize;<span class="comment">// 设置图片的缩放比例(宽和高)</span>
-<span class="keyword">public</span> <span class="built_in">int</span> inDensity;
-<span class="keyword">public</span> <span class="built_in">int</span> inTargetDensity;
-<span class="keyword">public</span> <span class="built_in">int</span> inScreenDensity;
-<span class="keyword">public</span> <span class="built_in">boolean</span> inScaled;
-<span class="keyword">public</span> <span class="built_in">int</span> outWidth;
-<span class="keyword">public</span> <span class="built_in">int</span> outHeight;
-<span class="keyword">public</span> <span class="keyword">String</span> outMimeType;
+<pre><code>public Bitmap inBitmap;//重用Bitmap
+public boolean inJustDecodeBounds;//设置只去读图片的附加信息(宽高),不去解析真实的Bitmap
+public int inSampleSize;// 设置图片的缩放比例(宽和高)
+public int inDensity;
+public int inTargetDensity;
+public int inScreenDensity;
+public boolean inScaled;
+public int outWidth;
+public int outHeight;
+public String outMimeType;
 </code></pre><p><strong>inJustDecodeBounds：</strong>这个参数设置为true的时候，BitmapFactory通过decodeResource或者decodeFile解码图片时，将会返回空(null)的Bitmap对象，这样可以避免Bitmap的内存分配，但是它可以返回Bitmap的宽度、高度以及MimeType。</p>
 <p><strong>inSampleSize：</strong>在获取了图片的宽高之后，在知道屏幕宽高的情况下，就可以通过两个的比例对图片进行压缩到屏幕尺寸进行显示。inSampleSize就是缩放比例，但是这个变量必须设置2的倍数，如果设置的非2的倍数，他也会自动变换成最近的2的<strong>指数</strong>倍数。例如：inSampleSize=4，宽高都会变为原来的1/4，整体就会缩小16倍，压缩比例还是很可观的，但是压缩到之前的16倍效果上就会差很多。</p>
 <p><strong>inPreferredConfig：</strong></p>
@@ -318,58 +319,58 @@ public View imgBottomPart<span class="params">()</span> {
 <p>Bitmap.Config RGB_565：每个像素占四位，即R=5，G=6，B=5，没有透明度，那么一个像素点占5+6+5=16位</p>
 <p>Bitmap.Config ALPHA_8：每个像素占四位，只有透明度，没有颜色。</p>
 <p>#####3.我使用的压缩方法</p>
-<pre><code><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Bitmap <span class="title">compressImage</span><span class="params">(Bitmap image, <span class="keyword">int</span> minSize)</span> </span>{
-    ByteArrayOutputStream baos = <span class="keyword">new</span> ByteArrayOutputStream();
-    image.compress(Bitmap.CompressFormat.JPEG, <span class="number">100</span>, baos);
-    <span class="keyword">int</span> bitmapSize = baos.toByteArray().length / <span class="number">1024</span>;
-    <span class="keyword">if</span> (bitmapSize / minSize &lt; <span class="number">4</span>) {<span class="comment">//图片需要缩小到1/4以内,用质量压缩</span>
-        <span class="keyword">int</span> options = minSize * <span class="number">200</span> / bitmapSize;
-        <span class="keyword">while</span> (baos.toByteArray().length / <span class="number">1024</span> &gt; minSize &amp;&amp; options &gt; <span class="number">0</span>) {
-            <span class="comment">// 重置baos</span>
+<pre><code>public static Bitmap compressImage(Bitmap image, int minSize) {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+    int bitmapSize = baos.toByteArray().length / 1024;
+    if (bitmapSize / minSize &lt; 4) {//图片需要缩小到1/4以内,用质量压缩
+        int options = minSize * 200 / bitmapSize;
+        while (baos.toByteArray().length / 1024 &gt; minSize &amp;&amp; options &gt; 0) {
+            // 重置baos
             baos.reset();
-            <span class="comment">// 这里压缩options%，把压缩后的数据存放到baos中</span>
+            // 这里压缩options%，把压缩后的数据存放到baos中
             image.compress(Bitmap.CompressFormat.JPEG, options, baos);
-            <span class="comment">// 每次都减少10</span>
-            options -= <span class="number">10</span>;
+            // 每次都减少10
+            options -= 10;
         }
-        byte[] <span class="built_in">array</span> = baos.toByteArray();
-        <span class="keyword">if</span> (options &gt;= <span class="number">30</span>) {
-            <span class="keyword">return</span> decodeByteArray(<span class="built_in">array</span>, <span class="number">0</span>, <span class="built_in">array</span>.length);
+        byte[] array = baos.toByteArray();
+        if (options &gt;= 30) {
+            return decodeByteArray(array, 0, array.length);
         }
     }
-    <span class="comment">//图片需要缩小到1/4以上,用尺寸压缩</span>
-    BitmapFactory.Options opts = <span class="keyword">new</span> BitmapFactory.Options();
+    //图片需要缩小到1/4以上,用尺寸压缩
+    BitmapFactory.Options opts = new BitmapFactory.Options();
     opts.inPreferredConfig = Bitmap.Config.RGB_565;
-    opts.inSampleSize = <span class="number">1</span>;
+    opts.inSampleSize = 1;
     Bitmap bitmap = image;
-    image.compress(Bitmap.CompressFormat.JPEG, <span class="number">100</span>, baos);
-    byte[] <span class="built_in">array</span> = baos.toByteArray();
-    <span class="keyword">while</span> (bitmap.getByteCount() / <span class="number">1024</span> &gt; <span class="number">2048</span>) {
-        opts.inSampleSize *= <span class="number">2</span>;
-        bitmap = BitmapFactory.decodeByteArray(<span class="built_in">array</span>, <span class="number">0</span>, <span class="built_in">array</span>.length, opts);
+    image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+    byte[] array = baos.toByteArray();
+    while (bitmap.getByteCount() / 1024 &gt; 2048) {
+        opts.inSampleSize *= 2;
+        bitmap = BitmapFactory.decodeByteArray(array, 0, array.length, opts);
     }
-    <span class="keyword">return</span> bitmap;
+    return bitmap;
 }
 </code></pre><p>###分享方法的使用</p>
 <p>接下来就是ShareImgManager的使用过程，因为之前已经设置好了公共和非公共部分，所以在这里只要设置部分数据，并且调用createImgCard方法即可，看下代码：</p>
-<pre><code>ShareImgManager shareImgManager = new ShareImgManager<span class="params">(getContext<span class="params">()</span>)</span>;
-shareImgManager.setShareImgStrategy<span class="params">(new ShareUserCommentImg<span class="params">(getContext<span class="params">()</span>, goodsComment, mShowGoodsComment.getGoods<span class="params">()</span>)</span>)</span>;<span class="comment">//自定义ui部分</span>
-shareImgManager.addImgBottomPart<span class="params">()</span>;
-ShareImgManager shareImgManager = new ShareImgManager<span class="params">(getContext<span class="params">()</span>)</span>;
-shareImgManager.setShareImgStrategy<span class="params">(new ShareUserCommentImg<span class="params">(getContext<span class="params">()</span>, goodsComment, mShowGoodsComment.getGoods<span class="params">()</span>)</span>)</span>;<span class="comment">//自定义ui部分</span>
-shareImgManager.addImgBottomPart<span class="params">()</span>;
-shareImgManager.setData<span class="params">(getContext<span class="params">()</span>, <span class="string">"http://www.kaola.com/product/"</span> + mShowGoodsComment.getGoods<span class="params">()</span>.getGoodsId<span class="params">()</span> + <span class="string">".html"</span>,R.drawable.ic_comment_share_head)</span>;<span class="comment">//设置二维码链接和头部的背景图</span>
-shareImgManager.createImgCard<span class="params">(getContext<span class="params">()</span>, imgUrls, new ShareImgManager.ShareImgListener<span class="params">()</span> {
+<pre><code>ShareImgManager shareImgManager = new ShareImgManager(getContext());
+shareImgManager.setShareImgStrategy(new ShareUserCommentImg(getContext(), goodsComment, mShowGoodsComment.getGoods()));//自定义ui部分
+shareImgManager.addImgBottomPart();
+ShareImgManager shareImgManager = new ShareImgManager(getContext());
+shareImgManager.setShareImgStrategy(new ShareUserCommentImg(getContext(), goodsComment, mShowGoodsComment.getGoods()));//自定义ui部分
+shareImgManager.addImgBottomPart();
+shareImgManager.setData(getContext(), &quot;http://www.kaola.com/product/&quot; + mShowGoodsComment.getGoods().getGoodsId() + &quot;.html&quot;,R.drawable.ic_comment_share_head);//设置二维码链接和头部的背景图
+shareImgManager.createImgCard(getContext(), imgUrls, new ShareImgManager.ShareImgListener() {
       @Override
-      public void createPicSuccess<span class="params">(String imgName)</span> {
-           GoodsDetailUtils.shareComment<span class="params">(getActivity<span class="params">()</span>, imgName, mCommentListLv)</span>;
+      public void createPicSuccess(String imgName) {
+           GoodsDetailUtils.shareComment(getActivity(), imgName, mCommentListLv);
       }
 
       @Override
-      public void createPicFailed<span class="params">()</span> {
-           ToastUtils.show<span class="params">(<span class="string">"网络请求失败"</span>)</span>;
+      public void createPicFailed() {
+           ToastUtils.show(&quot;网络请求失败&quot;);
       }
-})</span>;
+});
 </code></pre><p>###参考文档和延伸阅读</p>
 <ol>
 <li><a href="http://www.jianshu.com/p/9b47fc25f526" target="_blank" rel="external">App图片压缩裁剪原理和上传方案，以及那些有趣的事儿…</a></li>
@@ -452,7 +453,7 @@ shareImgManager.createImgCard<span class="params">(getContext<span class="params
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2016 Rodriguez-Xin
+    		&copy; 2017 Rodriguez-Xin
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -476,8 +477,8 @@ shareImgManager.createImgCard<span class="params">(getContext<span class="params
 		open_in_new: false
 	}
 </script>
-<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
-<script src="/js/main.js" type="text/javascript"></script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
 
 
 

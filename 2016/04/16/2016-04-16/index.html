@@ -17,13 +17,14 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="购物类App商品Sku级联逻辑">
 <meta name="twitter:description" content="对于一个购物类的App，可以说sku量是很重要的一环，那么什么是sku呢，SKU=Stock Keeping Unit（库存量单位）。它的基本解释即库存进出计量的基本单元。什么意思呢？比如，我们去买一条裤子，裤子有红色和蓝色，每种颜色都有L，XL两种号码，那么，我们一定要买一条的话则必然颜色选择一种，型号选择一个。就会出现，红色L号，红色XL号，蓝色L号，蓝色XL号四种情况。而这四种商品便是库存量">
+<meta name="twitter:image" content="http://nos.netease.com/knowledge/a3f2d404-dbcf-4702-aac5-571ef1486248">
   
     <link rel="alternative" href="/atom.xml" title="AFei" type="application/atom+xml">
   
   
     <link rel="icon" href="/avatar.jpg">
   
-  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div id="container">
@@ -106,7 +107,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Android/" style="font-size: 17.5px;">Android</a> <a href="/tags/React-Native/" style="font-size: 12.5px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/weex/" style="font-size: 10px;">weex</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a>
+						<a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/React-Native/" style="font-size: 13.33px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/weex/" style="font-size: 10px;">weex</a> <a href="/tags/读书/" style="font-size: 16.67px;">读书</a>
 					</div>
 				</section>
 				
@@ -203,106 +204,106 @@
 <p>在考拉商品详情页SKU的设计过程中，我用到了一个activity，一个view，一个manager。</p>
 <p>###一、数据组织方式</p>
 <p>我将每一个属性的的每一个属性值定义为一个model(SkuBtnEntity)，其中name为当前属性的名字，value为当前属性值。例如：name=颜色，value=红。同时每个按钮有四种状态，普通未选中状态，普通选中状态，缺货置灰未选中状态，缺货置灰选中状态。类中全部成员变量如下：</p>
-<pre><code><span class="keyword">private</span> TextView mSkuBtn;   <span class="comment">//属性按钮</span>
-<span class="keyword">private</span> <span class="built_in">int</span> mIsColor;       <span class="comment">//1为颜色属性，0为其他属性</span>
-<span class="keyword">private</span> <span class="keyword">String</span> mImageUrl;   <span class="comment">//图片url</span>
-<span class="keyword">private</span> <span class="keyword">String</span> mNameId;
-<span class="keyword">private</span> <span class="keyword">String</span> mName;
-<span class="keyword">private</span> <span class="keyword">String</span> mValueId;
-<span class="keyword">private</span> <span class="keyword">String</span> mValue;
-<span class="keyword">private</span> <span class="built_in">boolean</span> isAsh;      <span class="comment">//缺货置灰未选中状态</span>
-<span class="keyword">private</span> <span class="built_in">boolean</span> isPressed;  <span class="comment">//普通选中状态</span>
-<span class="keyword">private</span> <span class="built_in">boolean</span> isForcedAsh;<span class="comment">//缺货置灰选中状态</span>
+<pre><code>private TextView mSkuBtn;   //属性按钮
+private int mIsColor;       //1为颜色属性，0为其他属性
+private String mImageUrl;   //图片url
+private String mNameId;
+private String mName;
+private String mValueId;
+private String mValue;
+private boolean isAsh;      //缺货置灰未选中状态
+private boolean isPressed;  //普通选中状态
+private boolean isForcedAsh;//缺货置灰选中状态
 </code></pre><a id="more"></a>
 <p>之后我又准备了一个Manager类用来管理在sku选择过程中需要使用到的数据以及判断逻辑。先说显示层的，我在Manager里定义了一些成员变量。包括：</p>
-<pre><code><span class="keyword">private</span> <span class="built_in">List</span>&lt;SkuBtnEntity&gt; mSkuBtnList; <span class="comment">//每个属性value分别用一个按钮对象来标识，list为所有当前商品的属性和</span>
-<span class="keyword">private</span> <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">List</span>&lt;SkuBtnEntity&gt;&gt; mSkuBtnUnitMap;<span class="comment">//横向分组的Map,key为name,value为同一横行的按钮list</span>
-<span class="keyword">private</span> <span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">String</span>&gt; mSelectedPropertyValueIdMap;<span class="comment">//已经选择的属性值key为propertyName,value为PropertyValueId</span>
+<pre><code>private List&lt;SkuBtnEntity&gt; mSkuBtnList; //每个属性value分别用一个按钮对象来标识，list为所有当前商品的属性和
+private Map&lt;String, List&lt;SkuBtnEntity&gt;&gt; mSkuBtnUnitMap;//横向分组的Map,key为name,value为同一横行的按钮list
+private Map&lt;String, String&gt; mSelectedPropertyValueIdMap;//已经选择的属性值key为propertyName,value为PropertyValueId
 </code></pre><p>第一个成员变量，是包含了所有属性中所有项的列表。设置第二个成员变量是因为横向分组的是一个属性不同的项，在他们被点击的时候，同一横行的其他按钮要被弹起，此时就需要用到这个Map了。第三个Map是已经选择好的sku属性项的集合。后台传回来的数据是SkuGoodsPropertyList，其中所有的sku相关属性都是从这个list中得到。接着，确定了属性之后要判断缺货状态就需要用到SkuList，其数据结构如下：</p>
 <pre><code>{
-"<span class="attribute">actualCurrentPrice</span>": <span class="value"><span class="number">799</span></span>,
-"<span class="attribute">actualCurrentPriceForApp</span>": <span class="value"><span class="number">799</span></span>,
-"<span class="attribute">actualStorageStatus</span>": <span class="value"><span class="number">0</span></span>,
-"<span class="attribute">actualStore</span>": <span class="value"><span class="number">0</span></span>,
-"<span class="attribute">currentPrice</span>": <span class="value"><span class="number">999</span></span>,
-"<span class="attribute">goodsId</span>": <span class="value"><span class="number">21653</span></span>,
-"<span class="attribute">limitBuyOnce</span>": <span class="value"><span class="number">0</span></span>,
-"<span class="attribute">marketPrice</span>": <span class="value"><span class="number">1800</span></span>,
-"<span class="attribute">preSale</span>": <span class="value"><span class="number">0</span></span>,
-"<span class="attribute">sales</span>": <span class="value"><span class="number">30</span></span>,
-"<span class="attribute">skuId</span>": <span class="value"><span class="string">"26340-a354067f4c630cfd886595ad0966ce43"</span></span>,
-"<span class="attribute">skuPropertyList</span>": <span class="value">[{
-    "<span class="attribute">propertyName</span>": <span class="value"><span class="string">"颜色"</span></span>,
-    "<span class="attribute">propertyValue</span>": <span class="value"><span class="string">"CHE/栗色"</span>
-</span>}, {
-    "<span class="attribute">propertyName</span>": <span class="value"><span class="string">"材质"</span></span>,
-    "<span class="attribute">propertyValue</span>": <span class="value"><span class="string">"羊皮"</span>
-</span>}, {
-    "<span class="attribute">propertyName</span>": <span class="value"><span class="string">"尺码"</span></span>,
-    "<span class="attribute">propertyValue</span>": <span class="value"><span class="string">"6/37"</span>
-</span>}]</span>,
-"<span class="attribute">skuPropertyValueId4View</span>": <span class="value"><span class="string">"_135650_135666_135679"</span></span>,
-"<span class="attribute">skuPropertyValueIdList</span>": <span class="value">[<span class="string">"135650"</span>, <span class="string">"135666"</span>, <span class="string">"135679"</span>]</span>,
-"<span class="attribute">taxRate</span>": <span class="value"><span class="number">0.1</span></span>,
+&quot;actualCurrentPrice&quot;: 799,
+&quot;actualCurrentPriceForApp&quot;: 799,
+&quot;actualStorageStatus&quot;: 0,
+&quot;actualStore&quot;: 0,
+&quot;currentPrice&quot;: 999,
+&quot;goodsId&quot;: 21653,
+&quot;limitBuyOnce&quot;: 0,
+&quot;marketPrice&quot;: 1800,
+&quot;preSale&quot;: 0,
+&quot;sales&quot;: 30,
+&quot;skuId&quot;: &quot;26340-a354067f4c630cfd886595ad0966ce43&quot;,
+&quot;skuPropertyList&quot;: [{
+    &quot;propertyName&quot;: &quot;颜色&quot;,
+    &quot;propertyValue&quot;: &quot;CHE/栗色&quot;
+}, {
+    &quot;propertyName&quot;: &quot;材质&quot;,
+    &quot;propertyValue&quot;: &quot;羊皮&quot;
+}, {
+    &quot;propertyName&quot;: &quot;尺码&quot;,
+    &quot;propertyValue&quot;: &quot;6/37&quot;
+}],
+&quot;skuPropertyValueId4View&quot;: &quot;_135650_135666_135679&quot;,
+&quot;skuPropertyValueIdList&quot;: [&quot;135650&quot;, &quot;135666&quot;, &quot;135679&quot;],
+&quot;taxRate&quot;: 0.1,
 }
 </code></pre><p>###二、显示算法</p>
 <p>数据基本上够用了，下面就是要显示了，在显示Sku的View中本来使用的是一个listview，但是后来由于listview如果使用adapter的话逻辑又加深了一层，同时item的复用效果也不明显，因为其实每个属性内的value个数都是不同的,而且每个商品的sku属性最多三个，出现4，5个属性的情况很少。所以我在这里使用了一个ScrollView，将每一横行的属性放在一个自适应换行的view（FlowLayoutView）中。</p>
 <p>#####1.初始化显示</p>
 <p>由于在sku选择浮层打开的时候就要对可能缺货的几种级联属性进行置灰操作。通过后台给的数据可以知道，如果一个级联的sku有货，那么其actualStorageStatus状态一定是1，缺货的时候是0。这样就好办了，我假设所有的属性都是一个大集合(集合A)，我遍历SkuList的时候，将有货的属性拿到有货的属性的集合里面(集合B)，这样当遍历结束的时候，我只要将有货的集合里面的按钮放开点击，剩下的按钮让他们置灰便可。举个例子：假如一个鞋子商品，有两个大属性：颜色和尺码，其中颜色有：红，黄，蓝；尺码有：M，L，XL。那么SkuList必然会有9种sku情况，假设在这里面只有选择了红-M，红-L才是有货的，那么我在遍历的时候就将这三个按钮放开点击，剩下的三个按钮置灰作为缺货状态，如此便完成了初始化的工作。这里还要说一点的是，最早的版本我是通过遍历property再在SkuList找包含此属性的所有的sku是否都缺货来判断的，这种方法的时间复杂度明显高了一个数量级。代码如下：</p>
-<pre><code><span class="comment">/**
+<pre><code>/**
  * 初始化设置缺货状态
- */</span>
-public void initSkuBtnAsh<span class="params">()</span> {
-    List&lt;SkuList&gt; skuCells = mSpringGoods.getSkuList<span class="params">()</span>;
-    List&lt;String&gt; hasStoreSkuList = new ArrayList&lt;&gt;<span class="params">()</span>;
-    <span class="keyword">for</span> <span class="params">(SkuList skuCell : skuCells)</span> {
-        <span class="keyword">if</span> <span class="params">(skuCell.getActualStore<span class="params">()</span> &gt; <span class="number">0</span>)</span> {
-            <span class="keyword">for</span> <span class="params">(String valueid : skuCell.getSkuPropertyValueIdList<span class="params">()</span>)</span> {
-                <span class="keyword">if</span> <span class="params">(!hasStoreSkuList.contains<span class="params">(valueid)</span>)</span> {
-                    hasStoreSkuList.add<span class="params">(valueid)</span>;
+ */
+public void initSkuBtnAsh() {
+    List&lt;SkuList&gt; skuCells = mSpringGoods.getSkuList();
+    List&lt;String&gt; hasStoreSkuList = new ArrayList&lt;&gt;();
+    for (SkuList skuCell : skuCells) {
+        if (skuCell.getActualStore() &gt; 0) {
+            for (String valueid : skuCell.getSkuPropertyValueIdList()) {
+                if (!hasStoreSkuList.contains(valueid)) {
+                    hasStoreSkuList.add(valueid);
                 }
             }
         }
     }
-    <span class="keyword">for</span> <span class="params">(SkuBtnEntity skuBtnEntity : mSkuBtnList)</span> {
-        <span class="keyword">if</span> <span class="params">(!hasStoreSkuList.contains<span class="params">(skuBtnEntity.getValueId<span class="params">()</span>)</span>)</span> {
-            skuBtnEntity.setAsh<span class="params">(<span class="literal">true</span>)</span>;
+    for (SkuBtnEntity skuBtnEntity : mSkuBtnList) {
+        if (!hasStoreSkuList.contains(skuBtnEntity.getValueId())) {
+            skuBtnEntity.setAsh(true);
         }
     }
 }
 </code></pre><p>还要再说一点的是，此时初始化中的置灰和之后的置灰也是不一样的，这两种置灰状态我也是用了不同的值来区分，因为之后在选择了某一个确定的属性之后再将其他按钮置灰的时候，如果选定的属性又取消选中了，级联置灰的按钮还是要弹起的。所以为了区分，在初始化便缺货需要置灰的按钮状态叫做强制置灰，不随点击而弹起。另外一种叫做普通置灰。</p>
 <p>初始化完成之后，此时可能就会出现某个横行属性，只剩下一个可以选中了，其他的都缺货了。那么就需要将这个唯一剩余的按钮选中。同时如果本身此横行属性就只有一个按钮，也要进行选中。代码如下：</p>
-<pre><code><span class="comment">/**
+<pre><code>/**
  * 横行属性有多个，但是由于缺货或级联导致只有一个可以选择时，默认选中
- */</span>
-private void selectOnlyOneSkuProperty<span class="params">()</span> {
-    <span class="keyword">for</span> <span class="params">(int position = <span class="number">0</span>; position &lt; mSkuCascadeManager.getSkuBtnUnitMap<span class="params">()</span>.size<span class="params">()</span>; position++)</span> {
-        List&lt;SkuBtnEntity&gt; skuBtnUnitList = mSkuCascadeManager.getSkuBtnUnitMap<span class="params">()</span>.get<span class="params">(
-                mSkuCascadeManager.getPropertyNameList<span class="params">()</span>.get<span class="params">(position)</span>)</span>;
-        <span class="comment">//横向属性只有一个时设置点击状态</span>
-        <span class="keyword">if</span> <span class="params">(skuBtnUnitList.size<span class="params">()</span> == <span class="number">1</span>)</span> {
-            <span class="keyword">if</span> <span class="params">(<span class="number">1</span> == skuBtnUnitList.get<span class="params">(<span class="number">0</span>)</span>.getIsColor<span class="params">()</span>)</span> {
-                ImageLoaderManager.startLoad<span class="params">(new ImageLoaderBuilder<span class="params">()</span>.setImgUrl<span class="params">(skuBtnUnitList.get<span class="params">(<span class="number">0</span>)</span>.getImageUrl<span class="params">()</span>)</span>
-                        .setWidthHeight<span class="params">(<span class="number">70</span>, <span class="number">70</span>)</span>.setKaolaImageView<span class="params">(mSkuColorIv)</span>)</span>;
+ */
+private void selectOnlyOneSkuProperty() {
+    for (int position = 0; position &lt; mSkuCascadeManager.getSkuBtnUnitMap().size(); position++) {
+        List&lt;SkuBtnEntity&gt; skuBtnUnitList = mSkuCascadeManager.getSkuBtnUnitMap().get(
+                mSkuCascadeManager.getPropertyNameList().get(position));
+        //横向属性只有一个时设置点击状态
+        if (skuBtnUnitList.size() == 1) {
+            if (1 == skuBtnUnitList.get(0).getIsColor()) {
+                ImageLoaderManager.startLoad(new ImageLoaderBuilder().setImgUrl(skuBtnUnitList.get(0).getImageUrl())
+                        .setWidthHeight(70, 70).setKaolaImageView(mSkuColorIv));
             }
-            skuBtnUnitList.get<span class="params">(<span class="number">0</span>)</span>.setPressed<span class="params">(<span class="literal">true</span>)</span>;
-            checkIsAllPropertiesSelected<span class="params">(skuBtnUnitList.get<span class="params">(<span class="number">0</span>)</span>)</span>;
-        } <span class="keyword">else</span> {<span class="comment">//横向属性有多个，判断是否只有一个可以选</span>
-            int hasStoreSkuBtnCount = <span class="number">0</span>;
-            <span class="keyword">for</span> <span class="params">(SkuBtnEntity skuBtnEntity : skuBtnUnitList)</span> {
-                <span class="keyword">if</span> <span class="params">(!skuBtnEntity.isAsh<span class="params">()</span> &amp;&amp; !skuBtnEntity.isForcedAsh<span class="params">()</span>)</span> {
+            skuBtnUnitList.get(0).setPressed(true);
+            checkIsAllPropertiesSelected(skuBtnUnitList.get(0));
+        } else {//横向属性有多个，判断是否只有一个可以选
+            int hasStoreSkuBtnCount = 0;
+            for (SkuBtnEntity skuBtnEntity : skuBtnUnitList) {
+                if (!skuBtnEntity.isAsh() &amp;&amp; !skuBtnEntity.isForcedAsh()) {
                     hasStoreSkuBtnCount++;
                 }
             }
-            <span class="keyword">if</span> <span class="params">(hasStoreSkuBtnCount == <span class="number">1</span>)</span> {
-                <span class="keyword">for</span> <span class="params">(SkuBtnEntity skuBtnEntity : skuBtnUnitList)</span> {
-                    <span class="keyword">if</span> <span class="params">(!skuBtnEntity.isAsh<span class="params">()</span> &amp;&amp; !skuBtnEntity.isForcedAsh<span class="params">()</span>)</span> {
-                        skuBtnEntity.setPressed<span class="params">(<span class="literal">true</span>)</span>;
-                        <span class="keyword">if</span> <span class="params">(<span class="number">1</span> == skuBtnEntity.getIsColor<span class="params">()</span>)</span> {
-                            ImageLoaderManager.startLoad<span class="params">(new ImageLoaderBuilder<span class="params">()</span>.setImgUrl<span class="params">(skuBtnEntity.getImageUrl<span class="params">()</span>)</span>
-                                    .setWidthHeight<span class="params">(<span class="number">70</span>, <span class="number">70</span>)</span>.setKaolaImageView<span class="params">(mSkuColorIv)</span>)</span>;
+            if (hasStoreSkuBtnCount == 1) {
+                for (SkuBtnEntity skuBtnEntity : skuBtnUnitList) {
+                    if (!skuBtnEntity.isAsh() &amp;&amp; !skuBtnEntity.isForcedAsh()) {
+                        skuBtnEntity.setPressed(true);
+                        if (1 == skuBtnEntity.getIsColor()) {
+                            ImageLoaderManager.startLoad(new ImageLoaderBuilder().setImgUrl(skuBtnEntity.getImageUrl())
+                                    .setWidthHeight(70, 70).setKaolaImageView(mSkuColorIv));
                         }
-                        checkIsAllPropertiesSelected<span class="params">(skuBtnEntity)</span>;
+                        checkIsAllPropertiesSelected(skuBtnEntity);
                     }
                 }
             }
@@ -312,66 +313,66 @@ private void selectOnlyOneSkuProperty<span class="params">()</span> {
 </code></pre><p>其中要注意的是<strong>checkIsAllPropertiesSelected()</strong>方法，这个方法保证了，在初始化点击一个按钮之后都去检查一次是否所有的sku属性已经都被选过了，如果都被选过了则说明sku确定唯一了，此时就要关联到限购、预售、到货通知甚至下单等等ui的更新了，此处对此不再过多说明。</p>
 <p>#####2.点击后更新逻辑</p>
 <p>初始化完成，下面就到了开始选择属性的情况了。在选择了某一个属性之后，需要先将同一横行的其他属性弹起，这个比较简单就不贴代码了。之后就要去判断选择了之后其他相关级联的属性是否需要置灰或者弹起。先看一下代码：</p>
-<pre><code><span class="comment">/**
+<pre><code>/**
  * sku选择后设置效果
  *
  * @param skuCascadeListener 回调更新ui
- */</span>
-public void pressOneBtnUpdateSku<span class="params">(SkuCascadeListener skuCascadeListener)</span> {
-    <span class="keyword">if</span> <span class="params">(isAllPropertySelected<span class="params">()</span>)</span> {
-        allPropertySelected<span class="params">()</span>;
-    } <span class="keyword">else</span> {
-        List&lt;SkuList&gt; skuCells = mSpringGoods.getSkuList<span class="params">()</span>;
-        List&lt;String&gt; hasStoreSkuList = new ArrayList&lt;&gt;<span class="params">()</span>;
-        <span class="keyword">for</span> <span class="params">(SkuList skuCell : skuCells)</span> {
-            <span class="keyword">if</span> <span class="params">(skuCell.getSkuPropertyValueIdList<span class="params">()</span>.containsAll<span class="params">(mapToList<span class="params">(mSelectedPropertyValueIdMap)</span>)</span> &amp;&amp; skuCell.getActualStore<span class="params">()</span> &gt; <span class="number">0</span>)</span> {
-                <span class="keyword">for</span> <span class="params">(String valueId : skuCell.getSkuPropertyValueIdList<span class="params">()</span>)</span> {
-                    <span class="keyword">if</span> <span class="params">(!mSelectedPropertyValueIdMap.containsValue<span class="params">(valueId)</span> &amp;&amp; !hasStoreSkuList.contains<span class="params">(valueId)</span>)</span> {
-                        hasStoreSkuList.add<span class="params">(valueId)</span>;
+ */
+public void pressOneBtnUpdateSku(SkuCascadeListener skuCascadeListener) {
+    if (isAllPropertySelected()) {
+        allPropertySelected();
+    } else {
+        List&lt;SkuList&gt; skuCells = mSpringGoods.getSkuList();
+        List&lt;String&gt; hasStoreSkuList = new ArrayList&lt;&gt;();
+        for (SkuList skuCell : skuCells) {
+            if (skuCell.getSkuPropertyValueIdList().containsAll(mapToList(mSelectedPropertyValueIdMap)) &amp;&amp; skuCell.getActualStore() &gt; 0) {
+                for (String valueId : skuCell.getSkuPropertyValueIdList()) {
+                    if (!mSelectedPropertyValueIdMap.containsValue(valueId) &amp;&amp; !hasStoreSkuList.contains(valueId)) {
+                        hasStoreSkuList.add(valueId);
                     }
                 }
             }
         }
-        <span class="keyword">for</span> <span class="params">(SkuBtnEntity skuBtnEntity : mSkuBtnList)</span> {
-            <span class="keyword">if</span> <span class="params">(hasStoreSkuList.contains<span class="params">(skuBtnEntity.getValueId<span class="params">()</span>)</span>)</span> {
-                skuBtnEntity.setAsh<span class="params">(<span class="literal">false</span>)</span>;
-            } <span class="keyword">else</span> {
-                <span class="keyword">if</span> <span class="params">(!mSelectedPropertyValueIdMap.containsValue<span class="params">(skuBtnEntity.getValueId<span class="params">()</span>)</span>)</span> {
-                    skuBtnEntity.setAsh<span class="params">(!mSelectedPropertyValueIdMap.containsKey<span class="params">(skuBtnEntity.getName<span class="params">()</span>)</span>)</span>;
-                } <span class="keyword">else</span> <span class="keyword">if</span> <span class="params">(mSelectedPropertyValueIdMap.containsValue<span class="params">(skuBtnEntity.getValueId<span class="params">()</span>)</span>)</span> {
-                    skuBtnEntity.setAsh<span class="params">(ListUtils.isEmpty<span class="params">(hasStoreSkuList)</span>)</span>;
+        for (SkuBtnEntity skuBtnEntity : mSkuBtnList) {
+            if (hasStoreSkuList.contains(skuBtnEntity.getValueId())) {
+                skuBtnEntity.setAsh(false);
+            } else {
+                if (!mSelectedPropertyValueIdMap.containsValue(skuBtnEntity.getValueId())) {
+                    skuBtnEntity.setAsh(!mSelectedPropertyValueIdMap.containsKey(skuBtnEntity.getName()));
+                } else if (mSelectedPropertyValueIdMap.containsValue(skuBtnEntity.getValueId())) {
+                    skuBtnEntity.setAsh(ListUtils.isEmpty(hasStoreSkuList));
                 }
             }
         }
     }
-    <span class="comment">//sku选择改变后更新ui</span>
-    refreshText<span class="params">()</span>;
-    skuCascadeListener.selectSkuUpdateUi<span class="params">()</span>;
+    //sku选择改变后更新ui
+    refreshText();
+    skuCascadeListener.selectSkuUpdateUi();
 }
 </code></pre><p>此处要先进行属性是否全选的判断，因为全选之后判断的逻辑较多，留着之后说明。现在先说明一下属性并没有全部选中的情况。假如此时选中了一个属性的项，那么就要去SkuList里面去找包含这个项的所有sku情况，并且判断这些项是否是有货的。同样也是集合问题，如果和选中的项级联的属性缺货就置灰。不缺货就保持原状。此时要注意，如果选中的项相关联的其他属性都是无货的，就要将此项置按下的灰状态。另一方面，如果当前某一项是选中状态，在点击之后就变成了非选中状体，通过这段代码也可以达到更新其他级联项的效果。总结一下情况有以下几种：</p>
 <p>1.选中了一开始就缺货的属性。2.选中了一开始并不缺货的属性。3.切换了属性。4.取消选中了某一个属性。</p>
 <p>#####3.属性全选更新逻辑</p>
 <p> <img src="http://nos.netease.com/knowledge/a3f2d404-dbcf-4702-aac5-571ef1486248" alt="图1">          <img src="http://nos.netease.com/knowledge/63aaa8bb-e339-42bf-908f-b0caf8a161c0" alt="图2"> </p>
 <p>经过点击后达到的全选和初始化的全选完全不同。初始化的时候如果全部属性都选中了，就说明除了这几个属性的项外，其他属性的项所级联的项都是缺货的，这种状态比较简单。当经过点击让所有的属性都选中之后，就会出现其他本身可以选中的项，因为新项的选中而导致需要置灰的情况。类似于从左图到右图的情况。看一下代码：</p>
-<pre><code><span class="keyword">for</span> <span class="params">(String propertyName : mPropertyNameList)</span> { <span class="comment">//从每个属性Name开始比较</span>
-    Map&lt;String, String&gt; selectSkuBtnIdList = deepClone<span class="params">(mSelectedPropertyValueIdMap)</span>;
-    <span class="keyword">for</span> <span class="params">(SkuBtnEntity skuBtnEntity : mSkuBtnUnitMap.get<span class="params">(propertyName)</span>)</span> {<span class="comment">//选择当前行</span>
-        <span class="keyword">if</span> <span class="params">(!skuBtnEntity.getValueId<span class="params">()</span>.equals<span class="params">(mSelectedPropertyValueIdMap.get<span class="params">(propertyName)</span>)</span>)</span> {<span class="comment">//摘取出当前行未选择的其他按钮</span>
-            selectSkuBtnIdList.put<span class="params">(propertyName, skuBtnEntity.getValueId<span class="params">()</span>)</span>;
-            allPropertySelectedSetAsh<span class="params">(selectSkuBtnIdList, skuBtnEntity.getValueId<span class="params">()</span>)</span>;
+<pre><code>for (String propertyName : mPropertyNameList) { //从每个属性Name开始比较
+    Map&lt;String, String&gt; selectSkuBtnIdList = deepClone(mSelectedPropertyValueIdMap);
+    for (SkuBtnEntity skuBtnEntity : mSkuBtnUnitMap.get(propertyName)) {//选择当前行
+        if (!skuBtnEntity.getValueId().equals(mSelectedPropertyValueIdMap.get(propertyName))) {//摘取出当前行未选择的其他按钮
+            selectSkuBtnIdList.put(propertyName, skuBtnEntity.getValueId());
+            allPropertySelectedSetAsh(selectSkuBtnIdList, skuBtnEntity.getValueId());
         }
     }
 }
 </code></pre><p>当全部属性都选中后，我从第一个属性开始，取第一个属性中没有被选中的其他项和另外的属性中选中的相结合，这样就重新生成了新的Sku，此时去判断这个新的Sku是不是缺货，如果缺货的花，就把这个同一属性没有被选中的项置灰。还是以之前的，红，黄，蓝；M，L，XL为例。如果此时选了红、M，而且黄L是有货的，但是黄M没货，当选择了M之后就要把黄色置灰，因为已经不能选了。此时根据代码的逻辑，就是将红色之外的，黄、蓝和M组合，去判断这两种Sku是否有货，如果没货，就把黄或者蓝置灰。其中<strong>allPropertySelectedSetAsh()</strong>就是将其余项置灰的方法。</p>
-<pre><code>private void allPropertySelectedSetAsh<span class="params">(Map&lt;String, String&gt; selectSkuBtnIdMap, String propertyValueId)</span> {
-    List&lt;SkuList&gt; skuCells = mSpringGoods.getSkuList<span class="params">()</span>;
-    List&lt;String&gt; clickedSkuBtnPropertyValueIds = mapToList<span class="params">(selectSkuBtnIdMap)</span>;
-    <span class="keyword">for</span> <span class="params">(SkuList skuCell : skuCells)</span> {
-        <span class="keyword">if</span> <span class="params">(skuCell.getSkuPropertyValueIdList<span class="params">()</span>.containsAll<span class="params">(clickedSkuBtnPropertyValueIds)</span>)</span> { <span class="comment">//属性值列表中包含了这个按钮的id</span>
-            <span class="keyword">if</span> <span class="params">(skuCell.getActualStore<span class="params">()</span> == <span class="number">0</span>)</span> { <span class="comment">//库存为零</span>
-                <span class="keyword">for</span> <span class="params">(SkuBtnEntity skuBtnEntity : mSkuBtnList)</span> {
-                    <span class="keyword">if</span> <span class="params">(skuBtnEntity.getValueId<span class="params">()</span>.equals<span class="params">(propertyValueId)</span>)</span> {
-                        skuBtnEntity.setAsh<span class="params">(<span class="literal">true</span>)</span>;
+<pre><code>private void allPropertySelectedSetAsh(Map&lt;String, String&gt; selectSkuBtnIdMap, String propertyValueId) {
+    List&lt;SkuList&gt; skuCells = mSpringGoods.getSkuList();
+    List&lt;String&gt; clickedSkuBtnPropertyValueIds = mapToList(selectSkuBtnIdMap);
+    for (SkuList skuCell : skuCells) {
+        if (skuCell.getSkuPropertyValueIdList().containsAll(clickedSkuBtnPropertyValueIds)) { //属性值列表中包含了这个按钮的id
+            if (skuCell.getActualStore() == 0) { //库存为零
+                for (SkuBtnEntity skuBtnEntity : mSkuBtnList) {
+                    if (skuBtnEntity.getValueId().equals(propertyValueId)) {
+                        skuBtnEntity.setAsh(true);
                     }
                 }
             }
@@ -452,7 +453,7 @@ public void pressOneBtnUpdateSku<span class="params">(SkuCascadeListener skuCasc
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2016 Rodriguez-Xin
+    		&copy; 2017 Rodriguez-Xin
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -476,8 +477,8 @@ public void pressOneBtnUpdateSku<span class="params">(SkuCascadeListener skuCasc
 		open_in_new: false
 	}
 </script>
-<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
-<script src="/js/main.js" type="text/javascript"></script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
 
 
 

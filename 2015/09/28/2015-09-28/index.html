@@ -24,7 +24,7 @@
   
     <link rel="icon" href="/avatar.jpg">
   
-  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div id="container">
@@ -107,7 +107,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Android/" style="font-size: 17.5px;">Android</a> <a href="/tags/React-Native/" style="font-size: 12.5px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/weex/" style="font-size: 10px;">weex</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a>
+						<a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/React-Native/" style="font-size: 13.33px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/weex/" style="font-size: 10px;">weex</a> <a href="/tags/读书/" style="font-size: 16.67px;">读书</a>
 					</div>
 				</section>
 				
@@ -200,52 +200,52 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Fresco的Model层设计">Fresco的Model层设计</h1><p>上回讲到fresco的controller层，主要涉及到的是设置请求(ImageRequest)设置动画等等。下面讲述一下fresco的第三层次，Hierarchy层。</p>
+        <h1 id="Fresco的Model层设计"><a href="#Fresco的Model层设计" class="headerlink" title="Fresco的Model层设计"></a>Fresco的Model层设计</h1><p>上回讲到fresco的controller层，主要涉及到的是设置请求(ImageRequest)设置动画等等。下面讲述一下fresco的第三层次，Hierarchy层。</p>
 <p>在SimpleDraweeView的最上层DraweeView中，有一个<strong>setHierarchy()</strong>，即开发者如果需要自己定义hierarchy的话，可以使用这个方法。而如果不用自定义的话。在DraweeView的子类GenericDraweeView的构造函数中便有已经设置好的hierarchy。同样的，hierarchy也需要一个builder(<strong>GenericDraweeHierarchyBuilder</strong>)才可以创建(fresco中builder模式随处可见)。是否还记得在xml中使用SimpleDraweeView时候设置的xml各种属性？这些属性在这里才真正用到。<br><a id="more"></a><br>    GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder(resources);<br>    // set fade duration<br>    builder.setFadeDuration(fadeDuration);<br>    // set images &amp; scale types<br>    if (placeholderId &gt; 0) {<br>      builder.setPlaceholderImage(resources.getDrawable(placeholderId), placeholderScaleType);<br>    }<br>    if (retryImageId &gt; 0) {<br>      builder.setRetryImage(resources.getDrawable(retryImageId), retryImageScaleType);<br>    }<br>    if (failureImageId &gt; 0) {<br>      builder.setFailureImage(resources.getDrawable(failureImageId), failureImageScaleType);<br>    }<br>    if (progressBarId &gt; 0) {<br>      Drawable progressBarDrawable = resources.getDrawable(progressBarId);<br>      if (progressBarAutoRotateInterval &gt; 0) {<br>        progressBarDrawable =<br>            new AutoRotateDrawable(progressBarDrawable, progressBarAutoRotateInterval);<br>      }<br>      builder.setProgressBarImage(progressBarDrawable, progressBarScaleType);<br>    }<br>    if (backgroundId &gt; 0) {<br>      builder.setBackground(resources.getDrawable(backgroundId));<br>    }<br>    if (overlayId &gt; 0) {<br>      builder.setOverlay(resources.getDrawable(overlayId));<br>    }<br>    if (pressedStateOverlayId &gt; 0) {<br>      builder.setPressedStateOverlay(getResources().getDrawable(pressedStateOverlayId));<br>    }</p>
-<pre><code>builder.setActualImageScaleType<span class="params">(actualImageScaleType)</span>;
-<span class="comment">// set rounding parameters</span>
-<span class="keyword">if</span> <span class="params">(roundAsCircle || roundedCornerRadius &gt; <span class="number">0</span>)</span> {
-  RoundingParams roundingParams = new RoundingParams<span class="params">()</span>;
-  roundingParams.setRoundAsCircle<span class="params">(roundAsCircle)</span>;
-  <span class="keyword">if</span> <span class="params">(roundedCornerRadius &gt; <span class="number">0</span>)</span> {
-    roundingParams.setCornersRadii<span class="params">(
-        roundTopLeft ? roundedCornerRadius : <span class="number">0</span>,
-        roundTopRight ? roundedCornerRadius : <span class="number">0</span>,
-        roundBottomRight ? roundedCornerRadius : <span class="number">0</span>,
-        roundBottomLeft ? roundedCornerRadius : <span class="number">0</span>)</span>;
+<pre><code>builder.setActualImageScaleType(actualImageScaleType);
+// set rounding parameters
+if (roundAsCircle || roundedCornerRadius &gt; 0) {
+  RoundingParams roundingParams = new RoundingParams();
+  roundingParams.setRoundAsCircle(roundAsCircle);
+  if (roundedCornerRadius &gt; 0) {
+    roundingParams.setCornersRadii(
+        roundTopLeft ? roundedCornerRadius : 0,
+        roundTopRight ? roundedCornerRadius : 0,
+        roundBottomRight ? roundedCornerRadius : 0,
+        roundBottomLeft ? roundedCornerRadius : 0);
   }
-  <span class="keyword">if</span> <span class="params">(roundWithOverlayColor != <span class="number">0</span>)</span> {
-    roundingParams.setOverlayColor<span class="params">(roundWithOverlayColor)</span>;
+  if (roundWithOverlayColor != 0) {
+    roundingParams.setOverlayColor(roundWithOverlayColor);
   }
-  <span class="keyword">if</span> <span class="params">(roundingBorderColor != <span class="number">0</span> &amp;&amp; roundingBorderWidth &gt; <span class="number">0</span>)</span> {
-    roundingParams.setBorder<span class="params">(roundingBorderColor, roundingBorderWidth)</span>;
+  if (roundingBorderColor != 0 &amp;&amp; roundingBorderWidth &gt; 0) {
+    roundingParams.setBorder(roundingBorderColor, roundingBorderWidth);
   }
-  builder.setRoundingParams<span class="params">(roundingParams)</span>;
+  builder.setRoundingParams(roundingParams);
 }
-setHierarchy<span class="params">(builder.build<span class="params">()</span>)</span>;
+setHierarchy(builder.build());
 </code></pre><p>通过GenericDraweeHierarchyBuilder设置好属性之后，调用<strong>build()</strong>方法便会生成一个GenericDraweeHierarchy，那么他的图片是从哪里来的呢，GenericDraweeHierarchy实现了一个接口SettableDraweeHierarchy，这个接口中定义了图片加载过程中包括成功，失败，错误时候的情况。我们看一下成功之后的回调接口：</p>
 <pre><code>@Override
-public void setImage<span class="params">(Drawable drawable, float progress, boolean immediate)</span> {
-  drawable = maybeApplyRoundingBitmapOnly<span class="params">(mRoundingParams, mResources, drawable)</span>;
-  drawable.mutate<span class="params">()</span>;
-  mActualImageSettableDrawable.setDrawable<span class="params">(drawable)</span>;
-  mFadeDrawable.beginBatchMode<span class="params">()</span>;
-  fadeOutBranches<span class="params">()</span>;
-  fadeInLayer<span class="params">(mActualImageIndex)</span>;
-  setProgress<span class="params">(progress)</span>;
-  <span class="keyword">if</span> <span class="params">(immediate)</span> {
-        mFadeDrawable.finishTransitionImmediately<span class="params">()</span>;
+public void setImage(Drawable drawable, float progress, boolean immediate) {
+  drawable = maybeApplyRoundingBitmapOnly(mRoundingParams, mResources, drawable);
+  drawable.mutate();
+  mActualImageSettableDrawable.setDrawable(drawable);
+  mFadeDrawable.beginBatchMode();
+  fadeOutBranches();
+  fadeInLayer(mActualImageIndex);
+  setProgress(progress);
+  if (immediate) {
+        mFadeDrawable.finishTransitionImmediately();
   }
-  mFadeDrawable.endBatchMode<span class="params">()</span>;
+  mFadeDrawable.endBatchMode();
 }
 </code></pre><p>上一段代码中就将得到的图片fadeInLayer，而其他站位图则都进行了fadeOut，所以此时getTopDrawable时，便是获取到的最新的图片。那么又是什么时候去获取的图片呢。这时候需要回去看一下在AbstractDraweeController(用来控制图片显示的)中的Hierarchy便是直接使用的SettableDraweeHierarchy，也就是说，Controller中已经持有了SettableDraweeHierarchy的一个实例。</p>
-<pre><code><span class="annotation">@Override</span>
-  <span class="keyword">public</span> <span class="annotation">@Nullable</span>
-  <span class="function">DraweeHierarchy <span class="title">getHierarchy</span><span class="params">()</span> </span>{
-<span class="keyword">return</span> mSettableDraweeHierarchy;
+<pre><code>@Override
+  public @Nullable
+  DraweeHierarchy getHierarchy() {
+return mSettableDraweeHierarchy;
   }
 </code></pre><p>之后的就是上一篇文章中提到的，在AbstractDraweeController中如果发请求的话，会调用到submitRequest()方法，在此方法中会开线程去下载图片，如果图片下载成功回调至onNewResultImpl()方法中，紧接着又会执行到onNewResultInternal()方法中，这个方法中就会有这样一句：</p>
-<pre><code>mSettableDraweeHierarchy.setImage(drawable, <span class="number">1f</span>, wasImmediate);
+<pre><code>mSettableDraweeHierarchy.setImage(drawable, 1f, wasImmediate);
 </code></pre><p>此时之前的SimpleDraweeView中的Hierarvhy便有了真正的图片，而之前在显示的时候都是占位图，此时再获取的时候就会发现，topDrawable便开始有了真正的图片可以显示。这样整个图片从请求到请求完成，到如何显示的流程便分析完成了。</p>
 
       
@@ -320,7 +320,7 @@ public void setImage<span class="params">(Drawable drawable, float progress, boo
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2016 Rodriguez-Xin
+    		&copy; 2017 Rodriguez-Xin
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -344,8 +344,8 @@ public void setImage<span class="params">(Drawable drawable, float progress, boo
 		open_in_new: false
 	}
 </script>
-<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
-<script src="/js/main.js" type="text/javascript"></script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
 
 
 

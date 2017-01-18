@@ -22,13 +22,14 @@
 <meta name="twitter:description" content="Fresco的Controller层设计经过之前的分析，已经知道DraweeView的显示是需要controller层与hierarchy层接洽的。
 每个view都有一个controller来控制。我们还是从源码来分析一下。
 上次说道，SimpleDraweeView需要Fresco类在初始化方法中设置一个controller。其实这个controller便是PipelineDraweeContr">
+<meta name="twitter:image" content="http://7xl9v5.com1.z0.glb.clouddn.com/blogimageimage_20150825202359.png">
   
     <link rel="alternative" href="/atom.xml" title="AFei" type="application/atom+xml">
   
   
     <link rel="icon" href="/avatar.jpg">
   
-  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div id="container">
@@ -111,7 +112,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Android/" style="font-size: 17.5px;">Android</a> <a href="/tags/React-Native/" style="font-size: 12.5px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/weex/" style="font-size: 10px;">weex</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a>
+						<a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/React-Native/" style="font-size: 13.33px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/weex/" style="font-size: 10px;">weex</a> <a href="/tags/读书/" style="font-size: 16.67px;">读书</a>
 					</div>
 				</section>
 				
@@ -204,11 +205,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Fresco的Controller层设计">Fresco的Controller层设计</h1><p>经过之前的分析，已经知道DraweeView的显示是需要controller层与hierarchy层接洽的。</p>
+        <h1 id="Fresco的Controller层设计"><a href="#Fresco的Controller层设计" class="headerlink" title="Fresco的Controller层设计"></a>Fresco的Controller层设计</h1><p>经过之前的分析，已经知道DraweeView的显示是需要controller层与hierarchy层接洽的。</p>
 <p>每个view都有一个controller来控制。我们还是从源码来分析一下。</p>
 <p>上次说道，SimpleDraweeView需要Fresco类在初始化方法中设置一个controller。其实这个controller便是PipelineDraweeControllerBuilderSupplier类提供的对象。</p>
-<pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">initializeDrawee</span><span class="params">(Context context)</span> </span>{
-  sDraweeControllerBuilderSupplier = <span class="keyword">new</span> PipelineDraweeControllerBuilderSupplier(context);
+<pre><code>private static void initializeDrawee(Context context) {
+  sDraweeControllerBuilderSupplier = new PipelineDraweeControllerBuilderSupplier(context);
   SimpleDraweeView.initialize(sDraweeControllerBuilderSupplier);
 }
 </code></pre><p>以上这些都是针对SimpleDraweeView由Fresco设置默认Controller，并无法自己定义。如果用户非要自己定义该怎么办呢？开发者也给我们提供了一个方法，这个方法也是在Fresco这个类中的<strong>newDraweeControllerBuilder()</strong>方法。我们先说fresco是如何使用自定义controller来协调View和Model层的。而且默认的配置也是facebook所推荐使用的。</p>
@@ -216,69 +217,69 @@
 <p><img src="http://7xl9v5.com1.z0.glb.clouddn.com/blogimageimage_20150825202359.png" alt=""></p>
 <p>上图的逻辑主要是controller层的一些设置，还有一些其他属性和方法也并没有全部列出。但是可以看得出来Fresco使用的是构建者模式。从代码中一层一层来看。</p>
 <p>Fresco在init的时候给SimpleDraweeView初始化了一个静态成员变量<strong>sDraweeControllerBuilderSupplier</strong>，而之后每个SimpleDraweeView对象的controller就是从这个里面得到的。Fresco初始化的这个Supplier其实是提供一个Builder，Builder可以用来构造controller。Supplier只是作为一个泛型，将Builder提供出来。</p>
-<pre><code><span class="comment">//Fresco类中对SimpleDraweeView初始化</span>
-sDraweeControllerBuilderSupplier = new PipelineDraweeControllerBuilderSupplier<span class="params">(context)</span>;
-SimpleDraweeView.initialize<span class="params">(sDraweeControllerBuilderSupplier)</span>;
+<pre><code>//Fresco类中对SimpleDraweeView初始化
+sDraweeControllerBuilderSupplier = new PipelineDraweeControllerBuilderSupplier(context);
+SimpleDraweeView.initialize(sDraweeControllerBuilderSupplier);
 </code></pre><p>下面需要看一下<strong>PipelineDraweeControllerBuilderSupplier</strong>类的实现。PipelineDraweeControllerBuilderSupplier类中有个主要的构造函数。和实现了Supplier接口后的get方法。</p>
-<pre><code>public PipelineDraweeControllerBuilderSupplier<span class="params">(Context context,
+<pre><code>public PipelineDraweeControllerBuilderSupplier(Context context,
   ImagePipelineFactory imagePipelineFactory,
-  Set&lt;ControllerListener&gt; boundControllerListeners)</span> {
+  Set&lt;ControllerListener&gt; boundControllerListeners) {
     mContext = context;
-    mImagePipeline = imagePipelineFactory.getImagePipeline<span class="params">()</span>;
-    mPipelineDraweeControllerFactory = new PipelineDraweeControllerFactory<span class="params">(
-    context.getResources<span class="params">()</span>,
-    DeferredReleaser.getInstance<span class="params">()</span>,
-    imagePipelineFactory.getAnimatedDrawableFactory<span class="params">()</span>,
-    UiThreadImmediateExecutorService.getInstance<span class="params">()</span>)</span>;
+    mImagePipeline = imagePipelineFactory.getImagePipeline();
+    mPipelineDraweeControllerFactory = new PipelineDraweeControllerFactory(
+    context.getResources(),
+    DeferredReleaser.getInstance(),
+    imagePipelineFactory.getAnimatedDrawableFactory(),
+    UiThreadImmediateExecutorService.getInstance());
     mBoundControllerListeners = boundControllerListeners;
   }
 
   @Override
-  public PipelineDraweeControllerBuilder get<span class="params">()</span> {
-return new PipelineDraweeControllerBuilder<span class="params">(
+  public PipelineDraweeControllerBuilder get() {
+return new PipelineDraweeControllerBuilder(
     mContext,
     mPipelineDraweeControllerFactory,
     mImagePipeline,
-    mBoundControllerListeners)</span>;
+    mBoundControllerListeners);
   }
 </code></pre><p>这里的get方法很明显会返回一个<strong>PipelineDraweeControllerBuilder</strong>，这个也就是SimpleDraweeView中setImageURI时需要使用的</p>
-<pre><code><span class="comment">//SimpleDraweeView类中的代码段</span>
-  public void setImageURI<span class="params">(Uri uri, @Nullable Object callerContext)</span> {
+<pre><code>//SimpleDraweeView类中的代码段
+  public void setImageURI(Uri uri, @Nullable Object callerContext) {
     DraweeController controller = mSimpleDraweeControllerBuilder
-    .setCallerContext<span class="params">(callerContext)</span>
-    .setUri<span class="params">(uri)</span>
-    .setOldController<span class="params">(getController<span class="params">()</span>)</span>
-    .build<span class="params">()</span>;
-    setController<span class="params">(controller)</span>;
+    .setCallerContext(callerContext)
+    .setUri(uri)
+    .setOldController(getController())
+    .build();
+    setController(controller);
   }
 </code></pre><p>上段代码中的mSimpleDraweeControllerBuilder便是之前get方法中new出来的PipelineDraweeControllerBuilder。</p>
 <p>PipelineDraweeControllerBuilder继承自AbstractDraweeControllerBuilder，这个类是所有ControllerBuilder的基础实现。而AbstractDraweeControllerBuilder又实现了SimpleDraweeControllerBuilder接口的方法。</p>
 <p>在AbstractDraweeControllerBuilder实现的build()方法中又调用了buildController()方法，生成AbstractDraweeController对象并返回。由此便得到了真正的controller对象。</p>
 <p>看一下AbstractDraweeControllerBuilder中的重要方法：</p>
-<pre><code>  <span class="annotation">@Override</span>
-  <span class="keyword">public</span> <span class="function">AbstractDraweeController <span class="title">build</span><span class="params">()</span> </span>{
+<pre><code>  @Override
+  public AbstractDraweeController build() {
        validate();
     ...
-    <span class="function"><span class="keyword">return</span> <span class="title">buildController</span><span class="params">()</span></span>;
+    return buildController();
   }
-  <span class="keyword">protected</span> <span class="function">AbstractDraweeController <span class="title">buildController</span><span class="params">()</span> </span>{
+  protected AbstractDraweeController buildController() {
     AbstractDraweeController controller = obtainController();
     maybeBuildAndSetRetryManager(controller);
     maybeAttachListeners(controller);
-    <span class="keyword">return</span> controller;
+    return controller;
   }
-<span class="comment">//需要子类其实现此方法</span>
-<span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="function">AbstractDraweeController <span class="title">obtainController</span><span class="params">()</span></span>;
+//需要子类其实现此方法
+protected abstract AbstractDraweeController obtainController();
 </code></pre><p>我们在使用的时候也可以根据自己的需要去构造这个builder，设置相应的属性。在看一下<strong>SimpleDraweeControllerBuilder</strong>类的源码：</p>
-<pre><code><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">SimpleDraweeControllerBuilder</span> {
-  <span class="comment">/** Sets the caller context. */</span>
-  <span class="function"><span class="keyword">public</span> SimpleDraweeControllerBuilder <span class="title">setCallerContext</span>(<span class="params">Object callerContext</span>)</span>;
-  <span class="comment">/** Sets the uri. */</span>
-  <span class="function"><span class="keyword">public</span> SimpleDraweeControllerBuilder <span class="title">setUri</span>(<span class="params">Uri uri</span>)</span>;
-  <span class="comment">/** Sets the old controller to be reused if possible. */</span>
-  <span class="function"><span class="keyword">public</span> SimpleDraweeControllerBuilder <span class="title">setOldController</span>(<span class="params">@Nullable DraweeController oldController</span>)</span>;
-  <span class="comment">/** Builds the specified controller. */</span>
-  <span class="function"><span class="keyword">public</span> DraweeController <span class="title">build</span>(<span class="params"></span>)</span>;
+<pre><code>public interface SimpleDraweeControllerBuilder {
+  /** Sets the caller context. */
+  public SimpleDraweeControllerBuilder setCallerContext(Object callerContext);
+  /** Sets the uri. */
+  public SimpleDraweeControllerBuilder setUri(Uri uri);
+  /** Sets the old controller to be reused if possible. */
+  public SimpleDraweeControllerBuilder setOldController(@Nullable DraweeController oldController);
+  /** Builds the specified controller. */
+  public DraweeController build();
 }
 </code></pre><p>以上的分析便是supplier，builder，controller之间的继承和连接关系。</p>
 
@@ -354,7 +355,7 @@ return new PipelineDraweeControllerBuilder<span class="params">(
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2016 Rodriguez-Xin
+    		&copy; 2017 Rodriguez-Xin
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -378,8 +379,8 @@ return new PipelineDraweeControllerBuilder<span class="params">(
 		open_in_new: false
 	}
 </script>
-<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
-<script src="/js/main.js" type="text/javascript"></script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
 
 
 

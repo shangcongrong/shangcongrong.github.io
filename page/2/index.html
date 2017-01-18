@@ -5,22 +5,19 @@
   
   <title>AFei</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
+  <meta property="og:type" content="website">
 <meta property="og:title" content="AFei">
 <meta property="og:url" content="http://yoursite.com/page/2/index.html">
 <meta property="og:site_name" content="AFei">
-<meta property="og:description">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AFei">
-<meta name="twitter:description">
   
     <link rel="alternative" href="/atom.xml" title="AFei" type="application/atom+xml">
   
   
     <link rel="icon" href="/avatar.jpg">
   
-  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div id="container">
@@ -103,7 +100,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Android/" style="font-size: 17.5px;">Android</a> <a href="/tags/React-Native/" style="font-size: 12.5px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/weex/" style="font-size: 10px;">weex</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a>
+						<a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/React-Native/" style="font-size: 13.33px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/weex/" style="font-size: 10px;">weex</a> <a href="/tags/读书/" style="font-size: 16.67px;">读书</a>
 					</div>
 				</section>
 				
@@ -163,6 +160,135 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-2016-08-01" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/08/01/2016-08-01/" class="article-date">
+  	<time datetime="2016-08-01T07:12:21.000Z" itemprop="datePublished">2016-08-01</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/01/2016-08-01/">Android制作卡片类长图踩坑记</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在实现需求过程中，产品喜欢上了分享大图卡片。但是发现每个地方分享的卡片大图还不一样。经过分析发现还是能够找到一点共性。先上图看看最基础的卡片样子。由于分享的卡片在四张图片上下都需要自定义一些其他控件，主要有文字商品信息等等。</p>
+<p><img src="http://7xl9v5.com1.z0.glb.clouddn.com/2016-08-15" alt="图1"></p>
+<p>在实现之前先思考了一下，需要解决的问题有以下几个：</p>
+<ol>
+<li>因为每个地方的分享大图是不一样的，需要找出共性部分，并将不同之处方便替换；</li>
+<li>在卡片中的几张图片还没下载完就吊起分享肯定是不行的。这就需要监听图片下载了；</li>
+<li>分享到的App对大图都是有大小限制的，其中微博限制最大2M，这样就需要进行图片压缩。</li>
+</ol>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/08/01/2016-08-01/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-2016-06-08" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/06/08/2016-06-08/" class="article-date">
+  	<time datetime="2016-06-08T07:12:21.000Z" itemprop="datePublished">2016-06-08</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/06/08/2016-06-08/">Android图片转换字体</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>需求实现过程中遇到了一个问题，模块需要同时显示文字，一个图标和带有html标签的有颜色文字，我们试用了几个方法。基本上可以作为同一类型的TextView富文本等方式设置的总结。</p>
+<h4 id="1-Spannable"><a href="#1-Spannable" class="headerlink" title="1. Spannable"></a>1. Spannable</h4><p>首先使用了Spannable，看下代码：</p>
+<pre><code>SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(mWarehouse + &quot; 至  &quot;);
+ImageSpan imageSpan = new ImageSpan(getContext(), R.drawable.address_icon);
+spannableStringBuilder.setSpan(imageSpan, spannableStringBuilder.length() - 1, spannableStringBuilder.length(), Spannable
+        .SPAN_INCLUSIVE_EXCLUSIVE);
+if (StringUtils.isNotNull(goodsDelivery.getPostage())) {
+    spannableStringBuilder.append(&quot; &quot; + goodsDelivery.getAddress() + &quot; &quot; + Html.fromHtml(goodsDelivery.getPostage()));
+}
+mPostageRulesContainer.setText(spannableStringBuilder);
+</code></pre><p>这个应该网上有很多，使用的过程中发现后台传的字符串中间是有html标签的，spannable不能识别标签中的属性因此这种方法不能适用。</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/06/08/2016-06-08/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-2016-04-16" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -191,16 +317,16 @@
 <p>在考拉商品详情页SKU的设计过程中，我用到了一个activity，一个view，一个manager。</p>
 <p>###一、数据组织方式</p>
 <p>我将每一个属性的的每一个属性值定义为一个model(SkuBtnEntity)，其中name为当前属性的名字，value为当前属性值。例如：name=颜色，value=红。同时每个按钮有四种状态，普通未选中状态，普通选中状态，缺货置灰未选中状态，缺货置灰选中状态。类中全部成员变量如下：</p>
-<pre><code><span class="keyword">private</span> TextView mSkuBtn;   <span class="comment">//属性按钮</span>
-<span class="keyword">private</span> <span class="built_in">int</span> mIsColor;       <span class="comment">//1为颜色属性，0为其他属性</span>
-<span class="keyword">private</span> <span class="keyword">String</span> mImageUrl;   <span class="comment">//图片url</span>
-<span class="keyword">private</span> <span class="keyword">String</span> mNameId;
-<span class="keyword">private</span> <span class="keyword">String</span> mName;
-<span class="keyword">private</span> <span class="keyword">String</span> mValueId;
-<span class="keyword">private</span> <span class="keyword">String</span> mValue;
-<span class="keyword">private</span> <span class="built_in">boolean</span> isAsh;      <span class="comment">//缺货置灰未选中状态</span>
-<span class="keyword">private</span> <span class="built_in">boolean</span> isPressed;  <span class="comment">//普通选中状态</span>
-<span class="keyword">private</span> <span class="built_in">boolean</span> isForcedAsh;<span class="comment">//缺货置灰选中状态</span>
+<pre><code>private TextView mSkuBtn;   //属性按钮
+private int mIsColor;       //1为颜色属性，0为其他属性
+private String mImageUrl;   //图片url
+private String mNameId;
+private String mName;
+private String mValueId;
+private String mValue;
+private boolean isAsh;      //缺货置灰未选中状态
+private boolean isPressed;  //普通选中状态
+private boolean isForcedAsh;//缺货置灰选中状态
 </code></pre>
       
     </div>
@@ -346,160 +472,6 @@
 
 
   
-    <article id="post-2016-01-25" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/25/2016-01-25/" class="article-date">
-  	<time datetime="2016-01-25T07:43:38.000Z" itemprop="datePublished">2016-01-25</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/25/2016-01-25/">Android图片加载框架Fresco分析(八)</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Fresco的图片显示流程：</p>
-<p>DraweeView中的OnAttachedToWindow()方法中，会调用到DraweeHolder的onAttach()方法。DraweeHolder相当于View的管家。通过这个方法看出来，View在attached的时候就已经调用了holder的onAttach，而在这个onAttach中又会调用到attachController方法，进而调用controller的onAttach的方法。再进去看一下controller的attach方法里做了什么</p>
-<pre><code>@Override
-public void onAttach<span class="params">()</span> {
-  <span class="keyword">if</span> <span class="params">(FLog.isLoggable<span class="params">(FLog.VERBOSE)</span>)</span> {
-    FLog.v<span class="params">(
-        TAG,
-        <span class="string">"controller %x %s: onAttach: %s"</span>,
-        System.identityHashCode<span class="params">(this)</span>,
-        mId,
-        mIsRequestSubmitted ? <span class="string">"request already submitted"</span> : <span class="string">"request needs submit"</span>)</span>;
-  }
-  mEventTracker.recordEvent<span class="params">(Event.ON_ATTACH_CONTROLLER)</span>;
-  Preconditions.checkNotNull<span class="params">(mSettableDraweeHierarchy)</span>;
-  mDeferredReleaser.cancelDeferredRelease<span class="params">(this)</span>;
-  mIsAttached = <span class="literal">true</span>;
-  <span class="keyword">if</span> <span class="params">(!mIsRequestSubmitted)</span> {
-    submitRequest<span class="params">()</span>;
-  }
-}
-</code></pre><p>controller的onAttach方法出现在抽象类(AbstractDraweeController)中，在这里明显能够看出来<strong>submitRequest()</strong>调用了请求去下载图片。</p>
-<p>进到submitRequest方法中的代码可以看到一个mSettableDraweeHierarchy，这个Hierarchy是从SimpleDraweeView的父类GenericDraweeView里之前设置好的。同时，controller也会持有这个Hierarchy（之前说明过hierarchy就是用来显示图片和加载进度等）。再往下可以看到</p>
-<pre><code>mDataSource = getDataSource()<span class="comment">;</span>
-</code></pre><p>getDataSource便是将之前解析五中的流程都走了一遍。相当于得到了DataSource。其实最开始是很多的Producer，之后通过ProducerToDataSourceAdapter类将Producer转换成了DataSource。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fresco/">fresco</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-2016-01-21" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/21/2016-01-21/" class="article-date">
-  	<time datetime="2016-01-21T09:06:03.000Z" itemprop="datePublished">2016-01-21</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/21/2016-01-21/">Android图片加载框架Fresco分析(七)</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>ImagePipeline类中的</p>
-<pre><code><span class="comment">/**
- * Submits a request for bitmap cache lookup.
- *
- * <span class="doctag">@param</span> imageRequest the request to submit
- * <span class="doctag">@return</span> a DataSource representing the image
- */</span>
-<span class="keyword">public</span> DataSource&lt;CloseableReference&lt;CloseableImage&gt;&gt; fetchImageFromBitmapCache(
-    ImageRequest imageRequest,
-    Object callerContext) {
-  <span class="keyword">try</span> {
-    Producer&lt;CloseableReference&lt;CloseableImage&gt;&gt; producerSequence =
-        mProducerSequenceFactory.getDecodedImageProducerSequence(imageRequest);
-    <span class="keyword">return</span> submitFetchRequest(
-        producerSequence,
-        imageRequest,
-        ImageRequest.RequestLevel.BITMAP_MEMORY_CACHE,
-        callerContext);
-  } <span class="keyword">catch</span> (<span class="keyword">Exception</span> <span class="keyword">exception</span>) {
-    <span class="keyword">return</span> DataSources.immediateFailedDataSource(<span class="keyword">exception</span>);
-  }
-}
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fresco/">fresco</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/01/21/2016-01-21/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -510,7 +482,7 @@ public void onAttach<span class="params">()</span> {
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2016 Rodriguez-Xin
+    		&copy; 2017 Rodriguez-Xin
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -534,8 +506,8 @@ public void onAttach<span class="params">()</span> {
 		open_in_new: false
 	}
 </script>
-<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
-<script src="/js/main.js" type="text/javascript"></script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
 
 
 

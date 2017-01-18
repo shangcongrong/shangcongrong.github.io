@@ -27,7 +27,7 @@ SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(mWa">
   
     <link rel="icon" href="/avatar.jpg">
   
-  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div id="container">
@@ -110,7 +110,7 @@ SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(mWa">
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Android/" style="font-size: 17.5px;">Android</a> <a href="/tags/React-Native/" style="font-size: 12.5px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/weex/" style="font-size: 10px;">weex</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a>
+						<a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/React-Native/" style="font-size: 13.33px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/weex/" style="font-size: 10px;">weex</a> <a href="/tags/读书/" style="font-size: 16.67px;">读书</a>
 					</div>
 				</section>
 				
@@ -204,55 +204,55 @@ SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(mWa">
     <div class="article-entry" itemprop="articleBody">
       
         <p>需求实现过程中遇到了一个问题，模块需要同时显示文字，一个图标和带有html标签的有颜色文字，我们试用了几个方法。基本上可以作为同一类型的TextView富文本等方式设置的总结。</p>
-<h4 id="1-_Spannable">1. Spannable</h4><p>首先使用了Spannable，看下代码：</p>
-<pre><code>SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder<span class="params">(mWarehouse + <span class="string">" 至  "</span>)</span>;
-ImageSpan imageSpan = new ImageSpan<span class="params">(getContext<span class="params">()</span>, R.drawable.address_icon)</span>;
-spannableStringBuilder.setSpan<span class="params">(imageSpan, spannableStringBuilder.length<span class="params">()</span> - <span class="number">1</span>, spannableStringBuilder.length<span class="params">()</span>, Spannable
-        .SPAN_INCLUSIVE_EXCLUSIVE)</span>;
-<span class="keyword">if</span> <span class="params">(StringUtils.isNotNull<span class="params">(goodsDelivery.getPostage<span class="params">()</span>)</span>)</span> {
-    spannableStringBuilder.append<span class="params">(<span class="string">" "</span> + goodsDelivery.getAddress<span class="params">()</span> + <span class="string">" "</span> + Html.fromHtml<span class="params">(goodsDelivery.getPostage<span class="params">()</span>)</span>)</span>;
+<h4 id="1-Spannable"><a href="#1-Spannable" class="headerlink" title="1. Spannable"></a>1. Spannable</h4><p>首先使用了Spannable，看下代码：</p>
+<pre><code>SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(mWarehouse + &quot; 至  &quot;);
+ImageSpan imageSpan = new ImageSpan(getContext(), R.drawable.address_icon);
+spannableStringBuilder.setSpan(imageSpan, spannableStringBuilder.length() - 1, spannableStringBuilder.length(), Spannable
+        .SPAN_INCLUSIVE_EXCLUSIVE);
+if (StringUtils.isNotNull(goodsDelivery.getPostage())) {
+    spannableStringBuilder.append(&quot; &quot; + goodsDelivery.getAddress() + &quot; &quot; + Html.fromHtml(goodsDelivery.getPostage()));
 }
-mPostageRulesContainer.setText<span class="params">(spannableStringBuilder)</span>;
+mPostageRulesContainer.setText(spannableStringBuilder);
 </code></pre><p>这个应该网上有很多，使用的过程中发现后台传的字符串中间是有html标签的，spannable不能识别标签中的属性因此这种方法不能适用。</p>
 <a id="more"></a>
-<h4 id="2-_Html-ImageGetter">2. Html.ImageGetter</h4><p>接着使用了Html.ImageGetter方法，先看一下代码：</p>
-<pre><code>Html.ImageGetter imageGetter = new Html.ImageGetter<span class="params">()</span> {
+<h4 id="2-Html-ImageGetter"><a href="#2-Html-ImageGetter" class="headerlink" title="2. Html.ImageGetter"></a>2. Html.ImageGetter</h4><p>接着使用了Html.ImageGetter方法，先看一下代码：</p>
+<pre><code>Html.ImageGetter imageGetter = new Html.ImageGetter() {
 
-    public Drawable getDrawable<span class="params">(String source)</span> {
-        int rId = Integer.parseInt<span class="params">(source)</span>;
-        Drawable drawable = getResources<span class="params">()</span>.getDrawable<span class="params">(rId)</span>;
-        <span class="keyword">if</span> <span class="params">(drawable != null)</span> {
-            drawable.setBounds<span class="params">(<span class="number">0</span>, <span class="number">0</span>, drawable.getIntrinsicWidth<span class="params">()</span>, drawable.getIntrinsicHeight<span class="params">()</span>)</span>;
+    public Drawable getDrawable(String source) {
+        int rId = Integer.parseInt(source);
+        Drawable drawable = getResources().getDrawable(rId);
+        if (drawable != null) {
+            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
         }
         return drawable;
     }
 };
-String test = mWarehouse + <span class="string">" 至  &lt;img src=\""</span> + R.drawable.address_icon_a + <span class="string">"\" /&gt; "</span> + goodsDelivery.getAddress<span class="params">()</span> + goodsDelivery.getPostage<span class="params">()</span>;
-mPostageRulesContainer.setText<span class="params">(Html.fromHtml<span class="params">(text, imageGetter, null)</span>)</span>;
+String test = mWarehouse + &quot; 至  &lt;img src=\&quot;&quot; + R.drawable.address_icon_a + &quot;\&quot; /&gt; &quot; + goodsDelivery.getAddress() + goodsDelivery.getPostage();
+mPostageRulesContainer.setText(Html.fromHtml(text, imageGetter, null));
 </code></pre><p>这个方法可以支持将图标通过<img>标签加入到string中，再通过Html.fromHtml()方法是用。此时显示就没有问题了，但是这个方法还有个问题就是在TextView中设置了行间距之后，会导致图标无法识别行间距，而出现视觉上看起来和文字不在同一行的问题。</p>
 <p>之后我们想到用监听TextView的行数来解决问题，先看代码：</p>
-<pre><code>mPostageRulesContainer.post(<span class="keyword">new</span> Runnable() {
-        @<span class="function">Override
-        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{
-            <span class="keyword">if</span> (mPostageRulesContainer.getLineCount() &gt; <span class="number">1</span>) {
-                mPostageRulesContainer.setText(Html.fromHtml(mWarehouse + <span class="string">" 至  &lt;img src=\""</span> + R.drawable.address_icon + <span class="string">"\" /&gt; "</span> +
+<pre><code>mPostageRulesContainer.post(new Runnable() {
+        @Override
+        public void run() {
+            if (mPostageRulesContainer.getLineCount() &gt; 1) {
+                mPostageRulesContainer.setText(Html.fromHtml(mWarehouse + &quot; 至  &lt;img src=\&quot;&quot; + R.drawable.address_icon + &quot;\&quot; /&gt; &quot; +
                         goodsDelivery.getAddress() +
                         goodsDelivery.getPostage(), imageGetter, null));
-                mTitle.setPadding(<span class="number">0</span>,<span class="number">23</span>,<span class="number">0</span>,<span class="number">0</span>);
-            }<span class="keyword">else</span> <span class="keyword">if</span> (mPostageRulesContainer.getLineCount()==<span class="number">1</span>){
-                mTitle.setPadding(<span class="number">0</span>,<span class="number">2</span>,<span class="number">0</span>,<span class="number">0</span>);
+                mTitle.setPadding(0,23,0,0);
+            }else if (mPostageRulesContainer.getLineCount()==1){
+                mTitle.setPadding(0,2,0,0);
             }
         }
     });
 </code></pre><p>这样会有两个弊端，一是TextView要在setText之后再进行监听才管用。二是，需要区分行数使用不同的图片，这样就会存在两张图片。</p>
-<h4 id="3-_图片转换字体">3. 图片转换字体</h4><p>最后选择的方法是，将图片转换成字体，通过一个特殊的字符串来代表这个图片，相当于把这个图片变成了一个字，下面详细说一下这个方法。</p>
+<h4 id="3-图片转换字体"><a href="#3-图片转换字体" class="headerlink" title="3. 图片转换字体"></a>3. 图片转换字体</h4><p>最后选择的方法是，将图片转换成字体，通过一个特殊的字符串来代表这个图片，相当于把这个图片变成了一个字，下面详细说一下这个方法。</p>
 <p>首先要把这个图标转换成ttf文件，可以自己生成。我是通过<a href="http://fontello.com/" target="_blank" rel="external">http://fontello.com/</a>，在这个网站上下载到了一个一样的图标，把这个图标生成一个ttf文件，将ttf字体文件放在assets/fonts目录下。然后在demo.html中得到了这个图标的文字编码，设置在string中就可以直接使用了。</p>
 <p>用法比较简单，看一下代码:</p>
-<pre><code>Typeface iconfont = Typeface.createFromAsset<span class="params">(getContext<span class="params">()</span>.getAssets<span class="params">()</span>, <span class="string">"fonts/fontello.ttf"</span>)</span>;
-String <span class="built_in">text</span> = mWarehouse + <span class="string">" 至  "</span> + getContext<span class="params">()</span>.getString<span class="params">(R.string.ic_postage)</span> + goodsDelivery.getAddress<span class="params">()</span> + <span class="string">" "</span> +
-        goodsDelivery.getPostage<span class="params">()</span>;
-mPostageRulesContainer.setTypeface<span class="params">(iconfont)</span>;
-mPostageRulesContainer.setText<span class="params">(Html.fromHtml<span class="params">(test)</span>)</span>;
+<pre><code>Typeface iconfont = Typeface.createFromAsset(getContext().getAssets(), &quot;fonts/fontello.ttf&quot;);
+String text = mWarehouse + &quot; 至  &quot; + getContext().getString(R.string.ic_postage) + goodsDelivery.getAddress() + &quot; &quot; +
+        goodsDelivery.getPostage();
+mPostageRulesContainer.setTypeface(iconfont);
+mPostageRulesContainer.setText(Html.fromHtml(test));
 </code></pre><p>如果一定要是用自己的图片生成字体的话，可以到这个网站<a href="http://image.online-convert.com/convert-to-svg" target="_blank" rel="external">http://image.online-convert.com/convert-to-svg</a>去生成SVG图片，再到<a href="https://icomoon.io/app/#/select" target="_blank" rel="external">https://icomoon.io/app/#/select</a>这个网站将SVG图片转换成字体即可。具体可参考这篇文章：<a href="http://www.w3cplus.com/css3/how-to-turn-your-icons-into-a-web-font.html" title="如何把你的图标转换成web字体" target="_blank" rel="external">如何把你的图标转换成web字体</a>。</p>
 <p>这样就解决了目前遇到的所有问题，而且发现这样设置图标还有一个好处，就是可以通过颜色值和字体大小来控制图标的大小，可以完全把图标当成一个文字来处理。非常方便。</p>
 
@@ -328,7 +328,7 @@ mPostageRulesContainer.setText<span class="params">(Html.fromHtml<span class="pa
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2016 Rodriguez-Xin
+    		&copy; 2017 Rodriguez-Xin
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -352,8 +352,8 @@ mPostageRulesContainer.setText<span class="params">(Html.fromHtml<span class="pa
 		open_in_new: false
 	}
 </script>
-<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
-<script src="/js/main.js" type="text/javascript"></script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
 
 
 

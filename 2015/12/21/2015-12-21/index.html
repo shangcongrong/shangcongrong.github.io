@@ -24,7 +24,7 @@ public void setImageURI(Uri uri, @Nullable Obj">
   
     <link rel="icon" href="/avatar.jpg">
   
-  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div id="container">
@@ -107,7 +107,7 @@ public void setImageURI(Uri uri, @Nullable Obj">
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Android/" style="font-size: 17.5px;">Android</a> <a href="/tags/React-Native/" style="font-size: 12.5px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/weex/" style="font-size: 10px;">weex</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a>
+						<a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/React-Native/" style="font-size: 13.33px;">React Native</a> <a href="/tags/fresco/" style="font-size: 20px;">fresco</a> <a href="/tags/weex/" style="font-size: 10px;">weex</a> <a href="/tags/读书/" style="font-size: 16.67px;">读书</a>
 					</div>
 				</section>
 				
@@ -200,260 +200,260 @@ public void setImageURI(Uri uri, @Nullable Obj">
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="fresco请求部分分析">fresco请求部分分析</h1><p>SimpleDraweeView在setImageURI的时候，对controller做了默认设置，虽然是DraweeController，但是其实SimpleDraweeView使用到的真正的Controller类是PipeLineDraweeControllerBuilder：</p>
-<pre><code>public void setImageURI<span class="params">(Uri uri, @Nullable Object callerContext)</span> {
+        <h1 id="fresco请求部分分析"><a href="#fresco请求部分分析" class="headerlink" title="fresco请求部分分析"></a>fresco请求部分分析</h1><p>SimpleDraweeView在setImageURI的时候，对controller做了默认设置，虽然是DraweeController，但是其实SimpleDraweeView使用到的真正的Controller类是PipeLineDraweeControllerBuilder：</p>
+<pre><code>public void setImageURI(Uri uri, @Nullable Object callerContext) {
   DraweeController controller = mSimpleDraweeControllerBuilder
-  .setCallerContext<span class="params">(callerContext)</span>
-  .setUri<span class="params">(uri)</span>
-  .setOldController<span class="params">(getController<span class="params">()</span>)</span>
-  .build<span class="params">()</span>;
-  setController<span class="params">(controller)</span>;
+  .setCallerContext(callerContext)
+  .setUri(uri)
+  .setOldController(getController())
+  .build();
+  setController(controller);
 }
 </code></pre><p>其中的build()方法便是调用了controller的抽象建造者AbstrateDraweeControllerBuilder类中的build()方法：</p>
-<pre><code>  <span class="keyword">public</span> <span class="function">AbstractDraweeController <span class="title">build</span><span class="params">()</span> </span>{
+<pre><code>  public AbstractDraweeController build() {
     validate();
-    <span class="comment">// if only a low-res request is specified, treat it as a final request.</span>
-    <span class="keyword">if</span> (mImageRequest == <span class="keyword">null</span> &amp;&amp; mMultiImageRequests == <span class="keyword">null</span> &amp;&amp; mLowResImageRequest != <span class="keyword">null</span>) {
+    // if only a low-res request is specified, treat it as a final request.
+    if (mImageRequest == null &amp;&amp; mMultiImageRequests == null &amp;&amp; mLowResImageRequest != null) {
       mImageRequest = mLowResImageRequest;
-      mLowResImageRequest = <span class="keyword">null</span>;
+      mLowResImageRequest = null;
     }
-    <span class="function"><span class="keyword">return</span> <span class="title">buildController</span><span class="params">()</span></span>;
+    return buildController();
 }
-  <span class="keyword">protected</span> <span class="function">AbstractDraweeController <span class="title">buildController</span><span class="params">()</span> </span>{
+  protected AbstractDraweeController buildController() {
     AbstractDraweeController controller = obtainController();
     maybeBuildAndSetRetryManager(controller);
     maybeAttachListeners(controller);
-    <span class="keyword">return</span> controller;
+    return controller;
   }
 </code></pre><p>该方法中返回的<strong>buildController()</strong>会执行到SimpleDraweeView本身使用到的PipeLineDraweeControllerBuilder中的obtainController()：</p>
-<pre><code>protected PipelineDraweeController obtainController<span class="params">()</span> {
-  DraweeController oldController = getOldController<span class="params">()</span>;
+<pre><code>protected PipelineDraweeController obtainController() {
+  DraweeController oldController = getOldController();
   PipelineDraweeController controller;
-  <span class="keyword">if</span> <span class="params">(oldController instanceof PipelineDraweeController)</span> {
-    controller = <span class="params">(PipelineDraweeController)</span> oldController;
-    controller.initialize<span class="params">(
-        obtainDataSourceSupplier<span class="params">()</span>,
-        generateUniqueControllerId<span class="params">()</span>,
-        getCallerContext<span class="params">()</span>)</span>;
-  } <span class="keyword">else</span> {
-    controller = mPipelineDraweeControllerFactory.newController<span class="params">(
-        obtainDataSourceSupplier<span class="params">()</span>,
-        generateUniqueControllerId<span class="params">()</span>,
-        getCallerContext<span class="params">()</span>)</span>;
+  if (oldController instanceof PipelineDraweeController) {
+    controller = (PipelineDraweeController) oldController;
+    controller.initialize(
+        obtainDataSourceSupplier(),
+        generateUniqueControllerId(),
+        getCallerContext());
+  } else {
+    controller = mPipelineDraweeControllerFactory.newController(
+        obtainDataSourceSupplier(),
+        generateUniqueControllerId(),
+        getCallerContext());
   }
   return controller;
 }
 </code></pre><a id="more"></a>
 <p>代码中的<strong>obtainDataSourceSupplier()</strong>方法便是获取图片数据的方法，此方法又属于其父类AbstrateDraweeControllerBuilder，代码为：</p>
-<pre><code>protected Supplier&lt;DataSource&lt;IMAGE&gt;&gt; obtainDataSourceSupplier<span class="params">()</span> {
-<span class="keyword">if</span> <span class="params">(mDataSourceSupplier != null)</span> {
+<pre><code>protected Supplier&lt;DataSource&lt;IMAGE&gt;&gt; obtainDataSourceSupplier() {
+if (mDataSourceSupplier != null) {
   return mDataSourceSupplier;
 }
 
 Supplier&lt;DataSource&lt;IMAGE&gt;&gt; supplier = null;
 
-<span class="comment">// final image supplier;</span>
-<span class="keyword">if</span> <span class="params">(mImageRequest != null)</span> {
-  supplier = getDataSourceSupplierForRequest<span class="params">(mImageRequest)</span>;
-} <span class="keyword">else</span> <span class="keyword">if</span> <span class="params">(mMultiImageRequests != null)</span> {
-  supplier = getFirstAvailableDataSourceSupplier<span class="params">(mMultiImageRequests)</span>;
+// final image supplier;
+if (mImageRequest != null) {
+  supplier = getDataSourceSupplierForRequest(mImageRequest);
+} else if (mMultiImageRequests != null) {
+  supplier = getFirstAvailableDataSourceSupplier(mMultiImageRequests);
 }
 
-<span class="comment">// increasing-quality supplier; highest-quality supplier goes first</span>
-<span class="keyword">if</span> <span class="params">(supplier != null &amp;&amp; mLowResImageRequest != null)</span> {
-  List&lt;Supplier&lt;DataSource&lt;IMAGE&gt;&gt;&gt; suppliers = new ArrayList&lt;&gt;<span class="params">(<span class="number">2</span>)</span>;
-  suppliers.add<span class="params">(supplier)</span>;
-  suppliers.add<span class="params">(getDataSourceSupplierForRequest<span class="params">(mLowResImageRequest)</span>)</span>;
-  supplier = IncreasingQualityDataSourceSupplier.create<span class="params">(suppliers)</span>;
+// increasing-quality supplier; highest-quality supplier goes first
+if (supplier != null &amp;&amp; mLowResImageRequest != null) {
+  List&lt;Supplier&lt;DataSource&lt;IMAGE&gt;&gt;&gt; suppliers = new ArrayList&lt;&gt;(2);
+  suppliers.add(supplier);
+  suppliers.add(getDataSourceSupplierForRequest(mLowResImageRequest));
+  supplier = IncreasingQualityDataSourceSupplier.create(suppliers);
 }
 
-<span class="comment">// no image requests; use null data source supplier</span>
-<span class="keyword">if</span> <span class="params">(supplier == null)</span> {
-  supplier = DataSources.getFailedDataSourceSupplier<span class="params">(NO_REQUEST_EXCEPTION)</span>;
+// no image requests; use null data source supplier
+if (supplier == null) {
+  supplier = DataSources.getFailedDataSourceSupplier(NO_REQUEST_EXCEPTION);
 }
 
 return supplier;
   }
 </code></pre><p>其中的重点为<strong>getDataSourceSupplierForRequest()</strong>方法和getFirstAvailableDataSourceSupplier()方法，其实getFirstAvailableDataSourceSupplier方法进去看一下就能发现，他将对各请求循环遍历了下，但是最终还是调用到了getDataSourceSupplierForRequest()方法。由此可见，一个是针对单个请求的方法，一个是针对请求list的方法。我们下面看一下getDataSourceSupplierForRequest()的代码：</p>
-<pre><code><span class="keyword">protected</span> Supplier&lt;DataSource&lt;IMAGE&gt;&gt; getDataSourceSupplierForRequest(
-  <span class="keyword">final</span> REQUEST imageRequest,
-  <span class="keyword">final</span> <span class="keyword">boolean</span> bitmapCacheOnly) {
-<span class="keyword">final</span> Object callerContext = getCallerContext();
-<span class="keyword">return</span> <span class="keyword">new</span> Supplier&lt;DataSource&lt;IMAGE&gt;&gt;() {
-  <span class="annotation">@Override</span>
-  <span class="keyword">public</span> DataSource&lt;IMAGE&gt; get() {
-    <span class="function"><span class="keyword">return</span> <span class="title">getDataSourceForRequest</span><span class="params">(imageRequest, callerContext, bitmapCacheOnly)</span></span>;
+<pre><code>protected Supplier&lt;DataSource&lt;IMAGE&gt;&gt; getDataSourceSupplierForRequest(
+  final REQUEST imageRequest,
+  final boolean bitmapCacheOnly) {
+final Object callerContext = getCallerContext();
+return new Supplier&lt;DataSource&lt;IMAGE&gt;&gt;() {
+  @Override
+  public DataSource&lt;IMAGE&gt; get() {
+    return getDataSourceForRequest(imageRequest, callerContext, bitmapCacheOnly);
   }
-  <span class="annotation">@Override</span>
-  <span class="keyword">public</span> <span class="function">String <span class="title">toString</span><span class="params">()</span> </span>{
-    <span class="keyword">return</span> Objects.toStringHelper(<span class="keyword">this</span>)
-        .add(<span class="string">"request"</span>, imageRequest.toString())
+  @Override
+  public String toString() {
+    return Objects.toStringHelper(this)
+        .add(&quot;request&quot;, imageRequest.toString())
         .toString();
   }
 };
   }
 </code></pre><p>此方法中的重点是<code>getDataSourceForRequest()</code>方法，该方法是抽象方法，即真正调用的时候是使用的子类的方法。即PipeLineDraweeControllerBuilder中的getDataSourceForRequest()方法。进去看一下：</p>
-<pre><code><span class="keyword">protected</span> DataSource&lt;CloseableReference&lt;CloseableImage&gt;&gt; getDataSourceForRequest(
+<pre><code>protected DataSource&lt;CloseableReference&lt;CloseableImage&gt;&gt; getDataSourceForRequest(
   ImageRequest imageRequest,
   Object callerContext,
-  <span class="keyword">boolean</span> bitmapCacheOnly) {
-<span class="keyword">if</span> (bitmapCacheOnly) {
-  <span class="function"><span class="keyword">return</span> mImagePipeline.<span class="title">fetchImageFromBitmapCache</span><span class="params">(imageRequest, callerContext)</span></span>;
-} <span class="keyword">else</span> {
-  <span class="function"><span class="keyword">return</span> mImagePipeline.<span class="title">fetchDecodedImage</span><span class="params">(imageRequest, callerContext)</span></span>;
+  boolean bitmapCacheOnly) {
+if (bitmapCacheOnly) {
+  return mImagePipeline.fetchImageFromBitmapCache(imageRequest, callerContext);
+} else {
+  return mImagePipeline.fetchDecodedImage(imageRequest, callerContext);
 }
   }
 </code></pre><p>此处便是重点，请求也有了，接下来就是调用ImagePipeline中的方法去获取图片。其中重要的方法是fetchImageFromBitmapCache()和fetchDecodedImage()个，第一个方法是通过请求去下载图片，第二个方法是从DataSource中找到图片并解码出来。重点看一下第一个方法：</p>
-<pre><code><span class="keyword">public</span> DataSource&lt;CloseableReference&lt;CloseableImage&gt;&gt; fetchImageFromBitmapCache(
+<pre><code>public DataSource&lt;CloseableReference&lt;CloseableImage&gt;&gt; fetchImageFromBitmapCache(
   ImageRequest imageRequest,
   Object callerContext) {
-<span class="keyword">try</span> {
+try {
   Producer&lt;CloseableReference&lt;CloseableImage&gt;&gt; producerSequence =
       mProducerSequenceFactory.getDecodedImageProducerSequence(imageRequest);
-  <span class="keyword">return</span> submitFetchRequest(
+  return submitFetchRequest(
       producerSequence,
       imageRequest,
       ImageRequest.RequestLevel.BITMAP_MEMORY_CACHE,
       callerContext);
-} <span class="keyword">catch</span> (<span class="keyword">Exception</span> <span class="keyword">exception</span>) {
-  <span class="keyword">return</span> DataSources.immediateFailedDataSource(<span class="keyword">exception</span>);
+} catch (Exception exception) {
+  return DataSources.immediateFailedDataSource(exception);
 }
   }
 </code></pre><p>此时调用到了ProducerSequenceFactory的getDecodedImageProducerSequence()方法，</p>
-<pre><code><span class="keyword">public</span> Producer&lt;CloseableReference&lt;CloseableImage&gt;&gt; getDecodedImageProducerSequence(
+<pre><code>public Producer&lt;CloseableReference&lt;CloseableImage&gt;&gt; getDecodedImageProducerSequence(
   ImageRequest imageRequest) {
 Producer&lt;CloseableReference&lt;CloseableImage&gt;&gt; pipelineSequence =
     getBasicDecodedImageSequence(imageRequest);
-<span class="keyword">if</span> (imageRequest.getPostprocessor() != <span class="keyword">null</span>) {
-  <span class="function"><span class="keyword">return</span> <span class="title">getPostprocessorSequence</span><span class="params">(pipelineSequence)</span></span>;
-} <span class="keyword">else</span> {
-  <span class="keyword">return</span> pipelineSequence;
+if (imageRequest.getPostprocessor() != null) {
+  return getPostprocessorSequence(pipelineSequence);
+} else {
+  return pipelineSequence;
 }
   }
 </code></pre><p>重点在getBasicDecodedImageSequence方法中，进去看一下：</p>
-<pre><code>private Producer&lt;CloseableReference&lt;CloseableImage&gt;&gt; getBasicDecodedImageSequence<span class="params">(
-  ImageRequest imageRequest)</span> {
-Preconditions.checkNotNull<span class="params">(imageRequest)</span>;
+<pre><code>private Producer&lt;CloseableReference&lt;CloseableImage&gt;&gt; getBasicDecodedImageSequence(
+  ImageRequest imageRequest) {
+Preconditions.checkNotNull(imageRequest);
 
-Uri uri = imageRequest.getSourceUri<span class="params">()</span>;
-Preconditions.checkNotNull<span class="params">(uri, <span class="string">"Uri is null."</span>)</span>;
-<span class="keyword">if</span> <span class="params">(UriUtil.isNetworkUri<span class="params">(uri)</span>)</span> {
-  return getNetworkFetchSequence<span class="params">()</span>;
-} <span class="keyword">else</span> <span class="keyword">if</span> <span class="params">(UriUtil.isLocalFileUri<span class="params">(uri)</span>)</span> {
-  <span class="keyword">if</span> <span class="params">(MediaUtils.isVideo<span class="params">(MediaUtils.extractMime<span class="params">(uri.getPath<span class="params">()</span>)</span>)</span>)</span> {
-    return getLocalVideoFileFetchSequence<span class="params">()</span>;
-  } <span class="keyword">else</span> {
-    return getLocalImageFileFetchSequence<span class="params">()</span>;
+Uri uri = imageRequest.getSourceUri();
+Preconditions.checkNotNull(uri, &quot;Uri is null.&quot;);
+if (UriUtil.isNetworkUri(uri)) {
+  return getNetworkFetchSequence();
+} else if (UriUtil.isLocalFileUri(uri)) {
+  if (MediaUtils.isVideo(MediaUtils.extractMime(uri.getPath()))) {
+    return getLocalVideoFileFetchSequence();
+  } else {
+    return getLocalImageFileFetchSequence();
   }
-} <span class="keyword">else</span> <span class="keyword">if</span> <span class="params">(UriUtil.isLocalContentUri<span class="params">(uri)</span>)</span> {
-  return getLocalContentUriFetchSequence<span class="params">()</span>;
-} <span class="keyword">else</span> <span class="keyword">if</span> <span class="params">(UriUtil.isLocalAssetUri<span class="params">(uri)</span>)</span> {
-  return getLocalAssetFetchSequence<span class="params">()</span>;
-} <span class="keyword">else</span> <span class="keyword">if</span> <span class="params">(UriUtil.isLocalResourceUri<span class="params">(uri)</span>)</span> {
-  return getLocalResourceFetchSequence<span class="params">()</span>;
-} <span class="keyword">else</span> <span class="keyword">if</span> <span class="params">(UriUtil.isDataUri<span class="params">(uri)</span>)</span> {
-  return getDataFetchSequence<span class="params">()</span>;
-} <span class="keyword">else</span> {
-  String uriString = uri.toString<span class="params">()</span>;
-  <span class="keyword">if</span> <span class="params">(uriString.length<span class="params">()</span> &gt; <span class="number">30</span>)</span> {
-    uriString = uriString.substring<span class="params">(<span class="number">0</span>, <span class="number">30</span>)</span> + <span class="string">"..."</span>;
+} else if (UriUtil.isLocalContentUri(uri)) {
+  return getLocalContentUriFetchSequence();
+} else if (UriUtil.isLocalAssetUri(uri)) {
+  return getLocalAssetFetchSequence();
+} else if (UriUtil.isLocalResourceUri(uri)) {
+  return getLocalResourceFetchSequence();
+} else if (UriUtil.isDataUri(uri)) {
+  return getDataFetchSequence();
+} else {
+  String uriString = uri.toString();
+  if (uriString.length() &gt; 30) {
+    uriString = uriString.substring(0, 30) + &quot;...&quot;;
   }
-  throw new RuntimeException<span class="params">(<span class="string">"Unsupported uri scheme! Uri is: "</span> + uriString)</span>;
+  throw new RuntimeException(&quot;Unsupported uri scheme! Uri is: &quot; + uriString);
 }
  }
 </code></pre><p>接下来如果uri正常的话，会执行getNetworkFetchSequence方法：</p>
 <pre><code>/**
-   * swallow result <span class="keyword">if</span> prefetch -&gt; bitmap cache get -&gt;
+   * swallow result if prefetch -&gt; bitmap cache get -&gt;
    * background thread hand-off -&gt; multiplex -&gt; bitmap cache -&gt; decode -&gt; multiplex -&gt;
    * encoded cache -&gt; disk cache -&gt; (webp transcode) -&gt; network fetch.
    */
-<span class="title">private</span> synchronized <span class="type">Producer</span>&lt;<span class="type">CloseableReference</span>&lt;<span class="type">CloseableImage</span>&gt;&gt; getNetworkFetchSequence() {
-<span class="title">if</span> (mNetworkFetchSequence == null) {
+private synchronized Producer&lt;CloseableReference&lt;CloseableImage&gt;&gt; getNetworkFetchSequence() {
+if (mNetworkFetchSequence == null) {
   mNetworkFetchSequence =
       newBitmapCacheGetToDecodeSequence(getCommonNetworkFetchToEncodedMemorySequence());
 }
-<span class="title">return</span> mNetworkFetchSequence;
+return mNetworkFetchSequence;
   }
 </code></pre><p>然后是getCommonNetworkFetchToEncodedMemorySequence()方法，</p>
-<pre><code><span class="comment">/**
+<pre><code>/**
    * multiplex -&gt; encoded cache -&gt; disk cache -&gt; (webp transcode) -&gt; network fetch.
-   */</span>
-  private synchronized Producer&lt;EncodedImage&gt; getCommonNetworkFetchToEncodedMemorySequence<span class="params">()</span> {
-<span class="keyword">if</span> <span class="params">(mCommonNetworkFetchToEncodedMemorySequence == null)</span> {
+   */
+  private synchronized Producer&lt;EncodedImage&gt; getCommonNetworkFetchToEncodedMemorySequence() {
+if (mCommonNetworkFetchToEncodedMemorySequence == null) {
   Producer&lt;EncodedImage&gt; nextProducer =
-      newEncodedCacheMultiplexToTranscodeSequence<span class="params">(
-          mProducerFactory.newNetworkFetchProducer<span class="params">(mNetworkFetcher)</span>)</span>;
+      newEncodedCacheMultiplexToTranscodeSequence(
+          mProducerFactory.newNetworkFetchProducer(mNetworkFetcher));
   mCommonNetworkFetchToEncodedMemorySequence =
-      ProducerFactory.newAddImageTransformMetaDataProducer<span class="params">(nextProducer)</span>;
+      ProducerFactory.newAddImageTransformMetaDataProducer(nextProducer);
 
-  <span class="keyword">if</span> <span class="params">(mResizeAndRotateEnabledForNetwork)</span> {
+  if (mResizeAndRotateEnabledForNetwork) {
     mCommonNetworkFetchToEncodedMemorySequence =
-        mProducerFactory.newResizeAndRotateProducer<span class="params">(
-            mCommonNetworkFetchToEncodedMemorySequence)</span>;
+        mProducerFactory.newResizeAndRotateProducer(
+            mCommonNetworkFetchToEncodedMemorySequence);
   }
 }
 return mCommonNetworkFetchToEncodedMemorySequence;
   }
 </code></pre><p>此处会使用到ProducerFactory的newNetworkFetchProducer方法：</p>
-<pre><code><span class="keyword">public</span> <span class="function">NetworkFetchProducer <span class="title">newNetworkFetchProducer</span><span class="params">(NetworkFetcher networkFetcher)</span> </span>{
-<span class="keyword">return</span> <span class="keyword">new</span> NetworkFetchProducer(mPooledByteBufferFactory, mByteArrayPool, networkFetcher);
+<pre><code>public NetworkFetchProducer newNetworkFetchProducer(NetworkFetcher networkFetcher) {
+return new NetworkFetchProducer(mPooledByteBufferFactory, mByteArrayPool, networkFetcher);
   }
 </code></pre><p>返回的结果是NetworkFetchProducer，所有的Producer都会复写父类的produceResults()方法，NetworkFetchProducer则是专门用来处理网络请求的生产者，</p>
-<pre><code><span class="annotation">@Override</span>
-  <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">produceResults</span><span class="params">(Consumer&lt;EncodedImage&gt; consumer, ProducerContext context)</span> </span>{
+<pre><code>@Override
+  public void produceResults(Consumer&lt;EncodedImage&gt; consumer, ProducerContext context) {
 context.getListener()
     .onProducerStart(context.getId(), PRODUCER_NAME);
-<span class="keyword">final</span> FetchState fetchState = mNetworkFetcher.createFetchState(consumer, context);
+final FetchState fetchState = mNetworkFetcher.createFetchState(consumer, context);
 mNetworkFetcher.fetch(
-    fetchState, <span class="keyword">new</span> NetworkFetcher.Callback() {
-      <span class="annotation">@Override</span>
-      <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(InputStream response, <span class="keyword">int</span> responseLength)</span> <span class="keyword">throws</span> IOException </span>{
-        NetworkFetchProducer.<span class="keyword">this</span>.onResponse(fetchState, response, responseLength);
+    fetchState, new NetworkFetcher.Callback() {
+      @Override
+      public void onResponse(InputStream response, int responseLength) throws IOException {
+        NetworkFetchProducer.this.onResponse(fetchState, response, responseLength);
       }
 
-      <span class="annotation">@Override</span>
-      <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onFailure</span><span class="params">(Throwable throwable)</span> </span>{
-        NetworkFetchProducer.<span class="keyword">this</span>.onFailure(fetchState, throwable);
+      @Override
+      public void onFailure(Throwable throwable) {
+        NetworkFetchProducer.this.onFailure(fetchState, throwable);
       }
 
-      <span class="annotation">@Override</span>
-      <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onCancellation</span><span class="params">()</span> </span>{
-        NetworkFetchProducer.<span class="keyword">this</span>.onCancellation(fetchState);
+      @Override
+      public void onCancellation() {
+        NetworkFetchProducer.this.onCancellation(fetchState);
       }
     });
   }
 </code></pre><p>其中最重要的mNetworkFetcher则是之前在ImagePipelineConfig中设置的NetworkFetcher，默认的设置为HttpUrlConnectionNetworkFetcher()类的对象。而真正的请求就发生在该类中：</p>
-<pre><code><span class="annotation">@Override</span>
-  public <span class="keyword">void</span> fetch(<span class="keyword">final</span> FetchState fetchState, <span class="keyword">final</span> Callback callback) {
-<span class="keyword">final</span> Future&lt;?&gt; future = mExecutorService.submit(
-    <span class="keyword">new</span> Runnable() {
-      <span class="annotation">@Override</span>
-      public <span class="keyword">void</span> run() {
-        HttpURLConnection connection = <span class="keyword">null</span>;
-        <span class="built_in">Uri</span> uri = fetchState.getUri();
-        <span class="built_in">String</span> scheme = uri.getScheme();
-        <span class="built_in">String</span> uriString = fetchState.getUri().toString();
-        <span class="keyword">while</span> (<span class="keyword">true</span>) {
-          <span class="built_in">String</span> nextUriString;
-          <span class="built_in">String</span> nextScheme;
-          InputStream <span class="keyword">is</span>;
-          <span class="keyword">try</span> {
-            URL url = <span class="keyword">new</span> URL(uriString);
+<pre><code>@Override
+  public void fetch(final FetchState fetchState, final Callback callback) {
+final Future&lt;?&gt; future = mExecutorService.submit(
+    new Runnable() {
+      @Override
+      public void run() {
+        HttpURLConnection connection = null;
+        Uri uri = fetchState.getUri();
+        String scheme = uri.getScheme();
+        String uriString = fetchState.getUri().toString();
+        while (true) {
+          String nextUriString;
+          String nextScheme;
+          InputStream is;
+          try {
+            URL url = new URL(uriString);
             connection = (HttpURLConnection) url.openConnection();
-            nextUriString = connection.getHeaderField(<span class="string">"Location"</span>);
-            nextScheme = (nextUriString == <span class="keyword">null</span>) ? <span class="keyword">null</span> : <span class="built_in">Uri</span>.parse(nextUriString).getScheme();
-            <span class="keyword">if</span> (nextUriString == <span class="keyword">null</span> || nextScheme.equals(scheme)) {
-              <span class="keyword">is</span> = connection.getInputStream();
-              callback.onResponse(<span class="keyword">is</span>, -<span class="number">1</span>);
-              <span class="keyword">break</span>;
+            nextUriString = connection.getHeaderField(&quot;Location&quot;);
+            nextScheme = (nextUriString == null) ? null : Uri.parse(nextUriString).getScheme();
+            if (nextUriString == null || nextScheme.equals(scheme)) {
+              is = connection.getInputStream();
+              callback.onResponse(is, -1);
+              break;
             }
             uriString = nextUriString;
             scheme = nextScheme;
-          } <span class="keyword">catch</span> (Exception e) {
+          } catch (Exception e) {
             callback.onFailure(e);
-            <span class="keyword">break</span>;
-          } <span class="keyword">finally</span> {
-            <span class="keyword">if</span> (connection != <span class="keyword">null</span>) {
+            break;
+          } finally {
+            if (connection != null) {
               connection.disconnect();
             }
           }
@@ -462,38 +462,38 @@ mNetworkFetcher.fetch(
       }
     });
 fetchState.getContext().addCallbacks(
-    <span class="keyword">new</span> BaseProducerContextCallbacks() {
-      <span class="annotation">@Override</span>
-      public <span class="keyword">void</span> onCancellationRequested() {
-        <span class="keyword">if</span> (future.cancel(<span class="keyword">false</span>)) {
+    new BaseProducerContextCallbacks() {
+      @Override
+      public void onCancellationRequested() {
+        if (future.cancel(false)) {
           callback.onCancellation();
         }
       }
     });
   }
 </code></pre><p>此时生产者的工作基本已经完成，接下来便是回传给消费者的过程。代码中可以看到有一个回调，如果请求成功后会将输入流回传回去，在NetworkFetchProducer中会接收到这个回调并且将输入流转换成输出流。此时则在handleFinalResult方法中，返回数据给消费者。</p>
-<pre><code>private <span class="type">void</span> handleFinalResult(
-  <span class="type">PooledByteBufferOutputStream</span> pooledOutputStream,
-  <span class="type">FetchState</span> fetchState) {
-<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt; extraMap = getExtraMap(fetchState, pooledOutputStream.size());
+<pre><code>private void handleFinalResult(
+  PooledByteBufferOutputStream pooledOutputStream,
+  FetchState fetchState) {
+Map&lt;String, String&gt; extraMap = getExtraMap(fetchState, pooledOutputStream.size());
 fetchState.getListener()
-    .onProducerFinishWithSuccess(fetchState.getId(), <span class="type">PRODUCER_NAME</span>, extraMap);
-notifyConsumer(pooledOutputStream, <span class="literal">true</span>, fetchState.getConsumer());
+    .onProducerFinishWithSuccess(fetchState.getId(), PRODUCER_NAME, extraMap);
+notifyConsumer(pooledOutputStream, true, fetchState.getConsumer());
   }
 
-  private <span class="type">void</span> notifyConsumer(
-  <span class="type">PooledByteBufferOutputStream</span> pooledOutputStream,
+  private void notifyConsumer(
+  PooledByteBufferOutputStream pooledOutputStream,
   boolean isFinal,
-  <span class="type">Consumer</span>&lt;<span class="type">EncodedImage</span>&gt; consumer) {
-<span class="type">CloseableReference</span>&lt;<span class="type">PooledByteBuffer</span>&gt; <span class="literal">result</span> =
-    <span class="type">CloseableReference</span>.<span class="keyword">of</span>(pooledOutputStream.toByteBuffer());
-<span class="type">EncodedImage</span> encodedImage = null;
-<span class="keyword">try</span> {
-  encodedImage = new <span class="type">EncodedImage</span>(<span class="literal">result</span>);
+  Consumer&lt;EncodedImage&gt; consumer) {
+CloseableReference&lt;PooledByteBuffer&gt; result =
+    CloseableReference.of(pooledOutputStream.toByteBuffer());
+EncodedImage encodedImage = null;
+try {
+  encodedImage = new EncodedImage(result);
   consumer.onNewResult(encodedImage, isFinal);
-} <span class="keyword">finally</span> {
-  <span class="type">EncodedImage</span>.closeSafely(encodedImage);
-  <span class="type">CloseableReference</span>.closeSafely(<span class="literal">result</span>);
+} finally {
+  EncodedImage.closeSafely(encodedImage);
+  CloseableReference.closeSafely(result);
 }
   }
 </code></pre>
@@ -569,7 +569,7 @@ notifyConsumer(pooledOutputStream, <span class="literal">true</span>, fetchState
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2016 Rodriguez-Xin
+    		&copy; 2017 Rodriguez-Xin
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -593,8 +593,8 @@ notifyConsumer(pooledOutputStream, <span class="literal">true</span>, fetchState
 		open_in_new: false
 	}
 </script>
-<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
-<script src="/js/main.js" type="text/javascript"></script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
 
 
 
